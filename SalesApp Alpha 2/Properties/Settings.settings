@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SalesApp_Alpha_2.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="StringConnectionMySQL" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Server=Localhost; Database=saeximplementation1; Uid=root; Pwd=220718;</Value>
+    </Setting>
+    <Setting Name="MessageForEachAction" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
