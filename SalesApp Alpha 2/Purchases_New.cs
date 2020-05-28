@@ -125,7 +125,11 @@ namespace SalesApp_Alpha_2
 
         private void Product_ListPurchased(object sender, ECrud e)
         {
-            PremadeMessage.PMNotification("Lista de compra procesada");
+            //PremadeMessage.PMNotification("Lista de compra procesada");
+            MessageBox.Show("Lista de compra procesada correctamente",
+                            "Procesado",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
         }
 
         private void IB_Text_Search_Leave(object sender, EventArgs e)
