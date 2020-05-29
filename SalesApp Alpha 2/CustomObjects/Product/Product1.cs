@@ -29,7 +29,9 @@ namespace SalesApp_Alpha_2
         /// <summary>
         /// Devuelve una lista de los campos de propiedad activos
         /// </summary>
-        public static List<Enum> GetActiveFields(bool IncludesID = false)
+        /// <param name="IncludesID">True incluye la clave primaria "ID"</param>
+        /// <returns></returns>
+        public static List<Enum> GetActiveFields(bool IncludesID = true)
         {
             List<Enum> f = new List<Enum>();
             if (IncludesID)
@@ -265,7 +267,7 @@ namespace SalesApp_Alpha_2
         protected override List<DataFieldTemplate> GetListDataFields()
         {
             List<DataFieldTemplate> dft = new List<DataFieldTemplate>();
-            foreach (Enum e in GetActiveFields())
+            foreach (Enum e in GetActiveFields(false))
             {
                 dft.Add(DataField(e));
             }
