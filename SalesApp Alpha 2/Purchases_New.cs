@@ -41,6 +41,11 @@ namespace SalesApp_Alpha_2
         {
             get => LB_SearchResults.SelectedValue;
         }
+
+        int ResultsCount
+        {
+            get => LB_SearchResults.Items.Count;
+        }
         #endregion
 
         private readonly List<Product> ListToAddProducts = new List<Product>();
@@ -48,11 +53,16 @@ namespace SalesApp_Alpha_2
         private void IB_Text_Search_InputChanged(object sender, EventArgs e)
         {
             RefreshSearchResults();
+            if (ResultsCount == 0)
+            {
+                RefreshProperties();
+            }
         }
 
         private void RefreshSearchResults()
         {
             LB_SearchResults.DataSource = ProductsDataTable;
+
         }
 
         int x;
@@ -64,11 +74,12 @@ namespace SalesApp_Alpha_2
 
         private void RefreshProperties()
         {
-            if (SearchSelected != null)
-            {
-                LoadProperties(SearchSelected);
-            }
-            else UI_SelectProductsProperties.ClearProperties();
+            UI_SelectProductsProperties.SetObject(SearchSelected);
+            //if (SearchSelected != null)
+            //{
+            //    LoadProperties(SearchSelected);
+            //}
+            //else UI_SelectProductsProperties.ClearProperties();
         }
 
         private void LoadProperties(Product P)
