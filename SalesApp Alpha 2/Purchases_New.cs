@@ -15,14 +15,7 @@ namespace SalesApp_Alpha_2
         #region Getters
         Product SearchSelected
         {
-            get
-            {
-                if (SearchValue != null)
-                {
-                    return Product.GetFromID((int)SearchValue);
-                }
-                else return null;
-            }
+            get => SearchValue != null ? Product.GetFromID((int)SearchValue) : null;
         }
 
         Product PropertiesSelected

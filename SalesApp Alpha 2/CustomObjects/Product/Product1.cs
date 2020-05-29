@@ -29,9 +29,9 @@ namespace SalesApp_Alpha_2
         /// <summary>
         /// Configura los campos activos del producto
         /// </summary>
-        /// <param name="IncludesID">True (por defecto) incluye la clave primaria "ID"</param>
+        /// <param name="IncludesID">True  incluye la clave primaria "ID"</param>
         /// <returns><see cref="List{T}"/> de <see cref="Enum"/> de los campos activos</returns>
-        public static List<Enum> GetActiveFields(bool IncludesID = true)
+        public static List<Enum> GetActiveFields(bool IncludesID)
         {
             List<Enum> f = new List<Enum>();
             if (IncludesID)
