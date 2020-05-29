@@ -10,6 +10,8 @@ namespace SalesApp_Alpha_2
         public Purchases_New()
         {
             InitializeComponent();
+            LB_SearchResults.DisplayMember = Product.TableFields.Description.ToString();
+            LB_SearchResults.ValueMember = Product.TableFields.ID.ToString();
         }
 
         #region Getters
@@ -50,13 +52,13 @@ namespace SalesApp_Alpha_2
 
         private void RefreshSearchResults()
         {
-            LB_SearchResults.DisplayMember = Product.TableFields.Description.ToString();
-            LB_SearchResults.ValueMember = Product.TableFields.ID.ToString();
             LB_SearchResults.DataSource = ProductsDataTable;
         }
 
+        int x;
         private void LB_SearchResults_SelectedIndexChanged(object sender, EventArgs e)
         {
+            x++;
             RefreshProperties();
         }
 
@@ -118,11 +120,7 @@ namespace SalesApp_Alpha_2
 
         private void Product_ListPurchased(object sender, ECrud e)
         {
-            //PremadeMessage.PMNotification("Lista de compra procesada");
-            MessageBox.Show("Lista de compra procesada correctamente",
-                            "Procesado",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Information);
+            PremadeMessage.PMNotification("Lista de compras procesada correctamente", "Procesado");
         }
 
         private void IB_Text_Search_Leave(object sender, EventArgs e)
