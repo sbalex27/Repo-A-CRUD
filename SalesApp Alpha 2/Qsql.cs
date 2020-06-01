@@ -47,11 +47,11 @@ namespace SalesApp_Alpha_2
         /// lógica en una Query de SQL
         /// </summary>
         /// <param name="Field">Campo de la tabla</param>
-        /// <param name="Value">Valor del campo</param>
+        /// <param name="Val">Valor del campo</param>
         /// <param name="ValueType">Typo de variable del campo</param>
         /// <param name="LikeOperator">Tipo de operador de búsqueda (False "=", True "Like")</param>
         /// <exception cref="ArgumentException"></exception>
-        public DataFieldTemplate(object Field, object Value, SQLValueType ValueType, bool LikeOperator)
+        public DataFieldTemplate(object Field, object Val, SQLValueType ValueType, bool LikeOperator)
         {
             if (Field is null)
             {
@@ -59,11 +59,11 @@ namespace SalesApp_Alpha_2
             }
             else this.Field = Field.ToString();
 
-            if (Value is null)
+            if (Val is null)
             {
-                throw new ArgumentNullException(nameof(Value));
+                throw new ArgumentNullException(nameof(Val));
             }
-            else this.Value = Value.ToString();
+            else this.Value = Val.ToString();
 
             this.ValueType = ValueType;
             this.LikeOperator = LikeOperator;
@@ -73,15 +73,15 @@ namespace SalesApp_Alpha_2
         /// Instancia un nuevo empaquetado para SQL
         /// </summary>
         /// <param name="Field">Campo de la tabla</param>
-        /// <param name="Value">Valor del campo</param>
+        /// <param name="Val">Valor del campo</param>
         /// <param name="ValueType">Tipo de variable del campo</param>
         /// <exception cref="EmptyInputException"></exception>
-        public DataFieldTemplate(object Field, object Value, SQLValueType ValueType)
+        public DataFieldTemplate(object Field, object Val, SQLValueType ValueType)
         {
-            if (Field == null || Value == null) throw new EmptyInputException();
+            if (Field == null || Val == null) throw new EmptyInputException();
 
             this.Field = Field.ToString();
-            this.Value = Value.ToString();
+            this.Value = Val.ToString();
             this.ValueType = ValueType;
             LikeOperator = false;
         }
@@ -151,7 +151,7 @@ namespace SalesApp_Alpha_2
             switch (ValueType)
             {
                 case SQLValueType.SqlString:
-                    return $"\"{Value}\"";
+                    return LikeOperator ? $"'%{Value}%'" : $"'{Value}'";
                 case SQLValueType.SqlInt:
                     return Value.ToString();
                 case SQLValueType.SqlDouble:
@@ -287,38 +287,6 @@ namespace SalesApp_Alpha_2
             }
         }
 
-        //public static DataTable Select(SQLTable TableWork,
-        //                               List<Enum> Fields,
-        //                               DataFieldTemplate Conditional = null,
-        //                               bool UseLike = false)
-        //{
-        //    //Variables Declaration
-        //    int Lenght = Fields.Count;
-        //    string FieldsToStrings = null;
-        //    int i = 0;
-
-        //    //Concatenate Command
-        //    foreach (object item in Fields)
-        //    {
-        //        i++;
-        //        FieldsToStrings += item.ToString();
-        //        if (i != Lenght) FieldsToStrings += Comma;
-        //    }
-
-        //    string cmdText = $"Select {FieldsToStrings} from {TableWork}";
-
-        //    if (Conditional != null) cmdText += $" Where {Conditional.ToString(UseLike)}";
-
-        //    //Execute
-        //    TryOpen();
-        //    MySqlCommand sqlCommand = new MySqlCommand(cmdText, sqlConnection);
-        //    MySqlDataAdapter sqlDataAdapter = new MySqlDataAdapter(sqlCommand);
-        //    DataTable dataTable = new DataTable();
-        //    sqlDataAdapter.Fill(dataTable);
-        //    TryClose();
-        //    return dataTable;
-        //}
-
         public static List<object> Select(SQLTable Table,
                                           Enum Field = null,
                                           DataFieldTemplate Filter = null,
@@ -345,17 +313,16 @@ namespace SalesApp_Alpha_2
             {
                 if (Filter.Value.Length == 0)
                 {
-                    if (!EmptyLoadAll)
-                    {
-                        return null;
-                    }
+                    if (!EmptyLoadAll) return null;
                 }
-                else
-                {
-                    Command += $" Where {Filter}";
-                }
+                else Command += $" Where {Filter}";
             }
-            return GetTable(Command);
+            DataTable dataTable = GetTable(Command);
+            if (dataTable.Rows.Count == 0)
+            {
+                dataTable = null;
+            }
+            return dataTable;
         }
 
         public static DataTable Select(SQLTable Table, List<Enum> FieldsCollection)

@@ -10,41 +10,34 @@ namespace SalesApp_Alpha_2
         public Purchases_New()
         {
             InitializeComponent();
-            LB_SearchResults.DisplayMember = Product.TableFields.Description.ToString();
-            LB_SearchResults.ValueMember = Product.TableFields.ID.ToString();
         }
 
         #region Getters
-        Product SearchSelected
+        Product Selected
         {
             get => SearchValue != null ? Product.GetFromID((int)SearchValue) : null;
         }
 
-        Product PropertiesSelected
+        Product Modified
         {
             get => UI_SelectProductsProperties.GetObject();
         }
 
         DataTable ProductsDataTable
         {
-            get => Product.GetTableProducts(Product.GetActiveFields(true), DataFieldSearch);
+            get => Product.GetTableProducts(Product.GetActiveFields(true), SearchDataField);
         }
 
-        DataFieldTemplate DataFieldSearch
+        DataFieldTemplate SearchDataField
         {
             get => new DataFieldTemplate(Product.TableFields.Description,
                                              IB_Text_Search.InputValue,
-                                             SQLValueType.SqlString);
+                                             SQLValueType.SqlString, true);
         }
 
         object SearchValue
         {
             get => LB_SearchResults.SelectedValue;
-        }
-
-        int ResultsCount
-        {
-            get => LB_SearchResults.Items.Count;
         }
         #endregion
 
@@ -52,36 +45,33 @@ namespace SalesApp_Alpha_2
 
         private void IB_Text_Search_InputChanged(object sender, EventArgs e)
         {
-            RefreshSearchResults();
-            if (ResultsCount == 0)
-            {
-                RefreshProperties();
-            }
+            ShowSearchResults();
         }
 
-        private void RefreshSearchResults()
+        private void ShowSearchResults()
         {
+            LB_SearchResults.DisplayMember = Product.TableFields.Description.ToString();
+            LB_SearchResults.ValueMember = Product.TableFields.ID.ToString();
             LB_SearchResults.DataSource = ProductsDataTable;
-
         }
 
-        int x;
         private void LB_SearchResults_SelectedIndexChanged(object sender, EventArgs e)
         {
-            x++;
-            RefreshProperties();
+            LoadProperties();
         }
 
-        private void RefreshProperties()
+        private void LoadProperties()
         {
-            //UI_SelectProductsProperties.SetObject(SearchSelected);
-            LoadProperties(SearchSelected);
-        }
-
-        private void LoadProperties(Product P)
-        {
-            UI_SelectProductsProperties.inputBox_Text_Description.InputValue = P.Description;
-            UI_SelectProductsProperties.inputBox_Combo_TradeMark.InputValue = P.TradeMark;
+            Product P = Selected;
+            if (P is null)
+            {
+                UI_SelectProductsProperties.ClearProperties();
+            }
+            else
+            {
+                UI_SelectProductsProperties.inputBox_Text_Description.InputValue = P.Description;
+                UI_SelectProductsProperties.inputBox_Combo_TradeMark.InputValue = P.TradeMark;
+            }
         }
 
         #region Add to list
@@ -89,7 +79,7 @@ namespace SalesApp_Alpha_2
         {
             try
             {
-                Product ToAdd = PropertiesSelected;
+                Product ToAdd = Modified;
                 if (!ListToAddProducts.Contains(ToAdd))
                 {
                     AddToCart(ToAdd);
@@ -106,14 +96,13 @@ namespace SalesApp_Alpha_2
         private void AddToCart(Product P)
         {
             ListToAddProducts.Add(P);
-            UI_SelectProductsProperties.ClearProperties();
-            RefreshDataSource();
+            RefreshCart();
             IB_Text_Search.ResetInputValue();
             IB_Text_Search.Focus();
         }
         #endregion
 
-        private void RefreshDataSource()
+        private void RefreshCart()
         {
             DGV_ProductsLoaded.DataSource = null;
             DGV_ProductsLoaded.DataSource = ListToAddProducts;
@@ -132,7 +121,7 @@ namespace SalesApp_Alpha_2
 
         private void IB_Text_Search_Leave(object sender, EventArgs e)
         {
-            if (SearchSelected == null)
+            if (Selected == null)
             {
                 UI_SelectProductsProperties.SetFocus();
             }
@@ -146,7 +135,7 @@ namespace SalesApp_Alpha_2
 
         private void UI_SelectProductsProperties_Enter(object sender, EventArgs e)
         {
-            if (SearchSelected != null)
+            if (Selected != null)
             {
                 UI_SelectProductsProperties.inputBox_Numeric_Quantity.Focus();
             }
