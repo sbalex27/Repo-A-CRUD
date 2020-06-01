@@ -43,6 +43,33 @@ namespace SalesApp_Alpha_2
     public class DataFieldTemplate
     {
         /// <summary>
+        /// Instancia un nuevo empaquetado para utilizar como una comparación 
+        /// lógica en una Query de SQL
+        /// </summary>
+        /// <param name="Field">Campo de la tabla</param>
+        /// <param name="Value">Valor del campo</param>
+        /// <param name="ValueType">Typo de variable del campo</param>
+        /// <param name="LikeOperator">Tipo de operador de búsqueda (False "=", True "Like")</param>
+        /// <exception cref="ArgumentException"></exception>
+        public DataFieldTemplate(object Field, object Value, SQLValueType ValueType, bool LikeOperator)
+        {
+            if (Field is null)
+            {
+                throw new ArgumentNullException(nameof(Field));
+            }
+            else this.Field = Field.ToString();
+
+            if (Value is null)
+            {
+                throw new ArgumentNullException(nameof(Value));
+            }
+            else this.Value = Value.ToString();
+
+            this.ValueType = ValueType;
+            this.LikeOperator = LikeOperator;
+        }
+
+        /// <summary>
         /// Instancia un nuevo empaquetado para SQL
         /// </summary>
         /// <param name="Field">Campo de la tabla</param>
@@ -55,7 +82,8 @@ namespace SalesApp_Alpha_2
 
             this.Field = Field.ToString();
             this.Value = Value.ToString();
-            TypeSQL = ValueType;
+            this.ValueType = ValueType;
+            LikeOperator = false;
         }
         /// <summary>
         /// Instancia un nuevo empaquetado para SQL valor/formato <see cref="SQLValueType.SqlNullFormat"/>
@@ -71,49 +99,56 @@ namespace SalesApp_Alpha_2
             {
                 this.Field = Field.ToString();
                 Value = "Null";
-                TypeSQL = SQLValueType.SqlNullFormat;
+                ValueType = SQLValueType.SqlNullFormat;
+                LikeOperator = false;
             }
         }
 
         public string Field { get; private set; }
         public string Value { get; private set; }
-        public SQLValueType TypeSQL { get; private set; }
-        public Type Type
-        {
-            get
-            {
-                switch (TypeSQL)
-                {
-                    case SQLValueType.SqlString:
-                        return typeof(string);
-                    case SQLValueType.SqlInt:
-                        return typeof(int);
-                    case SQLValueType.SqlDouble:
-                        return typeof(double);
-                    case SQLValueType.SqlNullFormat:
-                        return typeof(object);
+        public SQLValueType ValueType { get; private set; }
+        public bool LikeOperator { get; private set; }
 
-                    default:
-                        throw new Exception("No aviable Type");
-                }
-            }
+        //public Type Type
+        //{
+        //    get
+        //    {
+        //        switch (TypeSQL)
+        //        {
+        //            case SQLValueType.SqlString:
+        //                return typeof(string);
+        //            case SQLValueType.SqlInt:
+        //                return typeof(int);
+        //            case SQLValueType.SqlDouble:
+        //                return typeof(double);
+        //            case SQLValueType.SqlNullFormat:
+        //                return typeof(object);
+
+        //            default:
+        //                throw new Exception("No aviable Type");
+        //        }
+        //    }
+        //}
+
+        public override string ToString()
+        {
+            string Operator = LikeOperator ? "Like" : "=";
+            return $"{Field} {Operator} {ConvertedValue()}";
         }
 
-        public override string ToString() => $"{Field} = {ConvertedValue()}";
-
-        public string ToString(bool UseLike)
-        {
-            if (UseLike)
-            {
-                Value = $"%{Value}%";
-                return $"{Field} Like {ConvertedValue()}";
-            }
-            else return ToString();
-        }
+        //public string ToString(bool UseLike)
+        //{
+        //    if (UseLike)
+        //    {
+        //        Value = $"%{Value}%";
+        //        return $"{Field} Like {ConvertedValue()}";
+        //    }
+        //    else return ToString();
+        //}
 
         public string ConvertedValue()
         {
-            switch (TypeSQL)
+            switch (ValueType)
             {
                 case SQLValueType.SqlString:
                     return $"\"{Value}\"";
@@ -166,7 +201,7 @@ namespace SalesApp_Alpha_2
                 throw new QsqlConnectionException();
             }
         }
-        
+
         public static void CmdExecuteNonQuery(string CommandText)
         {
             TryOpen();
@@ -183,7 +218,7 @@ namespace SalesApp_Alpha_2
             string Fields = null;
             string Values = null;
             int i = 0;
-            
+
             //Command Generator
             foreach (DataFieldTemplate item in FieldsAndValues)
             {
@@ -206,7 +241,7 @@ namespace SalesApp_Alpha_2
                 InsertIntoSuccess = null;
             }
         }
-        
+
         public static void UpdateWhere(SQLTable TableWork,
                                        DataFieldTemplate FieldAndValue,
                                        DataFieldTemplate Conditional)
@@ -240,7 +275,7 @@ namespace SalesApp_Alpha_2
                 UpdateSuccess = null;
             }
         }
-        
+
         public static void DeleteWhere(SQLTable TableWork, DataFieldTemplate DataFieldConditional)
         {
             string cmdText = $"Delete from {TableWork} Where {DataFieldConditional}";
@@ -252,51 +287,6 @@ namespace SalesApp_Alpha_2
             }
         }
 
-        public static List<object> Select(SQLTable TableWork,
-                                       Enum Field,
-                                       DataFieldTemplate Conditional = null,
-                                       bool UseLike = false)
-        {
-            List<Enum> LField = new List<Enum> { Field };
-            List<object> Items = new List<object>();
-            DataTable Result = Select(TableWork, LField, Conditional, UseLike);
-            foreach (DataRow row in Result.Rows)
-            {
-                Items.Add(row[0].ToString());
-            }
-            return Items;
-        }
-        public static DataTable Select(SQLTable TableWork, List<Enum> Fields, DataFieldTemplate Filter, bool UseLike = false)
-        {
-            int Lenght = Fields.Count;
-            string FieldsToString = null;
-            int i = 0;
-
-            foreach (Enum e in Fields)
-            {
-                FieldsToString += e.ToString();
-                if (i++ != Lenght)
-                {
-                    FieldsToString += Comma;
-                }
-            }
-
-            string CommandString = $"Select {FieldsToString} from {TableWork}";
-            string ComparationExpression;
-            if (Filter != null)
-            {
-                if (QFunctions.IsEmptyText(Filter.Value))
-                {
-                    Filter = new DataFieldTemplate(Filter.Field);
-                }
-                ComparationExpression = Filter.ToString(false);
-            }
-            else ComparationExpression = Filter.ToString(UseLike);
-            CommandString += $" Where {ComparationExpression}";
-
-            return GetTable(CommandString);
-
-        }
         //public static DataTable Select(SQLTable TableWork,
         //                               List<Enum> Fields,
         //                               DataFieldTemplate Conditional = null,
@@ -328,6 +318,72 @@ namespace SalesApp_Alpha_2
         //    TryClose();
         //    return dataTable;
         //}
+
+        public static List<object> Select(SQLTable Table,
+                                          Enum Field = null,
+                                          DataFieldTemplate Filter = null,
+                                          bool EmptyLoadAll = false)
+        {
+            List<Enum> LField = new List<Enum> { Field };
+            List<object> Items = new List<object>();
+            DataTable Result = Select(Table, LField, Filter, EmptyLoadAll);
+            foreach (DataRow row in Result.Rows)
+            {
+                Items.Add(row[0].ToString());
+            }
+            return Items;
+        }
+
+        public static DataTable Select(SQLTable Table,
+                                       List<Enum> FieldsCollection,
+                                       DataFieldTemplate Filter,
+                                       bool EmptyLoadAll = false)
+        {
+            string Fields = FieldsCollection is null ? "*" : FieldsExpression(FieldsCollection);
+            string Command = $"Select {Fields} From {Table}";
+            if (Filter != null)
+            {
+                if (Filter.Value.Length == 0)
+                {
+                    if (!EmptyLoadAll)
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    Command += $" Where {Filter}";
+                }
+            }
+            return GetTable(Command);
+        }
+
+        public static DataTable Select(SQLTable Table, List<Enum> FieldsCollection)
+        {
+            return Select(Table, FieldsCollection, null);
+        }
+
+        public static DataTable Select(SQLTable Table)
+        {
+            return Select(Table, null);
+        }
+
+        public static string FieldsExpression(List<Enum> Fields)
+        {
+            int Lenght = Fields.Count;
+            string Expression = null;
+            int i = 0;
+
+            foreach (Enum e in Fields)
+            {
+                Expression += e.ToString();
+                if (i++ != Lenght)
+                {
+                    Expression += Comma;
+                }
+            }
+            return Expression;
+        }
 
         static DataTable GetTable(string Command)
         {

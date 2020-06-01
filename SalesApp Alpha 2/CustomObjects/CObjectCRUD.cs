@@ -117,7 +117,7 @@ namespace SalesApp_Alpha_2
                 }
                 else
                 {
-                    if (Filter.TypeSQL == SQLValueType.SqlString)
+                    if (Filter.ValueType == SQLValueType.SqlString)
                     {
                         UseLike = true;
                     }
