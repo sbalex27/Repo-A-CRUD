@@ -9,6 +9,7 @@ using MySqlX.XDevAPI.Relational;
 using System.Net.Http.Headers;
 using System.Runtime.InteropServices;
 using System.CodeDom;
+using System.Windows.Forms;
 
 namespace SalesApp_Alpha_2
 {
@@ -19,7 +20,8 @@ namespace SalesApp_Alpha_2
     {
         SqlString, 
         SqlInt, 
-        SqlDouble
+        SqlDouble,
+        SqlNullFormat
     }
 
     /// <summary>
@@ -55,6 +57,23 @@ namespace SalesApp_Alpha_2
             this.Value = Value.ToString();
             TypeSQL = ValueType;
         }
+        /// <summary>
+        /// Instancia un nuevo empaquetado para SQL valor/formato <see cref="SQLValueType.SqlNullFormat"/>
+        /// </summary>
+        /// <param name="Field">Campo de la tabla</param>
+        public DataFieldTemplate(object Field)
+        {
+            if (Field is null)
+            {
+                throw new ArgumentNullException(nameof(Field));
+            }
+            else
+            {
+                this.Field = Field.ToString();
+                Value = "Null";
+                TypeSQL = SQLValueType.SqlNullFormat;
+            }
+        }
 
         public string Field { get; private set; }
         public string Value { get; private set; }
@@ -71,6 +90,9 @@ namespace SalesApp_Alpha_2
                         return typeof(int);
                     case SQLValueType.SqlDouble:
                         return typeof(double);
+                    case SQLValueType.SqlNullFormat:
+                        return typeof(object);
+
                     default:
                         throw new Exception("No aviable Type");
                 }
@@ -98,6 +120,8 @@ namespace SalesApp_Alpha_2
                 case SQLValueType.SqlInt:
                     return Value.ToString();
                 case SQLValueType.SqlDouble:
+                    return Value.ToString();
+                case SQLValueType.SqlNullFormat:
                     return Value.ToString();
                 default:
                     return Value.ToString();
@@ -228,10 +252,6 @@ namespace SalesApp_Alpha_2
             }
         }
 
-        //public static DataTable Select(Table TableWork, Enum Field, DataFieldTemplate Conditional = null, bool UseLike = false)
-        //{
-        //    return Select(TableWork, (object)Field, Conditional, UseLike);
-        //}
         public static List<object> Select(SQLTable TableWork,
                                        Enum Field,
                                        DataFieldTemplate Conditional = null,
@@ -246,35 +266,78 @@ namespace SalesApp_Alpha_2
             }
             return Items;
         }
-        public static DataTable Select(SQLTable TableWork,
-                                       List<Enum> Fields,
-                                       DataFieldTemplate Conditional = null,
-                                       bool UseLike = false)
+        public static DataTable Select(SQLTable TableWork, List<Enum> Fields, DataFieldTemplate Filter, bool UseLike = false)
         {
-            //Variables Declaration
             int Lenght = Fields.Count;
-            string FieldsToStrings = null;
+            string FieldsToString = null;
             int i = 0;
 
-            //Concatenate Command
-            foreach (object item in Fields)
+            foreach (Enum e in Fields)
             {
-                i++;
-                FieldsToStrings += item.ToString();
-                if (i != Lenght) FieldsToStrings += Comma;
+                FieldsToString += e.ToString();
+                if (i++ != Lenght)
+                {
+                    FieldsToString += Comma;
+                }
             }
 
-            string cmdText = $"Select {FieldsToStrings} from {TableWork}";
-            if (Conditional != null) cmdText += $" Where {Conditional.ToString(UseLike)}";
+            string CommandString = $"Select {FieldsToString} from {TableWork}";
+            string ComparationExpression;
+            if (Filter != null)
+            {
+                if (QFunctions.IsEmptyText(Filter.Value))
+                {
+                    Filter = new DataFieldTemplate(Filter.Field);
+                }
+                ComparationExpression = Filter.ToString(false);
+            }
+            else ComparationExpression = Filter.ToString(UseLike);
+            CommandString += $" Where {ComparationExpression}";
 
-            //Execute
+            return GetTable(CommandString);
+
+        }
+        //public static DataTable Select(SQLTable TableWork,
+        //                               List<Enum> Fields,
+        //                               DataFieldTemplate Conditional = null,
+        //                               bool UseLike = false)
+        //{
+        //    //Variables Declaration
+        //    int Lenght = Fields.Count;
+        //    string FieldsToStrings = null;
+        //    int i = 0;
+
+        //    //Concatenate Command
+        //    foreach (object item in Fields)
+        //    {
+        //        i++;
+        //        FieldsToStrings += item.ToString();
+        //        if (i != Lenght) FieldsToStrings += Comma;
+        //    }
+
+        //    string cmdText = $"Select {FieldsToStrings} from {TableWork}";
+
+        //    if (Conditional != null) cmdText += $" Where {Conditional.ToString(UseLike)}";
+
+        //    //Execute
+        //    TryOpen();
+        //    MySqlCommand sqlCommand = new MySqlCommand(cmdText, sqlConnection);
+        //    MySqlDataAdapter sqlDataAdapter = new MySqlDataAdapter(sqlCommand);
+        //    DataTable dataTable = new DataTable();
+        //    sqlDataAdapter.Fill(dataTable);
+        //    TryClose();
+        //    return dataTable;
+        //}
+
+        static DataTable GetTable(string Command)
+        {
             TryOpen();
-            MySqlCommand sqlCommand = new MySqlCommand(cmdText, sqlConnection);
+            MySqlCommand sqlCommand = new MySqlCommand(Command, sqlConnection);
             MySqlDataAdapter sqlDataAdapter = new MySqlDataAdapter(sqlCommand);
-            DataTable dataTable = new DataTable();
-            sqlDataAdapter.Fill(dataTable);
+            DataTable table = new DataTable();
+            sqlDataAdapter.Fill(table);
             TryClose();
-            return dataTable;
+            return table;
         }
     }
 

@@ -74,12 +74,8 @@ namespace SalesApp_Alpha_2
 
         private void RefreshProperties()
         {
-            UI_SelectProductsProperties.SetObject(SearchSelected);
-            //if (SearchSelected != null)
-            //{
-            //    LoadProperties(SearchSelected);
-            //}
-            //else UI_SelectProductsProperties.ClearProperties();
+            //UI_SelectProductsProperties.SetObject(SearchSelected);
+            LoadProperties(SearchSelected);
         }
 
         private void LoadProperties(Product P)
