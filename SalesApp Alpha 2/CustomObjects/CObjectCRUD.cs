@@ -108,22 +108,25 @@ namespace SalesApp_Alpha_2
         protected static DataTable GetDataTable(SQLTable Table, List<Enum> Fields, DataFieldTemplate Filter, bool EmptyLoadAll = false)
         {
             //TODO: Probar funcionamiento EmptyLoadAll
-            bool UseLike = false;
-            if (Filter != null)
-            {
-                if (QFunctions.IsEmptyText(Filter.Value))
-                {
-                    Filter = null;
-                }
-                else
-                {
-                    if (Filter.ValueType == SQLValueType.SqlString)
-                    {
-                        UseLike = true;
-                    }
-                }
-            }
-            return Qsql.Select(Table, Fields, Filter, UseLike);
+
+            return Qsql.Select(Table, Fields, Filter, EmptyLoadAll);
+
+            //bool UseLike = false;
+            //if (Filter != null)
+            //{
+            //    if (QFunctions.IsEmptyText(Filter.Value))
+            //    {
+            //        Filter = null;
+            //    }
+            //    else
+            //    {
+            //        if (Filter.ValueType == SQLValueType.SqlString)
+            //        {
+            //            UseLike = true;
+            //        }
+            //    }
+            //}
+            //return Qsql.Select(Table, Fields, Filter, UseLike);
         }
         #endregion
     }

@@ -377,7 +377,7 @@ namespace SalesApp_Alpha_2
             foreach (Enum e in Fields)
             {
                 Expression += e.ToString();
-                if (i++ != Lenght)
+                if (++i != Lenght)
                 {
                     Expression += Comma;
                 }
