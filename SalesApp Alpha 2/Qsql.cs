@@ -103,6 +103,14 @@ namespace SalesApp_Alpha_2
         /// </summary>
         public bool LikeOperator { get; private set; }
         /// <summary>
+        /// Valor formateado para obtener la cadena del uno de los operadores
+        /// <code>Like = </code>
+        /// </summary>
+        public string FormattedOperator
+        {
+            get => LikeOperator ? "Like" : "=";
+        }
+        /// <summary>
         /// Valor Formateado para comparación lógica en comando SQL
         /// <code>'%Apple%', 'Apple', 205, 15.25</code>
         /// </summary>
@@ -128,8 +136,7 @@ namespace SalesApp_Alpha_2
         /// </returns>
         public override string ToString()
         {
-            string Operator = LikeOperator ? "Like" : "=";
-            return $"{Field} {Operator} {FormattedValue}";
+            return $"{Field} {FormattedOperator} {FormattedValue}";
         }
     }
 
