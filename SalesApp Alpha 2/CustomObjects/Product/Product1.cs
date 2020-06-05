@@ -11,7 +11,24 @@ namespace SalesApp_Alpha_2
     public class Product : CObjectCRUD
     {
         #region Constructor and Properties
+        /// <summary>
+        /// Constructor de un producto vacío
+        /// </summary>
         public Product() { }
+
+        /// <summary>
+        /// Constructor de un producto con un ID existente
+        /// </summary>
+        /// <param name="ID">Identificador de producto</param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public Product(int ID)
+        {
+            if (ID != 0)
+            {
+                this.ID = ID;
+            }
+            else throw new ArgumentOutOfRangeException(nameof(ID));
+        }
 
         private const SQLTable TableWork = SQLTable.Products;
 

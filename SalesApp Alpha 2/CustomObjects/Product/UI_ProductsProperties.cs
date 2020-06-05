@@ -23,7 +23,7 @@ namespace SalesApp_Alpha_2
         private Product _ProductObject;
         public Product GetObject()
         {
-            _ProductObject = new Product
+            _ProductObject = new Product(_ProductObject.ID)
             {
                 Description = inputBox_Text_Description.InputValue,
                 TradeMark = inputBox_Combo_TradeMark.InputValue,

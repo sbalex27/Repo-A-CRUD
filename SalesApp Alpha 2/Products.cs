@@ -116,7 +116,6 @@ namespace SalesApp_Alpha_2
             try
             {
                 //Execute
-                //TODO: no actualiza reistros porque no se está adjuntando a la instancia el id aparentemente
                 Product Selected = UI_ProductsProperties_Input.GetObject();
                 Selected.Updated += ProductActioned;
                 Selected.Update();

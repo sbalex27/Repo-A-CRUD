@@ -34,6 +34,8 @@ namespace SalesApp_Alpha_2
     /// </summary>
     public class DataFieldTemplate
     {
+        private const string Comma = ", ";
+
         /// <summary>
         /// Instancia un nuevo empaquetado para utilizar como una comparación 
         /// lógica en una Query de SQL
@@ -152,7 +154,7 @@ namespace SalesApp_Alpha_2
                     Conc += item.ToString();
                     if (++i != C)
                     {
-                        Conc += " ,";
+                        Conc += Comma;
                     }
                 }
                 return Conc;
@@ -179,7 +181,7 @@ namespace SalesApp_Alpha_2
                     Conc += item.FormattedValue;
                     if (++i != C)
                     {
-                        Conc += " ,";
+                        Conc += Comma;
                     }
                 }
                 return Conc;
@@ -206,7 +208,7 @@ namespace SalesApp_Alpha_2
                     Conc += item.Field.ToString();
                     if (++i != C)
                     {
-                        Conc += " ,";
+                        Conc += Comma;
                     }
                 }
                 return Conc;
@@ -237,8 +239,8 @@ namespace SalesApp_Alpha_2
                     cValues += item.FormattedValue;
                     if (++i != C)
                     {
-                        cFields += " ,";
-                        cValues += " ,";
+                        cFields += Comma;
+                        cValues += Comma;
                     }
                 }
                 Fields = cFields;
@@ -330,7 +332,6 @@ namespace SalesApp_Alpha_2
         {
             //Validation
             if (FieldAndValue is null) throw new ArgumentNullException(nameof(FieldAndValue));
-            if (Conditional is null) throw new ArgumentNullException(nameof(Conditional));
 
             //Call Update
             List<DataFieldTemplate> Template = new List<DataFieldTemplate>() { FieldAndValue };
@@ -349,25 +350,16 @@ namespace SalesApp_Alpha_2
                                        DataFieldTemplate Conditional)
         {
             //Validation
-            if (FieldsAndValuesList is null) throw new ArgumentNullException(nameof(FieldsAndValuesList));
             if (Conditional is null) throw new ArgumentNullException(nameof(Conditional));
-
-            //Variables Declaration
-            int Lenght = FieldsAndValuesList.Count;
-            string ToStrings = null;
-            int i = 0;
-
-            //Concatenate Command
-            foreach (DataFieldTemplate item in FieldsAndValuesList)
-            {
-                i++;
-                ToStrings += item.ToString();
-                if (i != Lenght) ToStrings += Comma;
-            }
-            string cmdText = $"Update {TableWork} set {ToStrings} Where {Conditional}";
+            
+            //Command
+            string NewStrings = DataFieldTemplate.ConcatenateToStrings(FieldsAndValuesList);
+            string Command = $"Update {TableWork} set {NewStrings} Where {Conditional}";
 
             //Execute
-            ExecuteNonQuery(cmdText);
+            ExecuteNonQuery(Command);
+
+            //Event
             if (UpdateSuccess != null)
             {
                 UpdateSuccess();
@@ -375,10 +367,21 @@ namespace SalesApp_Alpha_2
             }
         }
 
-        public static void DeleteWhere(SQLTable TableWork, DataFieldTemplate DataFieldConditional)
+        /// <summary>
+        /// Elimina un los registros de la base de datos si cumplen con la condicional
+        /// </summary>
+        /// <param name="TableWork">Tabla a trabajar</param>
+        /// <param name="Conditional">Parámetro de condición</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static void DeleteWhere(SQLTable TableWork, DataFieldTemplate Conditional)
         {
-            string cmdText = $"Delete from {TableWork} Where {DataFieldConditional}";
+            //Validation
+            if (Conditional is null) throw new ArgumentNullException(nameof(Conditional));
+            //Command
+            string cmdText = $"Delete from {TableWork} Where {Conditional}";
+            //Execute
             ExecuteNonQuery(cmdText);
+            //Event
             if (DeleteSucess != null)
             {
                 DeleteSucess();
@@ -410,8 +413,6 @@ namespace SalesApp_Alpha_2
             string Command = $"Select {Fields} From {Table}";
             if (Filter != null)
             {
-                //TODO: Prueba de string.isemptyornull
-                //if (Filter.Value.ToString().Length == 0)
                 if (string.IsNullOrEmpty(Filter.Value.ToString()))
                 {
                     if (!EmptyLoadAll) return null;
