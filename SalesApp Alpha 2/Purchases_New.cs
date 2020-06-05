@@ -79,10 +79,10 @@ namespace SalesApp_Alpha_2
         {
             try
             {
-                Product ToAdd = Modified;
-                if (!ListToAddProducts.Contains(ToAdd))
+                Product P = Modified;
+                if (!ListToAddProducts.Contains(P))
                 {
-                    AddToCart(ToAdd);
+                    AddToList(P);
                 }
                 else throw new ProductRepeatedException();
             }
@@ -93,7 +93,7 @@ namespace SalesApp_Alpha_2
             }
         }
 
-        private void AddToCart(Product P)
+        private void AddToList(Product P)
         {
             ListToAddProducts.Add(P);
             RefreshCart();

@@ -1,15 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data;
 using MySql.Data.MySqlClient;
-using MySqlX.XDevAPI.Relational;
-using System.Net.Http.Headers;
-using System.Runtime.InteropServices;
-using System.CodeDom;
-using System.Windows.Forms;
 
 namespace SalesApp_Alpha_2
 {
@@ -138,6 +130,123 @@ namespace SalesApp_Alpha_2
         {
             return $"{Field} {FormattedOperator} {FormattedValue}";
         }
+
+        #region Statics
+        /// <summary>
+        /// Recibe y concatena la lista en valores obtenidos de <see cref="ToString"/>
+        /// </summary>
+        /// <param name="List">Lista a procesar</param>
+        /// <returns>Valores concatenados</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static string ConcatenateToStrings(List<DataFieldTemplate> List)
+        {
+            if (List is null) throw new ArgumentNullException(nameof(List));
+            int C = List.Count;
+            if (C != 0)
+            {
+                string Conc = null;
+                int i = 0;
+                foreach (DataFieldTemplate item in List)
+                {
+                    Conc += item.ToString();
+                    if (++i != C)
+                    {
+                        Conc += " ,";
+                    }
+                }
+                return Conc;
+            }
+            else throw new ArgumentOutOfRangeException(nameof(List));
+        }
+        /// <summary>
+        /// Concatena una lista en valores obtenidos de <see cref="FormattedValue"/>
+        /// </summary>
+        /// <param name="List">Lista a procesar</param>
+        /// <returns>Valores concatenados</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static string ConcatenateValues(List<DataFieldTemplate> List)
+        {
+            if (List is null) throw new ArgumentNullException(nameof(List));
+            int C = List.Count;
+            if (C != 0)
+            {
+                string Conc = null;
+                int i = 0;
+                foreach (DataFieldTemplate item in List)
+                {
+                    Conc += item.FormattedValue;
+                    if (++i != C)
+                    {
+                        Conc += " ,";
+                    }
+                }
+                return Conc;
+            }
+            else throw new ArgumentOutOfRangeException(nameof(List));
+        }
+        /// <summary>
+        /// Concatena una lista en valores obtenidos de <see cref="Field"/>
+        /// </summary>
+        /// <param name="List">Lista a procesar</param>
+        /// <returns>Valores concatenados</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static string ConcatenateFields(List<DataFieldTemplate> List)
+        {
+            if (List is null) throw new ArgumentNullException(nameof(List));
+            int C = List.Count;
+            if (C != 0)
+            {
+                string Conc = null;
+                int i = 0;
+                foreach (DataFieldTemplate item in List)
+                {
+                    Conc += item.Field.ToString();
+                    if (++i != C)
+                    {
+                        Conc += " ,";
+                    }
+                }
+                return Conc;
+            }
+            else throw new ArgumentNullException(nameof(List));
+        }
+        /// <summary>
+        /// Procesa una lista y concatena en dos cadenas de texto distintas las propiedades
+        /// de <see cref="Field"/> y <see cref="FormattedValue"/>
+        /// </summary>
+        /// <param name="List">Lista a procesar</param>
+        /// <param name="Fields">Valor de salida de <see cref="Field"/> concatenados</param>
+        /// <param name="FormattedValues">Valor de salida de <see cref="FormattedValue"/> concatenados</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static void ConcatenateFieldsValues(List<DataFieldTemplate> List, out string Fields, out string FormattedValues)
+        {
+            if (List is null) throw new ArgumentNullException(nameof(List));
+            int C = List.Count;
+            if (C != 0)
+            {
+                string cFields = null;
+                string cValues = null;
+                int i = 0;
+                foreach (DataFieldTemplate item in List)
+                {
+                    cFields += item.Field.ToString();
+                    cValues += item.FormattedValue;
+                    if (++i != C)
+                    {
+                        cFields += " ,";
+                        cValues += " ,";
+                    }
+                }
+                Fields = cFields;
+                FormattedValues = cValues;
+            }
+            else throw new ArgumentOutOfRangeException(nameof(List));
+        }
+        #endregion
     }
 
     public static class Qsql
@@ -187,17 +296,19 @@ namespace SalesApp_Alpha_2
             TryClose();
         }
 
-        //Commands
+        /// <summary>
+        /// Inserta dentro de una tabla de la base de datos un objeto <see cref="DataFieldTemplate"/>
+        /// </summary>
+        /// <param name="TableWork">Tabla en la que se insertará el registro</param>
+        /// <param name="FieldsAndValues">Empaquetado MySQL para insertar</param>
         public static void InsertInto(SQLTable TableWork, List<DataFieldTemplate> FieldsAndValues)
         {
             //Command Generator
-            string Fields = null;
-            string Values = null;
-            FillFieldsAndValues(FieldsAndValues, ref Fields, ref Values);
-            string cmdText = $"Insert into {TableWork} ({Fields}) Values ({Values})";
+            DataFieldTemplate.ConcatenateFieldsValues(FieldsAndValues, out string Fields, out string Values);
+            string Command = $"Insert into {TableWork} ({Fields}) Values ({Values})";
 
             //Execute
-            ExecuteNonQuery(cmdText);
+            ExecuteNonQuery(Command);
             if (InsertIntoSuccess != null)
             {
                 InsertIntoSuccess();
@@ -205,32 +316,42 @@ namespace SalesApp_Alpha_2
             }
         }
 
-        static void FillFieldsAndValues(List<DataFieldTemplate> DataFields, ref string Fields, ref string Values)
-        {
-            int i = 0;
-            foreach (DataFieldTemplate Template in DataFields)
-            {
-                Fields += Template.Field;
-                Values += Template.FormattedValue;
-                if (++i != DataFields.Count)
-                {
-                    Fields += Comma;
-                    Values += Comma;
-                }
-            }
-        }
-
+        /// <summary>
+        /// Actualiza el valor de un campo de una tabla en la Base de Datos
+        /// si cumple con el parámetro de condición
+        /// </summary>
+        /// <param name="TableWork">Tabla a trabajar</param>
+        /// <param name="FieldAndValue">Empaquetado MySql con el nuevo valor</param>
+        /// <param name="Conditional">Parámetro de condición</param>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void UpdateWhere(SQLTable TableWork,
                                        DataFieldTemplate FieldAndValue,
                                        DataFieldTemplate Conditional)
         {
-            List<DataFieldTemplate> fieldTemplate = new List<DataFieldTemplate>() { FieldAndValue };
-            UpdateWhere(TableWork, fieldTemplate, Conditional);
+            //Validation
+            if (FieldAndValue is null) throw new ArgumentNullException(nameof(FieldAndValue));
+            if (Conditional is null) throw new ArgumentNullException(nameof(Conditional));
+
+            //Call Update
+            List<DataFieldTemplate> Template = new List<DataFieldTemplate>() { FieldAndValue };
+            UpdateWhere(TableWork, Template, Conditional);
         }
+        /// <summary>
+        /// Actualiza valores de un registro en la base de datos si cumple con el
+        /// parámetro de condición
+        /// </summary>
+        /// <param name="TableWork">Tabla a trabajar</param>
+        /// <param name="FieldsAndValuesList">Lista de empaquetados MySQL con los nuevos valores</param>
+        /// <param name="Conditional">Parámetro de condición</param>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void UpdateWhere(SQLTable TableWork,
                                        List<DataFieldTemplate> FieldsAndValuesList,
                                        DataFieldTemplate Conditional)
         {
+            //Validation
+            if (FieldsAndValuesList is null) throw new ArgumentNullException(nameof(FieldsAndValuesList));
+            if (Conditional is null) throw new ArgumentNullException(nameof(Conditional));
+
             //Variables Declaration
             int Lenght = FieldsAndValuesList.Count;
             string ToStrings = null;
@@ -289,18 +410,20 @@ namespace SalesApp_Alpha_2
             string Command = $"Select {Fields} From {Table}";
             if (Filter != null)
             {
-                if (Filter.Value.ToString().Length == 0)
+                //TODO: Prueba de string.isemptyornull
+                //if (Filter.Value.ToString().Length == 0)
+                if (string.IsNullOrEmpty(Filter.Value.ToString()))
                 {
                     if (!EmptyLoadAll) return null;
                 }
                 else Command += $" Where {Filter}";
             }
-            DataTable dataTable = GetTable(Command);
-            if (dataTable.Rows.Count == 0)
+            DataTable dt = GetTable(Command);
+            if (dt.Rows.Count == 0)
             {
-                dataTable = null;
+                dt = null;
             }
-            return dataTable;
+            return dt;
         }
 
         public static DataTable Select(SQLTable Table, List<Enum> FieldsCollection)
@@ -313,6 +436,18 @@ namespace SalesApp_Alpha_2
             return Select(Table, null);
         }
 
+        static DataTable GetTable(string Command)
+        {
+            TryOpen();
+            MySqlCommand sqlCommand = new MySqlCommand(Command, sqlConnection);
+            MySqlDataAdapter sqlDataAdapter = new MySqlDataAdapter(sqlCommand);
+            DataTable table = new DataTable();
+            sqlDataAdapter.Fill(table);
+            TryClose();
+            return table;
+        }
+
+        #region Concatenates
         public static string FieldsExpression(List<Enum> Fields)
         {
             int Lenght = Fields.Count;
@@ -329,17 +464,7 @@ namespace SalesApp_Alpha_2
             }
             return Expression;
         }
-
-        static DataTable GetTable(string Command)
-        {
-            TryOpen();
-            MySqlCommand sqlCommand = new MySqlCommand(Command, sqlConnection);
-            MySqlDataAdapter sqlDataAdapter = new MySqlDataAdapter(sqlCommand);
-            DataTable table = new DataTable();
-            sqlDataAdapter.Fill(table);
-            TryClose();
-            return table;
-        }
+        #endregion
     }
 
     #region DataBase Exceptions
