@@ -267,6 +267,30 @@ namespace SalesApp_Alpha_2
             return exceptions;
         }
 
+        //TODO: intentar ver si la validación puede ir vinculada de algún modo a SQL y que dependiendo la excepción sql retorne una excepción personalizada
+        public bool ValidateTrial()
+        {
+            List<Enum> f = GetActiveFields(false);
+
+            if (f.Contains(TableFields.Description) && string.IsNullOrWhiteSpace(Description))
+            {
+                throw new ProductCriticalValuesException();
+            }
+            if (f.Contains(TableFields.TradeMark) && string.IsNullOrWhiteSpace(TradeMark))
+            {
+                throw new ProductCriticalValuesException();
+            }
+            if (f.Contains(TableFields.Quantity) && Quantity < 0)
+            {
+                throw new ProductNoQuantityException();
+            }
+            if (f.Contains(TableFields.Price) && Price <= 0)
+            {
+                throw new ProductWorthlessException();
+            }
+            return true;
+        }
+
         public override void Update()
         {
             if (GetListExceptions().Count == 0)
