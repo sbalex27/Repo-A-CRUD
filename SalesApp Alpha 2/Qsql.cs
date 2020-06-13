@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 
 namespace SalesApp_Alpha_2
@@ -389,14 +390,15 @@ namespace SalesApp_Alpha_2
             }
         }
 
+        #region Select
+
         public static List<object> Select(SQLTable Table,
                                           Enum Field = null,
-                                          DataFieldTemplate Filter = null,
-                                          bool EmptyLoadAll = false)
+                                          DataFieldTemplate Filter = null)
         {
             List<Enum> LField = new List<Enum> { Field };
             List<object> Items = new List<object>();
-            DataTable Result = Select(Table, LField, Filter, EmptyLoadAll);
+            DataTable Result = Select(Table, LField, Filter, null);
             foreach (DataRow row in Result.Rows)
             {
                 Items.Add(row[0].ToString());
@@ -406,25 +408,32 @@ namespace SalesApp_Alpha_2
 
         public static DataTable Select(SQLTable Table,
                                        List<Enum> FieldsCollection,
-                                       DataFieldTemplate Filter,
-                                       bool EmptyLoadAll = false)
+                                       DataFieldTemplate Conditional,
+                                       Enum OrderByField)
         {
+            //Var
             string Fields = FieldsCollection is null ? "*" : FieldsExpression(FieldsCollection);
             string Command = $"Select {Fields} From {Table}";
-            if (Filter != null)
+
+            //Conditional
+            if (!string.IsNullOrWhiteSpace(Conditional?.Value.ToString()))
             {
-                if (string.IsNullOrEmpty(Filter.Value.ToString()))
-                {
-                    if (!EmptyLoadAll) return null;
-                }
-                else Command += $" Where {Filter}";
+                Command += $" Where {Conditional}";
             }
-            DataTable dt = GetTable(Command);
-            if (dt.Rows.Count == 0)
+
+            //Order By
+            if (OrderByField != null)
             {
-                dt = null;
+                Command += $" Order By {OrderByField}";
             }
-            return dt;
+
+            //Execute
+            return GetTable(Command);
+        }
+
+        public static DataTable Select(SQLTable Table, List<Enum> FieldsCollection, DataFieldTemplate Conditional)
+        {
+            return Select(Table, FieldsCollection, Conditional, null);
         }
 
         public static DataTable Select(SQLTable Table, List<Enum> FieldsCollection)
@@ -436,6 +445,8 @@ namespace SalesApp_Alpha_2
         {
             return Select(Table, null);
         }
+
+        #endregion
 
         static DataTable GetTable(string Command)
         {
@@ -480,4 +491,27 @@ namespace SalesApp_Alpha_2
           System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
     #endregion
+
+    public class DataBaseSelect
+    {
+        public DataBaseSelect() { }
+        public DataBaseSelect(SQLTable Table, List<Enum> Fields, DataFieldTemplate Conditional, List<DataFieldTemplate> DataFields)
+        {
+            this.Table = Table;
+            this.Fields = Fields;
+            this.Conditional = Conditional;
+            this.DataFields = DataFields;
+        }
+
+        public SQLTable Table { get; set; }
+        public List<Enum> Fields { get; set; }
+        public DataFieldTemplate Conditional { get; set; }
+        public List<DataFieldTemplate> DataFields { get; set; }
+
+        public DataTable Select()
+        {
+            throw new NotImplementedException();
+        }
+
+    }
 }

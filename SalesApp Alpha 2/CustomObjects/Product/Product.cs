@@ -155,7 +155,7 @@ namespace SalesApp_Alpha_2
             bool IsEmpty = QFunctions.IsEmptyText(ValueFilter);
             if (IfEmptyIsNull && IsEmpty) return null;
             DataFieldTemplate Conditional = IsEmpty ? null : DataField(FieldForFilter, ValueFilter);
-            return Qsql.Select(SQLTable.Products, Fields, Conditional, true);
+            return Qsql.Select(SQLTable.Products, Fields, Conditional);
         }
 
         static public List<OProduct> GetAll()
@@ -181,8 +181,7 @@ namespace SalesApp_Alpha_2
         {
             DataTable ProductsDataTable = Qsql.Select(SQLTable.Products,
                 GetFieldsActivated(),
-                DataField(TableFields.ID, ID),
-                false);
+                DataField(TableFields.ID, ID));
 
             switch (ProductsDataTable.Rows.Count)
             {

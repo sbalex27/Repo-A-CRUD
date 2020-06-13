@@ -101,13 +101,16 @@ namespace SalesApp_Alpha_2
         /// <param name="Table">Nombre de la tabla a consultar</param>
         /// <param name="Fields">Lista de parámetros a consultar</param>
         /// <param name="Filter">Filtro de la búsqueda</param>
-        /// <param name="EmptyLoadAll">Si es verdadero y la búsqueda no devuelve
+        /// <param name="OrderByField">Si es verdadero y la búsqueda no devuelve
         /// ningún resultado, se cargan todos los datos de los parámetros asignados
         /// aunque no coincidan con la búsqueda</param>
         /// <returns></returns>
-        protected static DataTable GetDataTable(SQLTable Table, List<Enum> Fields, DataFieldTemplate Filter, bool EmptyLoadAll = false)
+        protected static DataTable GetDataTable(SQLTable Table,
+                                                List<Enum> Fields,
+                                                DataFieldTemplate Filter,
+                                                Enum OrderByField = null)
         {
-            return Qsql.Select(Table, Fields, Filter, EmptyLoadAll);
+            return Qsql.Select(Table, Fields, Filter, OrderByField);
         }
         #endregion
     }

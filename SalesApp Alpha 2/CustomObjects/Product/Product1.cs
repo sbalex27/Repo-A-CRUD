@@ -102,7 +102,7 @@ namespace SalesApp_Alpha_2
         /// <returns></returns>
         public static DataTable GetTableProducts(List<Enum> Fields, DataFieldTemplate Filter = null, bool EmptyLoadAll = false)
         {
-            return GetDataTable(TableWork, Fields, Filter, EmptyLoadAll);
+            return GetDataTable(TableWork, Fields, Filter, null);
         }
 
         /// <summary>
