@@ -60,7 +60,7 @@ namespace SalesApp_Alpha_2
             {
                 return new DataFieldTemplate(Product.TableFields.Description,
                                              inBox_Buscar.InputText,
-                                             SQLValueType.SqlString, true);
+                                             SQLValueType.SqlString, SQLOperator.Like);
             }
         }
 

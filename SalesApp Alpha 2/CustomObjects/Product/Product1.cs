@@ -102,7 +102,11 @@ namespace SalesApp_Alpha_2
         /// <returns></returns>
         public static DataTable GetTableProducts(List<Enum> Fields, DataFieldTemplate Filter = null, bool EmptyLoadAll = false)
         {
-            return GetDataTable(TableWork, Fields, Filter, null);
+            return GetDataTable(TableWork, Fields, Filter, null, true);
+            //return new Select(Fields, TableWork)
+            //{
+            //    Filter = Filter,
+            //}.Execute();
         }
 
         /// <summary>
@@ -161,7 +165,7 @@ namespace SalesApp_Alpha_2
         /// <returns>Lista de marcas</returns>
         public static List<object> GetTradeMarks()
         {
-            return Qsql.Select(TableWork, TableFields.TradeMark);
+            return new Select(TableFields.TradeMark, SQLTable.Products).GetListed();
         }
 
         /// <summary>

@@ -13,26 +13,23 @@ namespace SalesApp_Alpha_2
         }
 
         #region Getters
-        Product Selected
-        {
-            get => SearchValue != null ? Product.GetFromID((int)SearchValue) : null;
-        }
+        Product Selected => (Product)(SearchValue ?? Product.GetFromID((int)SearchValue));
 
-        Product Modified
-        {
-            get => UI_SelectProductsProperties.GetObject();
-        }
+        Product Modified => UI_SelectProductsProperties.GetObject();
 
         DataTable ProductsDataTable
         {
-            get => Product.GetTableProducts(Product.GetActiveFields(true), SearchDataField);
+            get
+            {
+                return Product.GetTableProducts(Product.GetActiveFields(true), SearchDataField);
+            }
         }
 
         DataFieldTemplate SearchDataField
         {
             get => new DataFieldTemplate(Product.TableFields.Description,
                                              IB_Text_Search.InputValue,
-                                             SQLValueType.SqlString, true);
+                                             SQLValueType.SqlString, SQLOperator.Like);
         }
 
         object SearchValue

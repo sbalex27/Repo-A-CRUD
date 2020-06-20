@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 
@@ -30,12 +31,19 @@ namespace SalesApp_Alpha_2
         Sales_Details
     };
 
+    public enum SQLOperator
+    {
+        Like,
+        Equal,
+        Between
+    }
+
     /// <summary>
     /// Clase de empaquetado de objetos para procesamiento SQL
     /// </summary>
     public class DataFieldTemplate
     {
-        private const string Comma = ", ";
+        //private const string Comma = ", ";
 
         /// <summary>
         /// Instancia un nuevo empaquetado para utilizar como una comparación 
@@ -44,9 +52,9 @@ namespace SalesApp_Alpha_2
         /// <param name="Field">Campo de la tabla</param>
         /// <param name="Value">Valor del campo</param>
         /// <param name="ValueType">Tipo de variable del campo</param>
-        /// <param name="LikeOperator">Tipo de operador de búsqueda (False "=", True "Like")</param>
+        /// <param name="Operator">Tipo de operador de búsqueda (False "=", True "Like")</param>
         /// <exception cref="ArgumentException"></exception>
-        public DataFieldTemplate(Enum Field, object Value, SQLValueType ValueType, bool LikeOperator)
+        public DataFieldTemplate(Enum Field, object Value, SQLValueType ValueType, SQLOperator Operator)
         {
             if (Field is null)
             {
@@ -61,7 +69,7 @@ namespace SalesApp_Alpha_2
             else this.Value = Value;
 
             this.ValueType = ValueType;
-            this.LikeOperator = LikeOperator;
+            this.Operator = Operator;
         }
 
         /// <summary>
@@ -78,7 +86,7 @@ namespace SalesApp_Alpha_2
             this.Field = Field;
             this.Value = Value.ToString();
             this.ValueType = ValueType;
-            LikeOperator = false;
+            Operator = SQLOperator.Equal;
         }
 
         /// <summary>
@@ -93,18 +101,45 @@ namespace SalesApp_Alpha_2
         /// Tipo de valor admitido por SQL para establecer el formato de <see cref="FormattedValue"/>
         /// </summary>
         public SQLValueType ValueType { get; private set; }
+        
         /// <summary>
-        /// Operador lógico de comparación [True = "Like"] [False = "="]
+        /// Operador lógico de comparación
         /// </summary>
-        public bool LikeOperator { get; private set; }
+        public SQLOperator Operator { get; private set; }
+
         /// <summary>
-        /// Valor formateado para obtener la cadena del uno de los operadores
-        /// <code>Like = </code>
+        /// Operador lógico de comparación en formato de cadena de texto <see cref="string"/>
         /// </summary>
-        public string FormattedOperator
+        public string OperatorStringable
         {
-            get => LikeOperator ? "Like" : "=";
+            get
+            {
+                Dictionary<SQLOperator, string> Stringable = new Dictionary<SQLOperator, string>
+                {
+                    {SQLOperator.Equal, "=" },
+                    {SQLOperator.Like, "Like" },
+                    {SQLOperator.Between, "Between" }
+                };
+
+                return Stringable[Operator];
+            }
         }
+        
+        ///// <summary>
+        ///// Operador lógico de comparación [True = "Like"] [False = "="]
+        ///// </summary>
+        //public bool LikeOperator { get; private set; }
+
+        ///// <summary>
+        ///// Valor formateado para obtener la cadena del uno de los operadores
+        ///// <code>Like = </code>
+        ///// </summary>
+        //public string FormattedOperator
+        //{
+        //    get => LikeOperator ? "Like" : "=";
+        //}
+
+
         /// <summary>
         /// Valor Formateado para comparación lógica en comando SQL
         /// <code>'%Apple%', 'Apple', 205, 15.25</code>
@@ -113,14 +148,25 @@ namespace SalesApp_Alpha_2
         {
             get
             {
-                switch (ValueType)
+                if (IsStringable)
                 {
-                    case SQLValueType.SqlString:
-                        return LikeOperator ? $"'%{Value}%'" : $"'{Value}'";
-                    default:
-                        return Value.ToString();
+                    switch (ValueType)
+                    {
+                        case SQLValueType.SqlString:
+                            return Operator == SQLOperator.Like ? $"'%{Value}%'" : $"'{Value}'";
+                        default:
+                            return Value.ToString();
+                    }
                 }
+                else return "null";
             }
+        }
+        /// <summary>
+        /// Analiza el estado del valor del campo y retorna <see langword="true"/> si no es nulo o si no está vacío.
+        /// </summary>
+        public bool IsStringable
+        {
+            get => !string.IsNullOrWhiteSpace(Value?.ToString());
         }
 
         /// <summary>
@@ -131,7 +177,7 @@ namespace SalesApp_Alpha_2
         /// </returns>
         public override string ToString()
         {
-            return $"{Field} {FormattedOperator} {FormattedValue}";
+            return $"{Field} {OperatorStringable} {FormattedValue}";
         }
 
         #region Statics
@@ -144,23 +190,8 @@ namespace SalesApp_Alpha_2
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static string ConcatenateToStrings(List<DataFieldTemplate> List)
         {
-            if (List is null) throw new ArgumentNullException(nameof(List));
-            int C = List.Count;
-            if (C != 0)
-            {
-                string Conc = null;
-                int i = 0;
-                foreach (DataFieldTemplate item in List)
-                {
-                    Conc += item.ToString();
-                    if (++i != C)
-                    {
-                        Conc += Comma;
-                    }
-                }
-                return Conc;
-            }
-            else throw new ArgumentOutOfRangeException(nameof(List));
+            if (List is null || List.Count == 0) throw new ArgumentNullException(nameof(List));
+            return string.Join<DataFieldTemplate>(", ", List.ToArray());
         }
         /// <summary>
         /// Concatena una lista en valores obtenidos de <see cref="FormattedValue"/>
@@ -172,22 +203,12 @@ namespace SalesApp_Alpha_2
         public static string ConcatenateValues(List<DataFieldTemplate> List)
         {
             if (List is null) throw new ArgumentNullException(nameof(List));
-            int C = List.Count;
-            if (C != 0)
+            List<object> FormattedValues = new List<object>();
+            foreach (DataFieldTemplate item in List)
             {
-                string Conc = null;
-                int i = 0;
-                foreach (DataFieldTemplate item in List)
-                {
-                    Conc += item.FormattedValue;
-                    if (++i != C)
-                    {
-                        Conc += Comma;
-                    }
-                }
-                return Conc;
+                FormattedValues.Add(item.FormattedValue);
             }
-            else throw new ArgumentOutOfRangeException(nameof(List));
+            return string.Join(", ", FormattedValues);
         }
         /// <summary>
         /// Concatena una lista en valores obtenidos de <see cref="Field"/>
@@ -198,23 +219,13 @@ namespace SalesApp_Alpha_2
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static string ConcatenateFields(List<DataFieldTemplate> List)
         {
-            if (List is null) throw new ArgumentNullException(nameof(List));
-            int C = List.Count;
-            if (C != 0)
+            if (List is null || List.Count == 0) throw new ArgumentNullException(nameof(List));
+            List<Enum> Fields = new List<Enum>();
+            foreach (DataFieldTemplate item in List)
             {
-                string Conc = null;
-                int i = 0;
-                foreach (DataFieldTemplate item in List)
-                {
-                    Conc += item.Field.ToString();
-                    if (++i != C)
-                    {
-                        Conc += Comma;
-                    }
-                }
-                return Conc;
+                Fields.Add(item.Field);
             }
-            else throw new ArgumentNullException(nameof(List));
+            return string.Join(", ", Fields);
         }
         /// <summary>
         /// Procesa una lista y concatena en dos cadenas de texto distintas las propiedades
@@ -227,27 +238,9 @@ namespace SalesApp_Alpha_2
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static void ConcatenateFieldsValues(List<DataFieldTemplate> List, out string Fields, out string FormattedValues)
         {
-            if (List is null) throw new ArgumentNullException(nameof(List));
-            int C = List.Count;
-            if (C != 0)
-            {
-                string cFields = null;
-                string cValues = null;
-                int i = 0;
-                foreach (DataFieldTemplate item in List)
-                {
-                    cFields += item.Field.ToString();
-                    cValues += item.FormattedValue;
-                    if (++i != C)
-                    {
-                        cFields += Comma;
-                        cValues += Comma;
-                    }
-                }
-                Fields = cFields;
-                FormattedValues = cValues;
-            }
-            else throw new ArgumentOutOfRangeException(nameof(List));
+            if (List is null || List.Count == 0) throw new ArgumentNullException(nameof(List));
+            Fields = ConcatenateFields(List);
+            FormattedValues = ConcatenateValues(List);
         }
         #endregion
     }
@@ -390,74 +383,74 @@ namespace SalesApp_Alpha_2
             }
         }
 
-        #region Select
+        //#region Select
 
-        public static List<object> Select(SQLTable Table,
-                                          Enum Field = null,
-                                          DataFieldTemplate Filter = null)
-        {
-            List<Enum> LField = new List<Enum> { Field };
-            List<object> Items = new List<object>();
-            DataTable Result = Select(Table, LField, Filter, null);
-            foreach (DataRow row in Result.Rows)
-            {
-                Items.Add(row[0].ToString());
-            }
-            return Items;
-        }
+        //public static List<object> Select(SQLTable Table,
+        //                                  Enum Field = null,
+        //                                  DataFieldTemplate Filter = null)
+        //{
+        //    List<Enum> LField = new List<Enum> { Field };
+        //    List<object> Items = new List<object>();
+        //    DataTable Result = Select(Table, LField, Filter, null);
+        //    foreach (DataRow row in Result.Rows)
+        //    {
+        //        Items.Add(row[0].ToString());
+        //    }
+        //    return Items;
+        //}
 
-        public static DataTable Select(SQLTable Table,
-                                       List<Enum> FieldsCollection,
-                                       DataFieldTemplate Conditional,
-                                       Enum OrderByField)
-        {
-            //Var
-            string Fields = FieldsCollection is null ? "*" : FieldsExpression(FieldsCollection);
-            string Command = $"Select {Fields} From {Table}";
+        //public static DataTable Select(SQLTable Table,
+        //                               List<Enum> FieldsCollection,
+        //                               DataFieldTemplate Conditional,
+        //                               Enum OrderByField)
+        //{
+        //    //Var
+        //    string Fields = FieldsCollection is null ? "*" : FieldsExpression(FieldsCollection);
+        //    string Command = $"Select {Fields} From {Table}";
 
-            //Conditional
-            if (!string.IsNullOrWhiteSpace(Conditional?.Value.ToString()))
-            {
-                Command += $" Where {Conditional}";
-            }
+        //    //Conditional
+        //    if (!string.IsNullOrWhiteSpace(Conditional?.Value.ToString()))
+        //    {
+        //        Command += $" Where {Conditional}";
+        //    }
 
-            //Order By
-            if (OrderByField != null)
-            {
-                Command += $" Order By {OrderByField}";
-            }
+        //    //Order By
+        //    if (OrderByField != null)
+        //    {
+        //        Command += $" Order By {OrderByField}";
+        //    }
 
-            //Execute
-            return GetTable(Command);
-        }
+        //    //Execute
+        //    return GetTable(Command);
+        //}
 
-        public static DataTable Select(SQLTable Table, List<Enum> FieldsCollection, DataFieldTemplate Conditional)
-        {
-            return Select(Table, FieldsCollection, Conditional, null);
-        }
+        //public static DataTable Select(SQLTable Table, List<Enum> FieldsCollection, DataFieldTemplate Conditional)
+        //{
+        //    return Select(Table, FieldsCollection, Conditional, null);
+        //}
 
-        public static DataTable Select(SQLTable Table, List<Enum> FieldsCollection)
-        {
-            return Select(Table, FieldsCollection, null);
-        }
+        //public static DataTable Select(SQLTable Table, List<Enum> FieldsCollection)
+        //{
+        //    return Select(Table, FieldsCollection, null);
+        //}
 
-        public static DataTable Select(SQLTable Table)
-        {
-            return Select(Table, null);
-        }
+        //public static DataTable Select(SQLTable Table)
+        //{
+        //    return Select(Table, null);
+        //}
 
-        #endregion
+        //#endregion
 
-        static DataTable GetTable(string Command)
-        {
-            TryOpen();
-            MySqlCommand sqlCommand = new MySqlCommand(Command, sqlConnection);
-            MySqlDataAdapter sqlDataAdapter = new MySqlDataAdapter(sqlCommand);
-            DataTable table = new DataTable();
-            sqlDataAdapter.Fill(table);
-            TryClose();
-            return table;
-        }
+        //static DataTable GetTable(string Command)
+        //{
+        //    TryOpen();
+        //    MySqlCommand sqlCommand = new MySqlCommand(Command, sqlConnection);
+        //    MySqlDataAdapter sqlDataAdapter = new MySqlDataAdapter(sqlCommand);
+        //    DataTable table = new DataTable();
+        //    sqlDataAdapter.Fill(table);
+        //    TryClose();
+        //    return table;
+        //}
 
         #region Concatenates
         public static string FieldsExpression(List<Enum> Fields)
@@ -479,6 +472,95 @@ namespace SalesApp_Alpha_2
         #endregion
     }
 
+    public class Select
+    {
+        public Select(List<Enum> Fields, SQLTable Table)
+        {
+            if (Fields != null && Fields.Count != 0)
+            {
+                this.Fields = Fields;
+                this.Table = Table;
+            }
+            else throw new ArgumentNullException(nameof(Fields));
+        }
+
+        public Select(Enum Field, SQLTable Table)
+        {
+            if (Field != null)
+            {
+                Fields = new List<Enum> { Field };
+                this.Table = Table;
+            }
+            else throw new ArgumentNullException(nameof(Field));
+        }
+
+        public List<Enum> Fields { get; private set; }
+        public SQLTable Table { get; private set; }
+        public DataFieldTemplate Filter { get; set; }
+        public Enum OrderByField { get; set; }
+
+        public override string ToString()
+        {
+            //Base
+            string FieldsString = string.Join<Enum>(", ", Fields.ToArray());
+            string cmd = $"Select {FieldsString} From {Table}";
+            //Secondary
+            if (Filter.IsStringable) cmd += $" Where {Filter}";
+            if (OrderByField != null) cmd += $" Order by {OrderByField}";
+            //Return
+            return cmd;
+        }
+
+        public DataTable Execute() => DataBase.RunSelect(this);
+
+        public List<object> GetListed()
+        {
+            List<object> list = new List<object>();
+            foreach (DataRow row in Execute().Rows)
+            {
+                list.Add(row[0]);
+            }
+            return list;
+        }
+    }
+
+    public static class DataBase
+    {
+        private readonly static MySqlConnection connection = new MySqlConnection(Properties.Settings.Default.StringConnectionMySQL);
+
+        public static void TryOpen()
+        {
+            try
+            {
+                if (connection.State == ConnectionState.Closed) connection.Open();
+            }
+            catch (MySqlException)
+            {
+                throw new QsqlConnectionException();
+            }
+        }
+
+        public static void TryClose()
+        {
+            try
+            {
+                if (connection.State == ConnectionState.Open) connection.Close();
+            }
+            catch (MySqlException)
+            {
+                throw new QsqlConnectionException();
+            }
+        }
+
+        public static DataTable RunSelect(Select S)
+        {
+            MySqlDataAdapter dataAdapter = new MySqlDataAdapter(S.ToString(), connection);
+            DataTable dataTable = new DataTable();
+            dataAdapter.Fill(dataTable);
+            return dataTable;
+        }
+    }
+
     #region DataBase Exceptions
     [Serializable]
     public class QsqlConnectionException : Exception
@@ -491,27 +573,4 @@ namespace SalesApp_Alpha_2
           System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
     #endregion
-
-    public class DataBaseSelect
-    {
-        public DataBaseSelect() { }
-        public DataBaseSelect(SQLTable Table, List<Enum> Fields, DataFieldTemplate Conditional, List<DataFieldTemplate> DataFields)
-        {
-            this.Table = Table;
-            this.Fields = Fields;
-            this.Conditional = Conditional;
-            this.DataFields = DataFields;
-        }
-
-        public SQLTable Table { get; set; }
-        public List<Enum> Fields { get; set; }
-        public DataFieldTemplate Conditional { get; set; }
-        public List<DataFieldTemplate> DataFields { get; set; }
-
-        public DataTable Select()
-        {
-            throw new NotImplementedException();
-        }
-
-    }
 }

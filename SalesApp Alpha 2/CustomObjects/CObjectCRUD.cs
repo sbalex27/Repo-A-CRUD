@@ -98,19 +98,28 @@ namespace SalesApp_Alpha_2
         /// Realiza una consulta en una tabla de la base de datos 
         /// y la devuelve en forma de tabla de tipo DataTable
         /// </summary>
-        /// <param name="Table">Nombre de la tabla a consultar</param>
-        /// <param name="Fields">Lista de parámetros a consultar</param>
-        /// <param name="Filter">Filtro de la búsqueda</param>
-        /// <param name="OrderByField">Si es verdadero y la búsqueda no devuelve
+        /// <param name="table">Nombre de la tabla a consultar</param>
+        /// <param name="fields">Lista de parámetros a consultar</param>
+        /// <param name="filter">Filtro de la búsqueda</param>
+        /// <param name="orderByField">Si es verdadero y la búsqueda no devuelve
         /// ningún resultado, se cargan todos los datos de los parámetros asignados
         /// aunque no coincidan con la búsqueda</param>
         /// <returns></returns>
-        protected static DataTable GetDataTable(SQLTable Table,
-                                                List<Enum> Fields,
-                                                DataFieldTemplate Filter,
-                                                Enum OrderByField = null)
+        protected static DataTable GetDataTable(SQLTable table,
+                                                List<Enum> fields,
+                                                DataFieldTemplate filter,
+                                                Enum orderByField = null,
+                                                bool EmptyLoadAll = false)
         {
-            return Qsql.Select(Table, Fields, Filter, OrderByField);
+            if (!filter.IsStringable && EmptyLoadAll || filter.IsStringable)
+            {
+                return new Select(fields, table)
+                {
+                    Filter = filter,
+                    OrderByField = orderByField
+                }.Execute();
+            }
+            else return null;
         }
         #endregion
     }
