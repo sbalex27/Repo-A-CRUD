@@ -2,20 +2,22 @@
 using System.Data;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
-using System.Runtime.CompilerServices;
+using MySqlX.XDevAPI.Relational;
 
 namespace SalesApp_Alpha_2
 {
     public class DataBaseInteraction
     {
         public SQLTable Table { get; protected set; }
-        private readonly static MySqlConnection connection = new MySqlConnection(Properties.Settings.Default.StringConnectionMySQL);
+        private readonly static MySqlConnection Connection = new MySqlConnection(Properties.Settings.Default.StringConnectionMySQL);
+        private MySqlCommand Command => new MySqlCommand(ToString(), Connection);
+        private MySqlDataAdapter DataAdapter => new MySqlDataAdapter(Command);
 
-        public static void TryOpen()
+        private void TryOpen()
         {
             try
             {
-                if (connection.State == ConnectionState.Closed) connection.Open();
+                if (Connection.State == ConnectionState.Closed) Connection.Open();
             }
             catch (MySqlException)
             {
@@ -23,11 +25,11 @@ namespace SalesApp_Alpha_2
             }
         }
 
-        public static void TryClose()
+        private void TryClose()
         {
             try
             {
-                if (connection.State == ConnectionState.Open) connection.Close();
+                if (Connection.State == ConnectionState.Open) Connection.Close();
             }
             catch (MySqlException)
             {
@@ -35,13 +37,12 @@ namespace SalesApp_Alpha_2
             }
         }
 
-        public static DataTable RunSelect(Select S)
+        public DataTable RunSelect()
         {
             TryOpen();
-            MySqlDataAdapter dataAdapter = new MySqlDataAdapter(S.ToString(), connection);
-            TryClose();
             DataTable dataTable = new DataTable();
-            dataAdapter.Fill(dataTable);
+            DataAdapter.Fill(dataTable);
+            TryClose();
             return dataTable;
         }
 
@@ -49,7 +50,7 @@ namespace SalesApp_Alpha_2
         {
             if (GetType() == typeof(Select)) throw new Exception("Consulta no válida");
             TryOpen();
-            int AffectedRows = new MySqlCommand(ToString(), connection).ExecuteNonQuery();
+            int AffectedRows = Command.ExecuteNonQuery();
             TryClose();
             return AffectedRows;
         }
@@ -94,15 +95,10 @@ namespace SalesApp_Alpha_2
             return cmd;
         }
 
-        public DataTable Execute()
-        {
-            return RunSelect(this);
-        }
-
         public List<object> GetListed()
         {
             List<object> list = new List<object>();
-            foreach (DataRow row in Execute().Rows)
+            foreach (DataRow row in RunSelect().Rows)
             {
                 list.Add(row[0]);
             }
@@ -165,6 +161,23 @@ namespace SalesApp_Alpha_2
         {
             DataFieldTemplate.ConcatenateFieldsValues(DataFieldsCollection, out string Fields, out string FormattedValues);
             return $"Insert Into {Table} ({Fields}) Values ({FormattedValues})";
+        }
+    }
+
+    public class Delete : DataBaseInteraction, IConditionableInteraction
+    {
+        public Delete(SQLTable table, DataFieldTemplate conditional)
+        {
+            Table = table;
+            Conditional = conditional;
+        }
+
+        public DataFieldTemplate Conditional { get; set; }
+        public bool Conditionable { get; set; }
+
+        public override string ToString()
+        {
+            return $"Delete From {Table} Where {Conditional}";
         }
     }
 

@@ -117,7 +117,7 @@ namespace SalesApp_Alpha_2
                 {
                     Conditional = filter,
                     OrderByField = orderByField
-                }.Execute();
+                }.RunSelect();
             //}
             //else return null;
         }
