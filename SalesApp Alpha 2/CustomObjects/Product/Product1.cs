@@ -238,7 +238,7 @@ namespace SalesApp_Alpha_2
             {
                 //Qsql.InsertIntoSuccess += DBAdded;
                 //Qsql.InsertInto(TableWork, GetListDataFields());
-                if (new InsertInto(TableWork, GetListDataFields()).Execute() != 0)
+                if (new InsertInto(TableWork, GetListDataFields()).RunNonQuery() != 0)
                 {
                     DBAdded();
                 }

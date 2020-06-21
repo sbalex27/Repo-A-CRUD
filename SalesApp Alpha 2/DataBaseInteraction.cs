@@ -2,6 +2,7 @@
 using System.Data;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
+using System.Runtime.CompilerServices;
 
 namespace SalesApp_Alpha_2
 {
@@ -44,15 +45,17 @@ namespace SalesApp_Alpha_2
             return dataTable;
         }
 
-        public static void RunNonQuery(DataBaseInteraction Command, out int AffectedRows)
+        public int RunNonQuery()
         {
+            if (GetType() == typeof(Select)) throw new Exception("Consulta no válida");
             TryOpen();
-            AffectedRows = new MySqlCommand(Command.ToString(), connection).ExecuteNonQuery();
+            int AffectedRows = new MySqlCommand(ToString(), connection).ExecuteNonQuery();
             TryClose();
+            return AffectedRows;
         }
     }
 
-    public class Select : DataBaseInteraction
+    public class Select : DataBaseInteraction, IConditionableInteraction
     {
         public Select(List<Enum> Fields, SQLTable Table)
         {
@@ -75,8 +78,9 @@ namespace SalesApp_Alpha_2
         }
 
         public List<Enum> Fields { get; private set; }
-        public DataFieldTemplate Filter { get; set; }
         public Enum OrderByField { get; set; }
+        public DataFieldTemplate Conditional { get; set; }
+        public bool Conditionable => !string.IsNullOrWhiteSpace(Conditional?.Value.ToString());
 
         public override string ToString()
         {
@@ -84,7 +88,7 @@ namespace SalesApp_Alpha_2
             string FieldsString = string.Join<Enum>(", ", Fields.ToArray());
             string cmd = $"Select {FieldsString} From {Table}";
             //Secondary
-            if (!string.IsNullOrWhiteSpace(Filter?.Value.ToString())) cmd += $" Where {Filter}";
+            if (Conditionable) cmd += $" Where {Conditional}";
             if (OrderByField != null) cmd += $" Order by {OrderByField}";
             //Return
             return cmd;
@@ -106,7 +110,7 @@ namespace SalesApp_Alpha_2
         }
     }
 
-    public class Update : DataBaseInteraction
+    public class Update : DataBaseInteraction, IConditionableInteraction, IAddOnInteraction
     {
         public Update (SQLTable table, List<DataFieldTemplate> dataFieldsCollection)
         {
@@ -127,16 +131,22 @@ namespace SalesApp_Alpha_2
             Table = table;
             DataFieldsCollection = new List<DataFieldTemplate> { DataField };
         }
-        public List<DataFieldTemplate> DataFieldsCollection { get; private set; }
+        public List<DataFieldTemplate> DataFieldsCollection { get; set; }
         public DataFieldTemplate Conditional { get; set; }
+        public bool Conditionable => !string.IsNullOrWhiteSpace(Conditional?.Value.ToString());
 
-        public int Execute()
+        public override string ToString()
         {
-
+            //Base
+            string CollectionString = DataFieldTemplate.ConcatenateToStrings(DataFieldsCollection);
+            string Command = $"Update {Table} Set {CollectionString}";
+            //Secondary
+            if (Conditionable) Command += $" Where {Conditional}";
+            return Command;
         }
     }
 
-    public class InsertInto : DataBaseInteraction
+    public class InsertInto : DataBaseInteraction, IAddOnInteraction
     {
         public InsertInto(SQLTable Table, List<DataFieldTemplate> Collection)
         {
@@ -149,20 +159,25 @@ namespace SalesApp_Alpha_2
             DataFieldsCollection = Collection;
         }
 
-        public List<DataFieldTemplate> DataFieldsCollection { get; private set; }
+        public List<DataFieldTemplate> DataFieldsCollection { get; set; }
 
         public override string ToString()
         {
             DataFieldTemplate.ConcatenateFieldsValues(DataFieldsCollection, out string Fields, out string FormattedValues);
             return $"Insert Into {Table} ({Fields}) Values ({FormattedValues})";
         }
-
-        public int Execute()
-        {
-            RunNonQuery(this, out int AffectedRows);
-            return AffectedRows;
-        }
     }
 
+    #region Interfaces
+    public interface IConditionableInteraction
+    {
+        DataFieldTemplate Conditional { get; set; }
+        bool Conditionable { get; }
+    }
 
+    public interface IAddOnInteraction
+    {
+        List<DataFieldTemplate> DataFieldsCollection { get; set; }
+    }
+    #endregion
 }
