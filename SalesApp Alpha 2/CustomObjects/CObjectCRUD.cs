@@ -111,15 +111,15 @@ namespace SalesApp_Alpha_2
                                                 Enum orderByField = null,
                                                 bool EmptyLoadAll = false)
         {
-            if (!filter.IsStringable && EmptyLoadAll || filter.IsStringable)
-            {
+            //if (!filter.IsStringable && EmptyLoadAll || filter.IsStringable)
+            //{
                 return new Select(fields, table)
                 {
                     Filter = filter,
                     OrderByField = orderByField
                 }.Execute();
-            }
-            else return null;
+            //}
+            //else return null;
         }
         #endregion
     }

@@ -236,8 +236,12 @@ namespace SalesApp_Alpha_2
         {
             if (GetListExceptions().Count == 0)
             {
-                Qsql.InsertIntoSuccess += DBAdded;
-                Qsql.InsertInto(TableWork, GetListDataFields());
+                //Qsql.InsertIntoSuccess += DBAdded;
+                //Qsql.InsertInto(TableWork, GetListDataFields());
+                if (new InsertInto(TableWork, GetListDataFields()).Execute() != 0)
+                {
+                    DBAdded();
+                }
             }
             else throw new ProductInvalidException();
         }

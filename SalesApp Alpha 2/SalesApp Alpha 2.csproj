@@ -53,6 +53,8 @@
     <Compile Include="CustomObjects\Product\Product1.cs" />
     <Compile Include="CustomObjects\CObjectCRUD.cs" />
     <Compile Include="CustomExceptions.cs" />
+    <Compile Include="DataBaseInteraction.cs" />
+    <Compile Include="DataFieldTemplate.cs" />
     <Compile Include="Home.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,7 +95,6 @@
     </Compile>
     <Compile Include="PremadeMessage.cs" />
     <Compile Include="CustomObjects\Product\ProductExceptions.cs" />
-    <Compile Include="CustomObjects\Product\Product.cs" />
     <Compile Include="Products.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -164,6 +164,7 @@ namespace SalesApp_Alpha_2
         }
 
         //Invoke Refresh Table
+        //TODO: añadir eventos de clase para refrescar la tabla al interactuar con la base de datos
         private void Qsql_InsertIntoSuccess() => RefreshTable();
         private void inBox_Buscar_TextChange(object sender, EventArgs e) => RefreshTable();
         private void Products_Load(object sender, EventArgs e) => RefreshTable();
