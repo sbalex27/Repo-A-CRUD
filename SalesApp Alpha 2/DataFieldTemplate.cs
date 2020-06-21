@@ -158,7 +158,7 @@ namespace SalesApp_Alpha_2
         /// <returns>Valores concatenados</returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public static string ConcatenateToStrings(List<DataFieldTemplate> List)
+        public static string JoinCollection(List<DataFieldTemplate> List)
         {
             if (List is null || List.Count == 0) throw new ArgumentNullException(nameof(List));
             return string.Join<DataFieldTemplate>(", ", List.ToArray());
@@ -170,7 +170,7 @@ namespace SalesApp_Alpha_2
         /// <returns>Valores concatenados</returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public static string ConcatenateValues(List<DataFieldTemplate> List)
+        public static string JoinValues(List<DataFieldTemplate> List)
         {
             if (List is null) throw new ArgumentNullException(nameof(List));
             List<object> FormattedValues = new List<object>();
@@ -187,7 +187,7 @@ namespace SalesApp_Alpha_2
         /// <returns>Valores concatenados</returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public static string ConcatenateFields(List<DataFieldTemplate> List)
+        public static string JoinFields(List<DataFieldTemplate> List)
         {
             if (List is null || List.Count == 0) throw new ArgumentNullException(nameof(List));
             List<Enum> Fields = new List<Enum>();
@@ -209,8 +209,8 @@ namespace SalesApp_Alpha_2
         public static void ConcatenateFieldsValues(List<DataFieldTemplate> List, out string Fields, out string FormattedValues)
         {
             if (List is null || List.Count == 0) throw new ArgumentNullException(nameof(List));
-            Fields = ConcatenateFields(List);
-            FormattedValues = ConcatenateValues(List);
+            Fields = JoinFields(List);
+            FormattedValues = JoinValues(List);
         }
         #endregion
     }

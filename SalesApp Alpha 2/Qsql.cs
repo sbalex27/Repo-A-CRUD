@@ -89,7 +89,7 @@ namespace SalesApp_Alpha_2
             if (Conditional is null) throw new ArgumentNullException(nameof(Conditional));
             
             //Command
-            string NewStrings = DataFieldTemplate.ConcatenateToStrings(FieldsAndValuesList);
+            string NewStrings = DataFieldTemplate.JoinCollection(FieldsAndValuesList);
             string Command = $"Update {TableWork} set {NewStrings} Where {Conditional}";
 
             //Execute
