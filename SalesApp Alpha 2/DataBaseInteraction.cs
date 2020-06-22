@@ -10,12 +10,13 @@ namespace SalesApp_Alpha_2
     public class DataBaseInteraction
     {
         #region Events
-        public delegate void DBEventHandler(DataBaseInteraction sender, int AffectedRows, Type T);
+        public delegate void DBEventHandler(DataBaseInteraction sender, int AffectedRows, Type T, string CommandDetails);
         public event DBEventHandler Interaction;
         #endregion
 
         #region Properties
         public SQLTable Table { get; protected set; }
+        public string CommandDescription { get; set; }
         public bool IsConditionable => !string.IsNullOrWhiteSpace(Filter?.Value.ToString());
         private MySqlCommand Command => new MySqlCommand(ToString(), Connection);
         private MySqlDataAdapter DataAdapter => new MySqlDataAdapter(Command);
@@ -58,18 +59,18 @@ namespace SalesApp_Alpha_2
             }
         }
 
-        public DataTable RunSelect()
+        public DataTable ExecuteSelect()
         {
             TryOpen();
             DataTable dataTable = new DataTable();
             int Rows = DataAdapter.Fill(dataTable);
             TryClose();
 
-            Interaction?.Invoke(this, Rows, GetType());
+            Interaction?.Invoke(this, Rows, GetType(), CommandDescription ?? "Seleción");
             return dataTable;
         }
 
-        public void RunNonQuery()
+        public void ExecuteNonQuery()
         {
             if (GetType() != typeof(Select))
             {
@@ -77,7 +78,7 @@ namespace SalesApp_Alpha_2
                 int Rows = Command.ExecuteNonQuery();
                 TryClose();
 
-                Interaction?.Invoke(this, Rows, GetType());
+                Interaction?.Invoke(this, Rows, GetType(), CommandDescription ?? "NonQuery");
             }
             else throw new InvalidOperationException();
         }
@@ -129,7 +130,7 @@ namespace SalesApp_Alpha_2
         public List<object> RunSelectListed()
         {
             List<object> list = new List<object>();
-            foreach (DataRow row in RunSelect().Rows)
+            foreach (DataRow row in ExecuteSelect().Rows)
             {
                 list.Add(row[0]);
             }

@@ -16,7 +16,7 @@ namespace SalesApp_Alpha_2
 
         #region Events
         public delegate void QsqlEventHandler();
-        public static event QsqlEventHandler InsertIntoSuccess;
+        //public static event QsqlEventHandler InsertIntoSuccess;
         public static event QsqlEventHandler UpdateSuccess;
         public static event QsqlEventHandler DeleteSucess;
         #endregion

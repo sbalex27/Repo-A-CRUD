@@ -204,10 +204,10 @@ namespace SalesApp_Alpha_2
         #endregion
 
         #region Implements
-        public override event EventHandler<ECrud> Validating;
-        public override event EventHandler<ECrud> Added;
-        public override event EventHandler<ECrud> Updated;
-        public override event EventHandler<ECrud> Deleted;
+        public override event EventHandler<string> Validating;
+        public override event CrudEventHandler Added;
+        public override event CrudEventHandler Updated;
+        public override event CrudEventHandler Deleted;
 
         protected override DataFieldTemplate DataField(Enum Field)
         {
@@ -238,36 +238,37 @@ namespace SalesApp_Alpha_2
             {
                 InsertInto I = new InsertInto(TableWork, GetListDataFields());
                 I.Interaction += DBInteraction;
-                I.RunNonQuery();
+                I.ExecuteNonQuery();
             }
             else throw new ProductInvalidException();
         }
 
-        private void DBInteraction(DataBaseInteraction sender, int AffectedRows, Type T)
+        private void DBInteraction(DataBaseInteraction sender, int AffectedRows, Type T, string QueryDetails)
         {
             if (T == typeof(InsertInto))
             {
-                Added?.Invoke(this, new ECrud("Añadido"));
+                Added?.Invoke(this, QueryDetails, AffectedRows);
             }
             else if (T == typeof(Update))
             {
-                Updated?.Invoke(this, new ECrud("Actualizado"));
+                Updated?.Invoke(this, QueryDetails, AffectedRows);
             }
             else if (T == typeof(Delete))
             {
-                Deleted?.Invoke(this, new ECrud("Eliminado"));
+                Deleted?.Invoke(this, QueryDetails, AffectedRows);
             }
         }
 
         public override void Delete()
         {
-            Qsql.DeleteSucess += DBDeleted;
-            Qsql.DeleteWhere(TableWork, DataField(TableFields.ID));
+            Delete D = new Delete(TableWork, DataField(TableFields.ID));
+            D.Interaction += DBInteraction;
+            D.ExecuteNonQuery();
         }
 
         public override List<Exception> GetListExceptions()
         {
-            Validating?.Invoke(this, new ECrud("Validando Producto"));
+            Validating?.Invoke(this, "Validando Producto");
             List<Exception> exceptions = new List<Exception>();
             if (QFunctions.IsEmptyText(Description))
             {
@@ -316,15 +317,15 @@ namespace SalesApp_Alpha_2
         {
             if (GetListExceptions().Count == 0)
             {
-                Qsql.UpdateSuccess += DBUpdated;
-                Qsql.UpdateWhere(TableWork, GetListDataFields(), DataField(TableFields.ID));
+                Update U = new Update(TableWork, GetListDataFields())
+                {
+                    Filter = DataField(TableFields.ID)
+                };
+                U.Interaction += DBInteraction;
+                U.ExecuteNonQuery();
             }
             else throw new ProductInvalidException();
         }
-
-        protected override void DBAdded() => Added?.Invoke(this, new ECrud("Producto Añadido"));
-        protected override void DBDeleted() => Deleted?.Invoke(this, new ECrud("Producto Eliminado"));
-        protected override void DBUpdated() => Updated?.Invoke(this, new ECrud("Producto Actualizado"));
 
         protected override List<DataFieldTemplate> GetListDataFields()
         {
@@ -341,11 +342,11 @@ namespace SalesApp_Alpha_2
         /// <summary>
         /// Evento que se lanza al comprar un producto
         /// </summary>
-        public event EventHandler<ECrud> Purchased;
+        public event CrudEventHandler Purchased;
         /// <summary>
         /// Evento que se lanza al vender un producto
         /// </summary>
-        public event EventHandler<ECrud> Selled;
+        public event CrudEventHandler Selled;
 
         /// <summary>
         /// Procesa la compra del producto
@@ -354,8 +355,18 @@ namespace SalesApp_Alpha_2
         public void Purchase(int Quantity)
         {
             this.Quantity += Quantity;
-            Update();
-            Purchased?.Invoke(this, new ECrud("Producto Comprado"));
+            Update Purchase = new Update(TableWork, DataField(TableFields.Quantity))
+            {
+                Filter = DataField(TableFields.ID),
+                CommandDescription = "Compra de Producto"
+            };
+            Purchase.Interaction += Purchase_Interaction;
+            Purchase.ExecuteNonQuery();
+        }
+
+        private void Purchase_Interaction(DataBaseInteraction sender, int AffectedRows, Type T, string QueryDescription)
+        {
+            Purchased?.Invoke(this, QueryDescription, AffectedRows);
         }
 
         /// <summary>
@@ -365,8 +376,18 @@ namespace SalesApp_Alpha_2
         public void Sell(int Quantity)
         {
             this.Quantity -= Quantity;
-            Update();
-            Selled?.Invoke(this, new ECrud("Producto Vendido"));
+            Update Sell = new Update(TableWork, DataField(TableFields.Quantity))
+            {
+                Filter = DataField(TableFields.ID),
+                CommandDescription = "Venta de Producto"
+            };
+            Sell.Interaction += Sell_Interaction;
+            Sell.ExecuteNonQuery();
+        }
+
+        private void Sell_Interaction(DataBaseInteraction sender, int AffectedRows, Type T, string CommandDetails)
+        {
+            Selled?.Invoke(this, CommandDetails, AffectedRows);
         }
 
         #endregion

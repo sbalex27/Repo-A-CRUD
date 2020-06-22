@@ -9,6 +9,7 @@ using System.Windows.Forms;
 namespace SalesApp_Alpha_2
 {
     //public delegate void EventHandler(object sender, ECrud e);
+    public delegate void CrudEventHandler(object sender, string Action, int AffectedsRecords);
 
     /// <summary>
     /// Clase hija de EventArgs encargada de gestionar las acciones
@@ -39,22 +40,22 @@ namespace SalesApp_Alpha_2
         /// <summary>
         /// Evento que se lanza al validar el objeto
         /// </summary>
-        event EventHandler<ECrud> Validating;
+        event EventHandler<string> Validating;
 
         /// <summary>
         /// Evento que se lanza al añadir el objeto
         /// </summary>
-        event EventHandler<ECrud> Added;
+        event CrudEventHandler Added;
 
         /// <summary>
         /// Evento que se lanza al actualizar el objeto
         /// </summary>
-        event EventHandler<ECrud> Updated;
+        event CrudEventHandler Updated;
 
         /// <summary>
         /// Evento que se lanza al eliminar el objeto
         /// </summary>
-        event EventHandler<ECrud> Deleted;
+        event CrudEventHandler Deleted;
 
         /// <summary>
         /// Añade objeto a la Base de Datos

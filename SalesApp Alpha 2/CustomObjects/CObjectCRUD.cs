@@ -41,10 +41,10 @@ namespace SalesApp_Alpha_2
     {
         #region Interface Implementation
         //Events
-        public abstract event EventHandler<ECrud> Validating;
-        public abstract event EventHandler<ECrud> Added;
-        public abstract event EventHandler<ECrud> Updated;
-        public abstract event EventHandler<ECrud> Deleted;
+        public abstract event EventHandler<string> Validating;
+        public abstract event CrudEventHandler Added;
+        public abstract event CrudEventHandler Updated;
+        public abstract event CrudEventHandler Deleted;
 
         //Basic Voids
         public abstract void Add();
@@ -75,23 +75,23 @@ namespace SalesApp_Alpha_2
         protected abstract DataFieldTemplate DataField(Enum Field);
         #endregion
 
-        #region Events (voids) imported from database
+        //#region Events (voids) imported from database
 
-        /// <summary>
-        /// Método de respuesta de una adición a la Base de Datos
-        /// </summary>
-        protected abstract void DBAdded();
+        ///// <summary>
+        ///// Método de respuesta de una adición a la Base de Datos
+        ///// </summary>
+        //protected abstract void DBAdded();
 
-        /// <summary>
-        /// Método de respuesta de una actualización a la Base de Datos
-        /// </summary>
-        protected abstract void DBUpdated();
+        ///// <summary>
+        ///// Método de respuesta de una actualización a la Base de Datos
+        ///// </summary>
+        //protected abstract void DBUpdated();
 
-        /// <summary>
-        /// Método de respuesta de una eliminación a la Base de Datos
-        /// </summary>
-        protected abstract void DBDeleted();
-        #endregion
+        ///// <summary>
+        ///// Método de respuesta de una eliminación a la Base de Datos
+        ///// </summary>
+        //protected abstract void DBDeleted();
+        //#endregion
 
         #region Statics
         /// <summary>
@@ -117,7 +117,7 @@ namespace SalesApp_Alpha_2
                 {
                     Filter = filter,
                     OrderByField = orderByField
-                }.RunSelect();
+                }.ExecuteSelect();
             //}
             //else return null;
         }

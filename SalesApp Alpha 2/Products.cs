@@ -12,7 +12,7 @@ namespace SalesApp_Alpha_2
         public Products()
         {
             InitializeComponent();
-            Qsql.InsertIntoSuccess += Qsql_InsertIntoSuccess;
+            //Qsql.InsertIntoSuccess += Qsql_InsertIntoSuccess;
         }
 
         #region Getters/Setters
@@ -134,10 +134,9 @@ namespace SalesApp_Alpha_2
             }
         }
 
-        private void ProductActioned(object sender, ECrud e)
+        private void ProductActioned(object sender, string Action, int AffectedsRecords)
         {
-            PremadeMessage.ObjectAction(sender, e.Action);
-            RefreshTable(true);
+            PremadeMessage.ObjectAction(sender, Action, AffectedsRecords);
         }
 
         private void BTT_Eliminar_Click(object sender, EventArgs e)
@@ -165,7 +164,7 @@ namespace SalesApp_Alpha_2
 
         //Invoke Refresh Table
         //TODO: añadir eventos de clase para refrescar la tabla al interactuar con la base de datos
-        private void Qsql_InsertIntoSuccess() => RefreshTable();
+        //private void Qsql_InsertIntoSuccess() => RefreshTable();
         private void inBox_Buscar_TextChange(object sender, EventArgs e) => RefreshTable();
         private void Products_Load(object sender, EventArgs e) => RefreshTable();
     }

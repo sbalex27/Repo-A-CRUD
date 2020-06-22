@@ -35,9 +35,9 @@ namespace SalesApp_Alpha_2
             }
         }
 
-        private void P_Event(object sender, ECrud e)
+        private void P_Event(object sender, string Action, int AffectedsRecords)
         {
-            PremadeMessage.ObjectAction(sender, e.Action);
+            PremadeMessage.ObjectAction(sender, Action, AffectedsRecords);
             Close();
         }
     }

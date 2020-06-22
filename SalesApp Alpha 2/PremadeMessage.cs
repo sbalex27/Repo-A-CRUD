@@ -23,12 +23,12 @@ namespace SalesApp_Alpha_2
         /// </summary>
         /// <param name="o">Objeto en cuestión</param>
         /// <param name="arg">Acción del objeto</param>
-        public static void ObjectAction(object o, string arg)
+        public static void ObjectAction(object o, string arg, int affected = 0)
         {
             if (Settings.Default.MessageForEachAction)
             {
                 _title = arg;
-                _caption = $"{arg}: {o}";
+                _caption = $"{affected} {arg}: {o}";
                 _buttons = MessageBoxButtons.OK;
                 _icon = MessageBoxIcon.Information;
                 Show();
