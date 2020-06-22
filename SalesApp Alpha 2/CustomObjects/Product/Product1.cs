@@ -236,14 +236,27 @@ namespace SalesApp_Alpha_2
         {
             if (GetListExceptions().Count == 0)
             {
-                //Qsql.InsertIntoSuccess += DBAdded;
-                //Qsql.InsertInto(TableWork, GetListDataFields());
-                if (new InsertInto(TableWork, GetListDataFields()).RunNonQuery() != 0)
-                {
-                    DBAdded();
-                }
+                InsertInto I = new InsertInto(TableWork, GetListDataFields());
+                I.Interaction += DBInteraction;
+                I.RunNonQuery();
             }
             else throw new ProductInvalidException();
+        }
+
+        private void DBInteraction(DataBaseInteraction sender, int AffectedRows, Type T)
+        {
+            if (T == typeof(InsertInto))
+            {
+                Added?.Invoke(this, new ECrud("Añadido"));
+            }
+            else if (T == typeof(Update))
+            {
+                Updated?.Invoke(this, new ECrud("Actualizado"));
+            }
+            else if (T == typeof(Delete))
+            {
+                Deleted?.Invoke(this, new ECrud("Eliminado"));
+            }
         }
 
         public override void Delete()

@@ -3,13 +3,14 @@ using System.Data;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI.Relational;
+using System.Runtime.CompilerServices;
 
 namespace SalesApp_Alpha_2
 {
     public class DataBaseInteraction
     {
         #region Events
-        public delegate void DBEventHandler(DataBaseInteraction sender, int AffectedRows, string Action);
+        public delegate void DBEventHandler(DataBaseInteraction sender, int AffectedRows, Type T);
         public event DBEventHandler Interaction;
         #endregion
 
@@ -64,7 +65,7 @@ namespace SalesApp_Alpha_2
             int Rows = DataAdapter.Fill(dataTable);
             TryClose();
 
-            Interaction?.Invoke(this, Rows, "Seleccionado");
+            Interaction?.Invoke(this, Rows, GetType());
             return dataTable;
         }
 
@@ -76,7 +77,7 @@ namespace SalesApp_Alpha_2
                 int Rows = Command.ExecuteNonQuery();
                 TryClose();
 
-                Interaction?.Invoke(this, Rows, "NonQuery");
+                Interaction?.Invoke(this, Rows, GetType());
             }
             else throw new InvalidOperationException();
         }
