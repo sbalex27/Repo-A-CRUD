@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace SalesApp_Alpha_2
 {
-    public delegate void EventHandler(object sender, ECrud e);
+    //public delegate void EventHandler(object sender, ECrud e);
 
     /// <summary>
     /// Clase hija de EventArgs encargada de gestionar las acciones

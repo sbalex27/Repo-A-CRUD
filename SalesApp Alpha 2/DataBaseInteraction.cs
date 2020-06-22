@@ -9,7 +9,8 @@ namespace SalesApp_Alpha_2
     public class DataBaseInteraction
     {
         #region Events
-        public event EventHandler<EventArgs> Interaction;
+        public delegate void DBEventHandler(DataBaseInteraction sender, int AffectedRows, string Action);
+        public event DBEventHandler Interaction;
         #endregion
 
         #region Properties
@@ -60,19 +61,24 @@ namespace SalesApp_Alpha_2
         {
             TryOpen();
             DataTable dataTable = new DataTable();
-            DataAdapter.Fill(dataTable);
+            int Rows = DataAdapter.Fill(dataTable);
             TryClose();
+
+            Interaction?.Invoke(this, Rows, "Seleccionado");
             return dataTable;
         }
 
-        //todo: agregar eventos que devuelvan el int de filas afectadas por separado del void.
-        public int RunNonQuery()
+        public void RunNonQuery()
         {
-            if (GetType() == typeof(Select)) throw new Exception("Consulta no válida");
-            TryOpen();
-            int AffectedRows = Command.ExecuteNonQuery();
-            TryClose();
-            return AffectedRows;
+            if (GetType() != typeof(Select))
+            {
+                TryOpen();
+                int Rows = Command.ExecuteNonQuery();
+                TryClose();
+
+                Interaction?.Invoke(this, Rows, "NonQuery");
+            }
+            else throw new InvalidOperationException();
         }
     }
 
