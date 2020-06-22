@@ -319,7 +319,7 @@ namespace SalesApp_Alpha_2
             {
                 Update U = new Update(TableWork, GetListDataFields())
                 {
-                    Filter = DataField(TableFields.ID),
+                    Conditional = DataField(TableFields.ID),
                     CommandDescription = "Actualización"
                 };
                 U.Interaction += DBInteraction;
@@ -358,7 +358,7 @@ namespace SalesApp_Alpha_2
             this.Quantity += Quantity;
             Update Purchase = new Update(TableWork, DataField(TableFields.Quantity))
             {
-                Filter = DataField(TableFields.ID),
+                Conditional = DataField(TableFields.ID),
                 CommandDescription = "Compra de Producto"
             };
             Purchase.Interaction += Purchase_Interaction;
@@ -379,7 +379,7 @@ namespace SalesApp_Alpha_2
             this.Quantity -= Quantity;
             Update Sell = new Update(TableWork, DataField(TableFields.Quantity))
             {
-                Filter = DataField(TableFields.ID),
+                Conditional = DataField(TableFields.ID),
                 CommandDescription = "Venta de Producto"
             };
             Sell.Interaction += Sell_Interaction;

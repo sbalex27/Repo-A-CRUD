@@ -17,13 +17,13 @@ namespace SalesApp_Alpha_2
         #region Properties
         public SQLTable Table { get; protected set; }
         public string CommandDescription { get; set; }
-        public bool IsConditionable => !string.IsNullOrWhiteSpace(Filter?.Value.ToString());
+        public bool IsConditionable => !string.IsNullOrWhiteSpace(Conditional?.Value.ToString());
         private MySqlCommand Command => new MySqlCommand(ToString(), Connection);
         private MySqlDataAdapter DataAdapter => new MySqlDataAdapter(Command);
         private readonly static MySqlConnection Connection = new MySqlConnection(Properties.Settings.Default.StringConnectionMySQL);
         private DataFieldTemplate PFilter { get; set; }
         private List<DataFieldTemplate> PDataFieldCollection { get; set; }
-        public DataFieldTemplate Filter
+        public DataFieldTemplate Conditional
         {
             get => PFilter;
             set => PFilter = value is null ? throw new ArgumentNullException() : value;
@@ -121,7 +121,7 @@ namespace SalesApp_Alpha_2
             string FieldsString = string.Join(", ", Fields);
             string cmd = $"Select {FieldsString} From {Table}";
             //Secondary
-            if (IsConditionable) cmd += $" Where {Filter}";
+            if (IsConditionable) cmd += $" Where {Conditional}";
             if (OrderByField != null) cmd += $" Order by {OrderByField}";
             //Return
             return cmd;
@@ -164,7 +164,7 @@ namespace SalesApp_Alpha_2
             string CollectionString = DataFieldTemplate.JoinCollection(DataFieldCollection);
             string Command = $"Update {Table} Set {CollectionString}";
             //Secondary
-            if (IsConditionable) Command += $" Where {Filter}";
+            if (IsConditionable) Command += $" Where {Conditional}";
             return Command;
         }
     }
@@ -189,12 +189,12 @@ namespace SalesApp_Alpha_2
         public Delete(SQLTable table, DataFieldTemplate conditional)
         {
             Table = table;
-            Filter = conditional;
+            Conditional = conditional;
         }
 
         public override string ToString()
         {
-            return $"Delete From {Table} Where {Filter}";
+            return $"Delete From {Table} Where {Conditional}";
         }
     }
 }
