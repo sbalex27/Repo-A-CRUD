@@ -319,7 +319,8 @@ namespace SalesApp_Alpha_2
             {
                 Update U = new Update(TableWork, GetListDataFields())
                 {
-                    Filter = DataField(TableFields.ID)
+                    Filter = DataField(TableFields.ID),
+                    CommandDescription = "Actualización"
                 };
                 U.Interaction += DBInteraction;
                 U.ExecuteNonQuery();
