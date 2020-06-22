@@ -98,9 +98,9 @@ namespace SalesApp_Alpha_2
         }
         #endregion
 
-        private void RefreshTable(bool TryConservateRow = false)
+        //Todo: permitir actualización de la tabla desde otros formularios
+        public void RefreshTable(bool TryConservateRow = false)
         {
-
             int Row = TryConservateRow ? SelectedRow : 0;
             SetGridDataSource(TableProducts);
             SelectedRow = Row;
