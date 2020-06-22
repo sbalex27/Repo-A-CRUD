@@ -141,16 +141,18 @@ namespace SalesApp_Alpha_2
 
     public class Update : DataBaseInteraction
     {
-        public Update (SQLTable table, List<DataFieldTemplate> dataFieldsCollection)
+        public Update (SQLTable table, List<DataFieldTemplate> dataFieldsCollection, DataFieldTemplate conditional)
         {
             Table = table;
             DataFieldCollection = dataFieldsCollection;
+            Conditional = conditional;
         }
 
-        public Update (SQLTable table, DataFieldTemplate dataField)
+        public Update (SQLTable table, DataFieldTemplate dataField, DataFieldTemplate conditional)
         {
             Table = table;
             DataField = dataField;
+            Conditional = conditional;
         }
 
         private DataFieldTemplate DataField

@@ -317,9 +317,8 @@ namespace SalesApp_Alpha_2
         {
             if (GetListExceptions().Count == 0)
             {
-                Update U = new Update(TableWork, GetListDataFields())
+                Update U = new Update(TableWork, GetListDataFields(), DataField(TableFields.ID))
                 {
-                    Conditional = DataField(TableFields.ID),
                     CommandDescription = "Actualización"
                 };
                 U.Interaction += DBInteraction;
@@ -356,9 +355,8 @@ namespace SalesApp_Alpha_2
         public void Purchase(int Quantity)
         {
             this.Quantity += Quantity;
-            Update Purchase = new Update(TableWork, DataField(TableFields.Quantity))
+            Update Purchase = new Update(TableWork, DataField(TableFields.Quantity), DataField(TableFields.ID))
             {
-                Conditional = DataField(TableFields.ID),
                 CommandDescription = "Compra de Producto"
             };
             Purchase.Interaction += Purchase_Interaction;
@@ -377,9 +375,8 @@ namespace SalesApp_Alpha_2
         public void Sell(int Quantity)
         {
             this.Quantity -= Quantity;
-            Update Sell = new Update(TableWork, DataField(TableFields.Quantity))
+            Update Sell = new Update(TableWork, DataField(TableFields.Quantity), DataField(TableFields.ID))
             {
-                Conditional = DataField(TableFields.ID),
                 CommandDescription = "Venta de Producto"
             };
             Sell.Interaction += Sell_Interaction;
