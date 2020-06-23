@@ -97,16 +97,20 @@ namespace SalesApp_Alpha_2
         /// </summary>
         /// <param name="Fields">Campos (columnas) de la tabla</param>
         /// <param name="Filter">Filtro de búsqueda</param>
-        /// <param name="EmptyLoadAll">Si la búsqueda no retorna resultados,
+        /// <param name="UnconditionalReturnsAll">Si la búsqueda no retorna resultados,
         /// se cargan todos los datos</param>
         /// <returns></returns>
-        public static DataTable GetTableProducts(List<Enum> Fields, DataFieldTemplate Filter = null, bool EmptyLoadAll = false)
+        public static DataTable GetTableProducts(List<Enum> Fields, DataFieldTemplate Filter = null, bool UnconditionalReturnsAll = false)
         {
-            return GetDataTable(TableWork, Fields, Filter, null, true);
-            //return new Select(Fields, TableWork)
-            //{
-            //    Filter = Filter,
-            //}.Execute();
+            Select S = new Select(Fields, TableWork)
+            {
+                Conditional = Filter
+            };
+            if (!S.IsConditionable && UnconditionalReturnsAll)
+            {
+                return null;
+            }
+            else return S.ExecuteSelect();
         }
 
         /// <summary>

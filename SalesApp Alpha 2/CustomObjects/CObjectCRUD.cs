@@ -111,15 +111,15 @@ namespace SalesApp_Alpha_2
                                                 Enum orderByField = null,
                                                 bool EmptyLoadAll = false)
         {
-            //if (!filter.IsStringable && EmptyLoadAll || filter.IsStringable)
-            //{
-                return new Select(fields, table)
-                {
-                    Conditional = filter,
-                    OrderByField = orderByField
-                }.ExecuteSelect();
-            //}
-            //else return null;
+            throw new NotImplementedException();
+        }
+
+        private static void S_Interaction(DataBaseInteraction sender, int AffectedRows, Type T, string CommandDetails)
+        {
+            if (AffectedRows == 0)
+            {
+                throw new NoResultsException();
+            }
         }
         #endregion
     }
