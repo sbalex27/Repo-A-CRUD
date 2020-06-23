@@ -50,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomObjects\IPropertiesUI.cs" />
-    <Compile Include="CustomObjects\Product\Product1.cs" />
+    <Compile Include="CustomObjects\Product\Product.cs" />
     <Compile Include="CustomObjects\CObjectCRUD.cs" />
     <Compile Include="CustomExceptions.cs" />
     <Compile Include="DataBaseInteraction.cs" />
