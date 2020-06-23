@@ -27,8 +27,8 @@ namespace SalesApp_Alpha_2
         {
             if (Settings.Default.MessageForEachAction)
             {
-                _title = arg;
-                _caption = $"{affected} {arg}: {o}";
+                _title = $"{affected} {arg}";
+                _caption = o.ToString();
                 _buttons = MessageBoxButtons.OK;
                 _icon = MessageBoxIcon.Information;
                 Show();
