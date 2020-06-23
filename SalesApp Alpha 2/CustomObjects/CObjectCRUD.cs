@@ -75,50 +75,32 @@ namespace SalesApp_Alpha_2
         protected abstract DataFieldTemplate DataField(Enum Field);
         #endregion
 
-        //#region Events (voids) imported from database
-
-        ///// <summary>
-        ///// Método de respuesta de una adición a la Base de Datos
-        ///// </summary>
-        //protected abstract void DBAdded();
-
-        ///// <summary>
-        ///// Método de respuesta de una actualización a la Base de Datos
-        ///// </summary>
-        //protected abstract void DBUpdated();
-
-        ///// <summary>
-        ///// Método de respuesta de una eliminación a la Base de Datos
-        ///// </summary>
-        //protected abstract void DBDeleted();
-        //#endregion
-
         #region Statics
         /// <summary>
         /// Realiza una consulta en una tabla de la base de datos 
         /// y la devuelve en forma de tabla de tipo DataTable
         /// </summary>
-        /// <param name="table">Nombre de la tabla a consultar</param>
-        /// <param name="fields">Lista de parámetros a consultar</param>
-        /// <param name="filter">Filtro de la búsqueda</param>
-        /// <param name="orderByField">Si es verdadero y la búsqueda no devuelve
+        /// <param name="Table">Nombre de la tabla a consultar</param>
+        /// <param name="ListFields">Lista de parámetros a consultar</param>
+        /// <param name="Filter">Filtro de la búsqueda</param>
+        /// <param name="OrderBy">Si es verdadero y la búsqueda no devuelve
         /// ningún resultado, se cargan todos los datos de los parámetros asignados
         /// aunque no coincidan con la búsqueda</param>
         /// <returns></returns>
-        protected static DataTable GetDataTable(SQLTable table,
-                                                List<Enum> fields,
-                                                DataFieldTemplate filter,
-                                                Enum orderByField = null,
+        protected static DataTable GetDataTable(SQLTable Table,
+                                                List<Enum> ListFields,
+                                                DataFieldTemplate Filter,
+                                                Enum OrderBy = null,
                                                 bool UnconditionalReturnsAll = false)
         {
-            Select S = new Select(fields, table);
-            if (filter != null)
+            Select S = new Select(ListFields, Table);
+            if (Filter != null)
             {
-                S.Conditional = filter;
+                S.Conditional = Filter;
             }
-            if (orderByField != null)
+            if (OrderBy != null)
             {
-                S.OrderByField = orderByField;
+                S.OrderByField = OrderBy;
             }
             return !UnconditionalReturnsAll && !S.IsConditionable ? null : S.ExecuteSelect();
         }

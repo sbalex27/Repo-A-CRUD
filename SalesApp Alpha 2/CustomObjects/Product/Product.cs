@@ -232,7 +232,10 @@ namespace SalesApp_Alpha_2
         {
             if (GetListExceptions().Count == 0)
             {
-                InsertInto I = new InsertInto(TableWork, GetListDataFields());
+                InsertInto I = new InsertInto(TableWork, GetListDataFields())
+                {
+                    CommandDescription = "Añadido(s)"
+                };
                 I.Interaction += DBInteraction;
                 I.ExecuteNonQuery();
             }
@@ -257,7 +260,10 @@ namespace SalesApp_Alpha_2
 
         public override void Delete()
         {
-            Delete D = new Delete(TableWork, DataField(TableFields.ID));
+            Delete D = new Delete(TableWork, DataField(TableFields.ID))
+            {
+                CommandDescription = "Eliminado(s)"
+            };
             D.Interaction += DBInteraction;
             D.ExecuteNonQuery();
         }
@@ -315,7 +321,7 @@ namespace SalesApp_Alpha_2
             {
                 Update U = new Update(TableWork, GetListDataFields(), DataField(TableFields.ID))
                 {
-                    CommandDescription = "Actualización"
+                    CommandDescription = "Actualización(es)"
                 };
                 U.Interaction += DBInteraction;
                 U.ExecuteNonQuery();
