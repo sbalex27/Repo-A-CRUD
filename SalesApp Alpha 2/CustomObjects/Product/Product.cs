@@ -102,15 +102,7 @@ namespace SalesApp_Alpha_2
         /// <returns></returns>
         public static DataTable GetTableProducts(List<Enum> Fields, DataFieldTemplate Filter = null, bool UnconditionalReturnsAll = false)
         {
-            Select S = new Select(Fields, TableWork)
-            {
-                Conditional = Filter
-            };
-            if (!S.IsConditionable && UnconditionalReturnsAll)
-            {
-                return null;
-            }
-            else return S.ExecuteSelect();
+            return GetDataTable(TableWork, Fields, Filter, null, UnconditionalReturnsAll);
         }
 
         /// <summary>

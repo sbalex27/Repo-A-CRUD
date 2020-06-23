@@ -109,17 +109,18 @@ namespace SalesApp_Alpha_2
                                                 List<Enum> fields,
                                                 DataFieldTemplate filter,
                                                 Enum orderByField = null,
-                                                bool EmptyLoadAll = false)
+                                                bool UnconditionalReturnsAll = false)
         {
-            throw new NotImplementedException();
-        }
-
-        private static void S_Interaction(DataBaseInteraction sender, int AffectedRows, Type T, string CommandDetails)
-        {
-            if (AffectedRows == 0)
+            Select S = new Select(fields, table);
+            if (filter != null)
             {
-                throw new NoResultsException();
+                S.Conditional = filter;
             }
+            if (orderByField != null)
+            {
+                S.OrderByField = orderByField;
+            }
+            return !UnconditionalReturnsAll && !S.IsConditionable ? null : S.ExecuteSelect();
         }
         #endregion
     }
