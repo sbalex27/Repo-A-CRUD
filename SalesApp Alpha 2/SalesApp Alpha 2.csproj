@@ -81,6 +81,12 @@
     <Compile Include="UserInterfaces\InputBox_Combo.Designer.cs">
       <DependentUpon>InputBox_Combo.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserInterfaces\InputBox_Generic.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserInterfaces\InputBox_Generic.Designer.cs">
+      <DependentUpon>InputBox_Generic.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserInterfaces\InputBox_Numeric.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -133,6 +133,8 @@ namespace SalesApp_Alpha_2
                 {
                     case SQLValueType.SqlString:
                         return Operator == SQLOperator.Like ? $"'%{Value}%'" : $"'{Value}'";
+                    //case SQLValueType.SqlDouble:
+                    //    return Value.ToString().Replace(",",".");
                     default:
                         return Value.ToString();
                 }

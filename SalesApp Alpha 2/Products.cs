@@ -137,6 +137,10 @@ namespace SalesApp_Alpha_2
         private void ProductActioned(object sender, string Action, int AffectedsRecords)
         {
             PremadeMessage.ObjectAction(sender, Action, AffectedsRecords);
+            if (AffectedsRecords != 0)
+            {
+                RefreshTable();
+            }
         }
 
         private void BTT_Eliminar_Click(object sender, EventArgs e)
