@@ -8,7 +8,7 @@ namespace SalesApp_Alpha_2
     /// <summary>
     /// Objeto de tipo Producto con métodos de compra/venta
     /// </summary>
-    public class Product : CObjectCRUD
+    public class Product : CObjectCRUD, IEquatable<Product>
     {
         #region Constructor and Properties
         /// <summary>
@@ -79,6 +79,11 @@ namespace SalesApp_Alpha_2
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public bool Equals(Product other)
+        {
+            return Equals(other);
         }
         #endregion
 
@@ -389,6 +394,8 @@ namespace SalesApp_Alpha_2
         {
             Selled?.Invoke(this, CommandDetails, AffectedRows);
         }
+
+
 
         #endregion
 
