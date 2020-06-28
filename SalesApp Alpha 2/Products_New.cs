@@ -11,6 +11,8 @@ namespace SalesApp_Alpha_2
             InitializeComponent();
         }
 
+        public event EventHandler<Product> Added;
+
         private bool FormActionModify { get; set; }
 
         private void BTT_Ok_Click(object sender, EventArgs e)
@@ -38,6 +40,7 @@ namespace SalesApp_Alpha_2
         private void P_Event(object sender, string Action, int AffectedsRecords)
         {
             PremadeMessage.ObjectAction(sender, Action, AffectedsRecords);
+            Added?.Invoke(this, (Product)sender);
             Close();
         }
     }

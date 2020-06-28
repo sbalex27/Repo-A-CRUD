@@ -43,7 +43,6 @@ namespace SalesApp_Alpha_2
             {
                 if (GridView_Products.Rows.Count != 0 && value != -1)
                 {
-                    //GridView_Products.Rows[RowIndex].Cells[0].Selected = false;
                     GridView_Products.Rows[value].Cells[0].Selected = true;
                 }
             }
@@ -126,9 +125,11 @@ namespace SalesApp_Alpha_2
 
         private void BTT_Nuevo_Click(object sender, EventArgs e)
         {
-            Form Create = new Products_New();
+            Products_New Create = new Products_New();
             Create.Show();
+            Create.Added += Create_Added;
         }
+
 
         private void BTT_Vender_Click(object sender, EventArgs e)
         {
@@ -137,8 +138,7 @@ namespace SalesApp_Alpha_2
         }
 
         //Invoke Refresh Table
-        //TODO: añadir eventos de clase para refrescar la tabla al interactuar con la base de datos
-        //private void Qsql_InsertIntoSuccess() => RefreshTable();
+        private void Create_Added(object sender, Product e) => RefreshTable();
         private void inBox_Buscar_TextChange(object sender, EventArgs e) => RefreshTable();
         private void Products_Load(object sender, EventArgs e) => RefreshTable();
     }
