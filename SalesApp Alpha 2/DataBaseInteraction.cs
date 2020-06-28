@@ -102,6 +102,7 @@ namespace SalesApp_Alpha_2
 
         #region Properties
         public Enum OrderByField { get; set; }
+        public Enum GroupByField { get; set; }
         private List<Enum> PFields { get; set; }
         public List<Enum> Fields
         {
@@ -122,6 +123,7 @@ namespace SalesApp_Alpha_2
             string cmd = $"Select {FieldsString} From {Table}";
             //Secondary
             if (IsConditionable) cmd += $" Where {Conditional}";
+            if (GroupByField != null) cmd += $" Group by {GroupByField}";
             if (OrderByField != null) cmd += $" Order by {OrderByField}";
             //Return
             return cmd;

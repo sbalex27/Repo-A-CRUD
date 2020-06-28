@@ -170,6 +170,7 @@ namespace SalesApp_Alpha_2
             //return new Select(TableFields.TradeMark, SQLTable.Products).RunSelectListed();
             return new Select(TableFields.TradeMark, SQLTable.Products)
             {
+                GroupByField = TableFields.TradeMark,
                 OrderByField = TableFields.TradeMark
             }.RunSelectListed();
         }
