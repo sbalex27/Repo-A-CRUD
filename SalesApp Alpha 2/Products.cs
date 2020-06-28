@@ -14,11 +14,12 @@ namespace SalesApp_Alpha_2
             InitializeComponent();
         }
 
-        #region BetaTestOneSearch
+        #region Properties
+
         private List<Product> ListProducts;
         private Product Selected;
 
-        private Predicate<Product> PredicateProductBeta
+        private Predicate<Product> PredicateID
         {
             get => new Predicate<Product>(P => P.ID.Equals(IDSelected));
         }
@@ -28,15 +29,23 @@ namespace SalesApp_Alpha_2
             return ListProducts = Product.GetListProducts(SearchFilter, true);
         }
 
+        private int PreviousRowSelected(int Last)
+        {
+            return ListProducts.FindIndex(P => P.ID.Equals(Last));
+        }
+
         /// <summary>
         /// Fila activa del actual producto seleccionado
         /// </summary>
-        public int SelectedRow
+        public int RowIndex
         {
-            get => GridView_Products.CurrentRow.Index;
+            get
+            {
+                return GridView_Products.CurrentRow.Index;
+            }
             set
             {
-                if (GridView_Products.Rows.Count != 0)
+                if (GridView_Products.Rows.Count != 0 && value != -1)
                 {
                     GridView_Products.Rows[value].Cells[0].Selected = true;
                 }
@@ -48,12 +57,12 @@ namespace SalesApp_Alpha_2
         /// </summary>
         private int IDSelected
         {
-            get => (int)GridView_Products[(int)Product.TableFields.ID, SelectedRow].Value;
+            get => (int)GridView_Products[(int)Product.TableFields.ID, RowIndex].Value;
         }
 
         private Product GetSelected()
         {
-            return Selected = ListProducts.Find(PredicateProductBeta);
+            return Selected = ListProducts.Find(PredicateID);
         }
 
         /// <summary>
@@ -79,48 +88,40 @@ namespace SalesApp_Alpha_2
             UI_ProductsProperties_Input.SetObject(P);
         }
 
-        //Todo: permitir actualización de la tabla desde otros formularios
-        public void RefreshTable(bool TryConservateRow = false)
+        public bool AnyRowActive
         {
-            int Row = TryConservateRow ? SelectedRow : 0;
-            GridView_Products.DataSource = GetListProducts();
-            SelectedRow = Row;
+            get => !(GridView_Products.CurrentRow is null);
         }
 
-        private void DBTableProducts_SelectionChanged(object sender, EventArgs e)
+        //Todo: permitir actualización de la tabla desde otros formularios
+        //Todo: actualizar detalles del producto cuando se refresque la tabla
+        public void RefreshTable()
+        {
+            int Previous = 0;
+            if (AnyRowActive)
+            {
+                Previous = IDSelected;
+            }
+            GridView_Products.DataSource = GetListProducts();
+            RowIndex = PreviousRowSelected(Previous);
+        }
+
+        private void GridView_Products_SelectionChanged(object sender, EventArgs e)
         {
             SetProductProperties(GetSelected());
         }
 
         private void BTT_Modificar_Click(object sender, EventArgs e)
         {
-            try
-            {
-                //Execute
-                Selected.Updated += ProductActioned;
-                Selected.Update();
-            }
-            catch (CrudListExceptions ex)
-            {
-                UI_ProductsProperties_Input.ExceptionsHandler(ex.ExceptionsList);
-            }
-            catch (MySqlException)
-            {
-                PremadeMessage.PMDataBaseException();
-            }
-            catch (Exception ex)
-            {
-                PremadeMessage.PMNotification(ex.Message);
-            }
+            Product FromProperties = UI_ProductsProperties_Input.GetObject();
+            FromProperties.Updated += ProductActioned;
+            FromProperties.Update();
         }
 
         private void ProductActioned(object sender, string Action, int AffectedsRecords)
         {
+            if (AffectedsRecords != 0) RefreshTable();
             PremadeMessage.ObjectAction(sender, Action, AffectedsRecords);
-            if (AffectedsRecords != 0)
-            {
-                RefreshTable();
-            }
         }
 
         private void BTT_Eliminar_Click(object sender, EventArgs e)

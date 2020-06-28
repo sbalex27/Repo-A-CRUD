@@ -57,7 +57,7 @@
             this.GridView_Products.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.GridView_Products.Size = new System.Drawing.Size(606, 408);
             this.GridView_Products.TabIndex = 0;
-            this.GridView_Products.SelectionChanged += new System.EventHandler(this.DBTableProducts_SelectionChanged);
+            this.GridView_Products.SelectionChanged += new System.EventHandler(this.GridView_Products_SelectionChanged);
             // 
             // Panel_Details
             // 
