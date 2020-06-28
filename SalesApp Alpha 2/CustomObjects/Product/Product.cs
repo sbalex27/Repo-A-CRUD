@@ -116,15 +116,16 @@ namespace SalesApp_Alpha_2
         /// <param name="Filter">Filtro de búsqueda</param>
         /// <returns></returns>
         /// <exception cref="NoResultsException"></exception>
-        public static List<Product> GetListProducts(DataFieldTemplate Filter = null)
+        public static List<Product> GetListProducts(DataFieldTemplate Filter = null, bool UnconditionalReturnsAll = false)
         {
-            List<Product> list = new List<Product>();
-            DataTable table = GetTableProducts(GetActiveFields(true), Filter);
-            if (table.Rows.Count != 0)
+            List<Product> Products = new List<Product>();
+            DataTable Results = GetTableProducts(GetActiveFields(true), Filter, UnconditionalReturnsAll);
+
+            if (!(Results?.Rows.Count == 0))
             {
-                foreach (DataRow row in table.Rows)
+                foreach (DataRow row in Results.Rows)
                 {
-                    list.Add(new Product()
+                    Products.Add(new Product()
                     {
                         ID = Convert.ToInt32(row[TableFields.ID.ToString()]),
                         Description = Convert.ToString(row[TableFields.Description.ToString()]),
@@ -133,9 +134,9 @@ namespace SalesApp_Alpha_2
                         Price = Convert.ToDouble(row[TableFields.Price.ToString()])
                     });
                 }
-                return list;
+                
             }
-            else throw new NoResultsException();
+            return Products;
         }
 
         /// <summary>
