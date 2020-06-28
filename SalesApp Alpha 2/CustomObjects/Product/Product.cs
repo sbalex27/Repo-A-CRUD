@@ -167,7 +167,6 @@ namespace SalesApp_Alpha_2
         /// <returns>Lista de marcas</returns>
         public static List<object> GetTradeMarks()
         {
-            //return new Select(TableFields.TradeMark, SQLTable.Products).RunSelectListed();
             return new Select(TableFields.TradeMark, SQLTable.Products)
             {
                 GroupByField = TableFields.TradeMark,
