@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Data;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
-using SalesApp_Alpha_2.Properties;
 using System.Collections.Generic;
+using System.Data;
 
 namespace SalesApp_Alpha_2
 {
@@ -19,19 +17,17 @@ namespace SalesApp_Alpha_2
         private List<Product> ListProducts;
         private Product Selected;
 
-        private Predicate<Product> PredicateID
+        /// <summary>
+        /// Obtiene el filtro de búsqueda empaquetado
+        /// </summary>
+        private DataFieldTemplate SearchFilter
         {
-            get => new Predicate<Product>(P => P.ID.Equals(IDSelected));
-        }
-
-        private List<Product> GetListProducts()
-        {
-            return ListProducts = Product.GetListProducts(SearchFilter, true);
-        }
-
-        private int PreviousRowSelected(int Last)
-        {
-            return ListProducts.FindIndex(P => P.ID.Equals(Last));
+            get
+            {
+                return new DataFieldTemplate(Product.TableFields.Description,
+                                             inBox_Buscar.InputText,
+                                             SQLValueType.SqlString, SQLOperator.Like);
+            }
         }
 
         /// <summary>
@@ -47,6 +43,7 @@ namespace SalesApp_Alpha_2
             {
                 if (GridView_Products.Rows.Count != 0 && value != -1)
                 {
+                    //GridView_Products.Rows[RowIndex].Cells[0].Selected = false;
                     GridView_Products.Rows[value].Cells[0].Selected = true;
                 }
             }
@@ -59,25 +56,25 @@ namespace SalesApp_Alpha_2
         {
             get => (int)GridView_Products[(int)Product.TableFields.ID, RowIndex].Value;
         }
+        #endregion
 
+        /// <summary>
+        /// Procesa el método <see cref="List{T}.Find(Predicate{T})"/>
+        /// </summary>
+        /// <returns>El <see cref="Product"/> de la <see cref="ListProducts"/> que coincida con el <see cref="Product.ID"/></returns>
         private Product GetSelected()
         {
-            return Selected = ListProducts.Find(PredicateID);
+            return Selected = ListProducts.Find(P => P.ID.Equals(IDSelected));
         }
 
         /// <summary>
-        /// Obtiene el filtro de búsqueda empaquetado
+        /// Procesa y asigna el método <see cref="Product.GetListProducts(DataFieldTemplate, bool)"/>
         /// </summary>
-        private DataFieldTemplate SearchFilter
+        /// <returns><see cref="ListProducts"/></returns>
+        private List<Product> GetListProducts()
         {
-            get
-            {
-                return new DataFieldTemplate(Product.TableFields.Description,
-                                             inBox_Buscar.InputText,
-                                             SQLValueType.SqlString, SQLOperator.Like);
-            }
+            return ListProducts = Product.GetListProducts(SearchFilter, true);
         }
-        #endregion
 
         private void SetProductProperties(Product P)
         {
@@ -94,16 +91,10 @@ namespace SalesApp_Alpha_2
         }
 
         //Todo: permitir actualización de la tabla desde otros formularios
-        //Todo: actualizar detalles del producto cuando se refresque la tabla
+        //Todo: Intentar mantener el registro de la anterior fila activa
         public void RefreshTable()
         {
-            int Previous = 0;
-            if (AnyRowActive)
-            {
-                Previous = IDSelected;
-            }
             GridView_Products.DataSource = GetListProducts();
-            RowIndex = PreviousRowSelected(Previous);
         }
 
         private void GridView_Products_SelectionChanged(object sender, EventArgs e)
