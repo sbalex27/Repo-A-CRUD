@@ -12,14 +12,26 @@ namespace SalesApp_Alpha_2
         public Products()
         {
             InitializeComponent();
-            //Qsql.InsertIntoSuccess += Qsql_InsertIntoSuccess;
         }
 
-        #region Getters/Setters
+        #region BetaTestOneSearch
+        private List<Product> ListProducts = new List<Product>();
+
+        private Predicate<Product> PredicateProductBeta
+        {
+            get => new Predicate<Product>(P => P.ID.Equals(IDSelected));
+        }
+
+        private List<Product> GetListProducts()
+        {
+            ListProducts = Product.GetListProducts(SearchFilter);
+            return ListProducts;
+        }
+
         /// <summary>
-        /// Obiene o establece la actual fila seleccionada
+        /// Fila activa del actual producto seleccionado
         /// </summary>
-        private int SelectedRow
+        public int SelectedRow
         {
             get => GridView_Products.CurrentRow.Index;
             set
@@ -32,23 +44,16 @@ namespace SalesApp_Alpha_2
         }
 
         /// <summary>
-        /// Retorna el actual producto seleccionado del <see cref="DataGridView"/>
+        /// ID del actual producto seleccionado de la lista
         /// </summary>
-        private Product ListProductSelected
+        private int IDSelected
         {
-            get
-            {
-                int Row = (int)Product.TableFields.ID;
-                try
-                {
-                    int ID = (int)GridView_Products.Rows[SelectedRow].Cells[Row].Value;
-                    return Product.GetFromID(ID);
-                }
-                catch (NullReferenceException)
-                {
-                    return null;
-                }
-            }
+            get => (int)GridView_Products[(int)Product.TableFields.ID, SelectedRow].Value;
+        }
+
+        private Product Selected
+        {
+            get => ListProducts.Find(PredicateProductBeta);
         }
 
         /// <summary>
@@ -63,24 +68,47 @@ namespace SalesApp_Alpha_2
                                              SQLValueType.SqlString, SQLOperator.Like);
             }
         }
+        #endregion
 
-        /// <summary>
-        /// Obtiene la tabla de productos de la Base de Datos
-        /// </summary>
-        private DataTable TableProducts
-        {
-            get
-            {
-                return Product.GetTableProducts(Product.GetActiveFields(true),
-                                                SearchFilter,
-                                                true);
-            }
-        }
+        #region Getters/Setters Antiguos
+
+        ///// <summary>
+        ///// Retorna el actual producto seleccionado del <see cref="DataGridView"/>
+        ///// </summary>
+        //private Product ListProductSelected
+        //{
+        //    get
+        //    {
+        //        int Row = (int)Product.TableFields.ID;
+        //        try
+        //        {
+        //            int ID = (int)GridView_Products.Rows[SelectedRow].Cells[Row].Value;
+        //            return Product.GetFromID(ID);
+        //        }
+        //        catch (NullReferenceException)
+        //        {
+        //            return null;
+        //        }
+        //    }
+        //}
+
+        ///// <summary>
+        ///// Obtiene la tabla de productos de la Base de Datos
+        ///// </summary>
+        //private DataTable TableProducts
+        //{
+        //    get
+        //    {
+        //        return Product.GetTableProducts(Product.GetActiveFields(true),
+        //                                        SearchFilter,
+        //                                        true);
+        //    }
+        //}
 
         /// <summary>
         /// Establece la fuente de datos del <see cref="DataGridView"/>
         /// </summary>
-        private void SetGridDataSource(DataTable value)
+        private void SetGridDataSource(List<Product> value)
         {
             GridView_Products.DataSource = value;
         }
@@ -88,13 +116,13 @@ namespace SalesApp_Alpha_2
         /// <summary>
         /// Establece el producto para mostrar al usuario sus propiedades detalladas en el formulario
         /// </summary>
-        private void SetProductProperties(Product value)
+        private void SetProductProperties(Product P)
         {
-            if (value != null)
+            if (P != null)
             {
-                LBL_Title.Text = value.ToString();
+                LBL_Title.Text = P.ToString();
             }
-            UI_ProductsProperties_Input.SetObject(value);
+            UI_ProductsProperties_Input.SetObject(P);
         }
         #endregion
 
@@ -102,13 +130,13 @@ namespace SalesApp_Alpha_2
         public void RefreshTable(bool TryConservateRow = false)
         {
             int Row = TryConservateRow ? SelectedRow : 0;
-            SetGridDataSource(TableProducts);
+            SetGridDataSource(GetListProducts());
             SelectedRow = Row;
         }
 
         private void DBTableProducts_SelectionChanged(object sender, EventArgs e)
         {
-            SetProductProperties(ListProductSelected);
+            SetProductProperties(Selected);
         }
 
         private void BTT_Modificar_Click(object sender, EventArgs e)
@@ -145,11 +173,11 @@ namespace SalesApp_Alpha_2
 
         private void BTT_Eliminar_Click(object sender, EventArgs e)
         {
-            if (PremadeMessage.PMYesNo($"Se eliminará permanentemente {ListProductSelected}"))
+            if (PremadeMessage.PMYesNo($"Se eliminará permanentemente {Selected}"))
             {
-                Product Selected = ListProductSelected;
-                Selected.Deleted += ProductActioned;
-                Selected.Delete();
+                Product P = Selected;
+                P.Deleted += ProductActioned;
+                P.Delete();
             }
         }
 
@@ -161,9 +189,9 @@ namespace SalesApp_Alpha_2
 
         private void BTT_Vender_Click(object sender, EventArgs e)
         {
-            Product Selected = ListProductSelected;
-            Selected.Selled += ProductActioned;
-            Selected.Sell(1);
+            Product P = Selected;
+            P.Selled += ProductActioned;
+            P.Sell(1);
         }
 
         //Invoke Refresh Table
