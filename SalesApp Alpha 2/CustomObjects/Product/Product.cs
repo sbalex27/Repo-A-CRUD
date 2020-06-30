@@ -23,7 +23,6 @@ namespace SalesApp_Alpha_2
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public Product(int ID)
         {
-            
             if (ID != 0)
             {
                 this.ID = ID;
@@ -117,7 +116,7 @@ namespace SalesApp_Alpha_2
         /// <param name="Filter">Filtro de búsqueda</param>
         /// <returns></returns>
         /// <exception cref="NoResultsException"></exception>
-        public static List<Product> GetListProducts(DataFieldTemplate Filter = null, bool UnconditionalReturnsAll = false)
+        public static List<Product> GetProductListed(DataFieldTemplate Filter = null, bool UnconditionalReturnsAll = false)
         {
             List<Product> Products = new List<Product>();
             DataTable Results = GetTableProducts(GetActiveFields(true), Filter, UnconditionalReturnsAll);
@@ -135,7 +134,7 @@ namespace SalesApp_Alpha_2
                         Price = Convert.ToDouble(row[TableFields.Price.ToString()])
                     });
                 }
-                
+
             }
             return Products;
         }
@@ -147,19 +146,9 @@ namespace SalesApp_Alpha_2
         /// <returns></returns>
         /// <exception cref="NoResultsException"></exception>
         /// <exception cref="MultipleResultsException"></exception>
-        public static Product GetFromID(int ID) //Manual Override
+        public static Product GetFromID(int ID)
         {
-            DataFieldTemplate DF = new DataFieldTemplate(TableFields.ID, ID, SQLValueType.SqlInt);
-            List<Product> products = GetListProducts(DF);
-            switch (products.Count)
-            {
-                case 0:
-                    throw new NoResultsException();
-                case 1:
-                    return products[0];
-                default:
-                    throw new MultipleResultsException();
-            }
+            return GetProductListed().Find(P => P.ID.Equals(ID));
         }
 
         /// <summary>
@@ -179,32 +168,51 @@ namespace SalesApp_Alpha_2
         /// Tiene lugar al procesar una lista de compra de productos
         /// </summary>
         public static event EventHandler<ECrud> ListPurchased;
-        /// <summary>
-        /// Procesa una lista de compra de productos
-        /// </summary>
-        /// <param name="Products">Lista de productos</param>
-        public static void ListToPurchase(List<Product> Products)
+
+        ///// <summary>
+        ///// Procesa una lista de compra de productos
+        ///// </summary>
+        ///// <param name="Products">Lista de productos</param>
+        //public static void ListToPurchaseOld(List<Product> Products)
+        //{
+        //    foreach (Product ToPurchase in Products)
+        //    {
+        //        bool Procesed = false;
+        //        foreach (Product Existent in GetProductListed())
+        //        {
+        //            if (ToPurchase.Equals(Existent))
+        //            {
+        //                Existent.Purchase(ToPurchase.Quantity);
+        //                Procesed = true;
+        //                break;
+        //            }
+        //        }
+        //        if (!Procesed)
+        //        {
+        //            ToPurchase.Add();
+        //        }
+        //    }
+        //    if (ListPurchased != null)
+        //    {
+        //        ListPurchased(Products, new ECrud("Lista Procesada"));
+        //        ListPurchased = null;
+        //    }
+        //}
+
+        //CHECK: Prueba
+        //UNDONE: Revisar código optimizado en la modificación del método ListToPurchase
+        public static void ListToPurchase(List<Product> ShoppingCart)
         {
-            foreach (Product ToPurchase in Products)
+            List<Product> Listed = GetProductListed();
+            foreach (Product product in ShoppingCart)
             {
-                bool Procesed = false;
-                foreach (Product Existent in GetListProducts())
-                {
-                    if (ToPurchase.Equals(Existent))
-                    {
-                        Existent.Purchase(ToPurchase.Quantity);
-                        Procesed = true;
-                        break;
-                    }
-                }
-                if (!Procesed)
-                {
-                    ToPurchase.Add();
-                }
+                Product Finded = Listed.Find(P => P.Equals(product));
+                if (Finded is null) Finded.Add(); 
+                else Finded.Purchase(product.Quantity);
             }
             if (ListPurchased != null)
             {
-                ListPurchased(Products, new ECrud("Lista Procesada"));
+                ListPurchased(ShoppingCart, null);
                 ListPurchased = null;
             }
         }

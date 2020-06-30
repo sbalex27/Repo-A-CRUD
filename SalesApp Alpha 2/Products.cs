@@ -67,12 +67,12 @@ namespace SalesApp_Alpha_2
         }
 
         /// <summary>
-        /// Procesa y asigna el método <see cref="Product.GetListProducts(DataFieldTemplate, bool)"/>
+        /// Procesa y asigna el método <see cref="Product.GetProductListed(DataFieldTemplate, bool)"/>
         /// </summary>
         /// <returns><see cref="ListProducts"/></returns>
         private List<Product> GetListProducts()
         {
-            return ListProducts = Product.GetListProducts(SearchFilter, true);
+            return ListProducts = Product.GetProductListed(SearchFilter, true);
         }
 
         private void SetProductProperties(Product P)
