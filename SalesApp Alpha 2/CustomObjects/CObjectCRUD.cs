@@ -39,6 +39,15 @@ namespace SalesApp_Alpha_2
     /// </summary>
     public abstract class CObjectCRUD : ICrud
     {
+        public static SQLTable Table(Type T)
+        {
+            if (T.Equals(typeof(Product)))
+            {
+                return SQLTable.Products;
+            }
+            else throw new Exception("Clase no implementada");
+        }
+
         #region Interface Implementation
         //Events
         public abstract event EventHandler<string> Validating;
@@ -73,6 +82,7 @@ namespace SalesApp_Alpha_2
         /// <returns>Retorna DataFieldTemplate</returns>
         /// <exception cref="InvalidFieldException"></exception>
         protected abstract DataFieldTemplate DataField(Enum Field);
+
         #endregion
 
         #region Statics

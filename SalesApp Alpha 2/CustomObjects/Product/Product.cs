@@ -23,6 +23,7 @@ namespace SalesApp_Alpha_2
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public Product(int ID)
         {
+            
             if (ID != 0)
             {
                 this.ID = ID;
@@ -30,13 +31,13 @@ namespace SalesApp_Alpha_2
             else throw new ArgumentOutOfRangeException(nameof(ID));
         }
 
-        private const SQLTable TableWork = SQLTable.Products;
-
         public int ID { get; private set; }
         public string Description { get; set; }
         public string TradeMark { get; set; }
         public int Quantity { get; set; }
         public double Price { get; set; }
+
+        public const SQLTable TableWork = SQLTable.Products;
 
         public enum TableFields
         {
