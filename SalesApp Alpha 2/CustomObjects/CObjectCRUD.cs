@@ -116,20 +116,16 @@ namespace SalesApp_Alpha_2
             return !UnconditionalReturnsAll && !S.IsConditionable ? null : S.ExecuteSelect();
         }
 
-        protected void ActionNonQuery(DataBaseInteraction dbInteraction, CrudEventHandler eventHandler)
+        protected void ActionNonQuery(DataBaseInteraction dbInteraction)
         {
-            Event = eventHandler;
             dbInteraction.Interaction += DBInteraction;
             dbInteraction.ExecuteNonQuery();
         }
 
-        private CrudEventHandler Event;
-
-        protected void DBInteraction(DataBaseInteraction sender, int AffectedRows, Type T, string CommandDetails)
+        private void DBInteraction(DataBaseInteraction sender, int AffectedRows, Type T, string CommandDetails, CrudEventHandler secondEventHandler)
         {
-            Event?.Invoke(this, CommandDetails, AffectedRows);
+            secondEventHandler?.Invoke(this, CommandDetails, AffectedRows);
         }
-
         #endregion
     }
 

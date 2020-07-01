@@ -10,13 +10,14 @@ namespace SalesApp_Alpha_2
     public class DataBaseInteraction
     {
         #region Events
-        public delegate void DBEventHandler(DataBaseInteraction sender, int AffectedRows, Type T, string CommandDetails);
+        public delegate void DBEventHandler(DataBaseInteraction sender, int AffectedRows, Type T, string CommandDetails, CrudEventHandler secondaryEvent);
         public event DBEventHandler Interaction;
         #endregion
 
         #region Properties
         public SQLTable Table { get; protected set; }
         public string CommandDescription { get; set; }
+        public CrudEventHandler SecondaryEvent { get; set; }
         public bool IsConditionable => !string.IsNullOrWhiteSpace(Conditional?.Value.ToString());
         private MySqlCommand Command => new MySqlCommand(ToString(), Connection);
         private MySqlDataAdapter DataAdapter => new MySqlDataAdapter(Command);
@@ -66,7 +67,7 @@ namespace SalesApp_Alpha_2
             int Rows = DataAdapter.Fill(dataTable);
             TryClose();
 
-            Interaction?.Invoke(this, Rows, GetType(), CommandDescription ?? "Seleción");
+            Interaction?.Invoke(this, Rows, GetType(), CommandDescription ?? "Seleción", SecondaryEvent);
             return dataTable;
         }
 
@@ -78,7 +79,7 @@ namespace SalesApp_Alpha_2
                 int Rows = Command.ExecuteNonQuery();
                 TryClose();
 
-                Interaction?.Invoke(this, Rows, GetType(), CommandDescription ?? "NonQuery");
+                Interaction?.Invoke(this, Rows, GetType(), CommandDescription ?? "NonQuery", SecondaryEvent);
             }
             else throw new InvalidOperationException();
         }

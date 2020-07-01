@@ -275,8 +275,9 @@ namespace SalesApp_Alpha_2
             {
                 ActionNonQuery(new InsertInto(TableWork, GetListDataFields())
                 {
-                    CommandDescription = "Añadido(s)"
-                }, Added);
+                    CommandDescription = "Añadido(s)",
+                    SecondaryEvent = Added
+                });
             }
             else throw new ProductInvalidException();
         }
@@ -285,8 +286,9 @@ namespace SalesApp_Alpha_2
         {
             ActionNonQuery(new Delete(TableWork, DataField(TableFields.ID))
             {
-                CommandDescription = "Eliminado(s)"
-            }, Deleted);
+                CommandDescription = "Eliminado(s)",
+                SecondaryEvent = Deleted
+            });
         }
 
         //protected override void DBInteraction(DataBaseInteraction sender, int AffectedRows, Type T, string QueryDetails)
@@ -384,8 +386,9 @@ namespace SalesApp_Alpha_2
             {
                 ActionNonQuery(new Update(TableWork, GetListDataFields(), DataField(TableFields.ID))
                 {
-                    CommandDescription = "Actualización(es)"
-                }, Updated);
+                    CommandDescription = "Actualización(es)",
+                    SecondaryEvent = Updated
+                });
             }
             else throw new ProductInvalidException();
         }
@@ -410,8 +413,9 @@ namespace SalesApp_Alpha_2
             Quantity += quantity;
             ActionNonQuery(new Update(TableWork, DataField(TableFields.Quantity), DataField(TableFields.ID))
             {
-                CommandDescription = "Compra de Producto"
-            }, Purchased);
+                CommandDescription = "Compra de Producto",
+                SecondaryEvent = Purchased
+            });
         }
 
         public void Sell(int quantity)
@@ -419,8 +423,9 @@ namespace SalesApp_Alpha_2
             Quantity -= quantity;
             ActionNonQuery(new Update(TableWork, DataField(TableFields.Quantity), DataField(TableFields.ID))
             {
-                CommandDescription = "Venta de Producto"
-            }, Selled);
+                CommandDescription = "Venta de Producto",
+                SecondaryEvent = Selled
+            });
         }
         #endregion
 
