@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Runtime;
 using System.Net.Http.Headers;
 using System.Data;
+using System.Runtime.Remoting.Channels;
 
 namespace SalesApp_Alpha_2
 {
@@ -114,6 +115,21 @@ namespace SalesApp_Alpha_2
             }
             return !UnconditionalReturnsAll && !S.IsConditionable ? null : S.ExecuteSelect();
         }
+
+        protected void ActionNonQuery(DataBaseInteraction dbInteraction, CrudEventHandler eventHandler)
+        {
+            Event = eventHandler;
+            dbInteraction.Interaction += DBInteraction;
+            dbInteraction.ExecuteNonQuery();
+        }
+
+        private CrudEventHandler Event;
+
+        protected void DBInteraction(DataBaseInteraction sender, int AffectedRows, Type T, string CommandDetails)
+        {
+            Event?.Invoke(this, CommandDetails, AffectedRows);
+        }
+
         #endregion
     }
 

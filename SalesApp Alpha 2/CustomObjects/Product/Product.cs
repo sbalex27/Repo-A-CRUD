@@ -1,14 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
 
 namespace SalesApp_Alpha_2
 {
+    public interface INegotiable
+    {
+        /// <summary>
+        /// Se lanza al comprar un objeto
+        /// </summary>
+        event CrudEventHandler Purchased;
+        /// <summary>
+        /// Se lanza al vender un objeto
+        /// </summary>
+        event CrudEventHandler Selled;
+        /// <summary>
+        /// Procesa la compra de un objeto
+        /// </summary>
+        /// <param name="quantity">Cantidad de elementos</param>
+        void Purchase(int quantity);
+        /// <summary>
+        /// Procesa la venta de un objeto
+        /// </summary>
+        /// <param name="quantity">Cantidad de elementos</param>
+        void Sell(int quantity);
+    }
     /// <summary>
     /// Objeto de tipo Producto con métodos de compra/venta
     /// </summary>
-    public class Product : CObjectCRUD, IEquatable<Product>
+    public class Product : CObjectCRUD, IEquatable<Product>, INegotiable
     {
         #region Constructor and Properties
         /// <summary>
@@ -199,16 +221,15 @@ namespace SalesApp_Alpha_2
         //    }
         //}
 
-        //CHECK: Prueba
         //UNDONE: Revisar código optimizado en la modificación del método ListToPurchase
         public static void ListToPurchase(List<Product> ShoppingCart)
         {
             List<Product> Listed = GetProductListed();
-            foreach (Product product in ShoppingCart)
+            foreach (Product ToShop in ShoppingCart)
             {
-                Product Finded = Listed.Find(P => P.Equals(product));
+                Product Finded = Listed.Find(P => P.Equals(ToShop));
                 if (Finded is null) Finded.Add(); 
-                else Finded.Purchase(product.Quantity);
+                else Finded.Purchase(ToShop.Quantity);
             }
             if (ListPurchased != null)
             {
@@ -223,6 +244,7 @@ namespace SalesApp_Alpha_2
         public override event CrudEventHandler Added;
         public override event CrudEventHandler Updated;
         public override event CrudEventHandler Deleted;
+        
 
         protected override DataFieldTemplate DataField(Enum Field)
         {
@@ -251,53 +273,49 @@ namespace SalesApp_Alpha_2
         {
             if (GetListExceptions().Count == 0)
             {
-                InsertInto I = new InsertInto(TableWork, GetListDataFields())
+                ActionNonQuery(new InsertInto(TableWork, GetListDataFields())
                 {
                     CommandDescription = "Añadido(s)"
-                };
-                I.Interaction += DBInteraction;
-                I.ExecuteNonQuery();
+                }, Added);
             }
             else throw new ProductInvalidException();
         }
 
-        private void DBInteraction(DataBaseInteraction sender, int AffectedRows, Type T, string QueryDetails)
-        {
-            if (T == typeof(InsertInto))
-            {
-                Added?.Invoke(this, QueryDetails, AffectedRows);
-            }
-            else if (T == typeof(Update))
-            {
-                Updated?.Invoke(this, QueryDetails, AffectedRows);
-            }
-            else if (T == typeof(Delete))
-            {
-                Deleted?.Invoke(this, QueryDetails, AffectedRows);
-            }
-        }
-
         public override void Delete()
         {
-            Delete D = new Delete(TableWork, DataField(TableFields.ID))
+            ActionNonQuery(new Delete(TableWork, DataField(TableFields.ID))
             {
                 CommandDescription = "Eliminado(s)"
-            };
-            D.Interaction += DBInteraction;
-            D.ExecuteNonQuery();
+            }, Deleted);
         }
 
-        public override List<Exception> GetListExceptions()
+        //protected override void DBInteraction(DataBaseInteraction sender, int AffectedRows, Type T, string QueryDetails)
+        //{
+        //    if (T.Equals(typeof(InsertInto))) Added?.Invoke(this, QueryDetails, AffectedRows);
+        //    else if (T.Equals(typeof(Update))) Updated?.Invoke(this, QueryDetails, AffectedRows);
+        //    else if (T.Equals(typeof(Delete))) Deleted?.Invoke(this, QueryDetails, AffectedRows);
+        //}
+
+        //undone: si funciona el nuevo método de reemplazo deshacer este.
+        public List<Exception> GetListExceptionsOld()
         {
             Validating?.Invoke(this, "Validando Producto");
             List<Exception> exceptions = new List<Exception>();
-            if (QFunctions.IsEmptyText(Description))
+
+            Func<string, bool> IsEmpty = new Func<string, bool>(val => string.IsNullOrEmpty(val));
+            Action<List<Exception>, Exception> action = (ex, li) => ex.Add(li);
+            Action CriticalValues = new Action(delegate ()
             {
                 exceptions.Add(new ProductCriticalValuesException());
+            });
+
+            if (IsEmpty(Description))
+            {
+                CriticalValues();
             }
-            if (QFunctions.IsEmptyText(TradeMark))
+            if (IsEmpty(TradeMark))
             {
-                exceptions.Add(new ProductCriticalValuesException());
+                CriticalValues();
             }
             if (Quantity < 0)
             {
@@ -307,6 +325,32 @@ namespace SalesApp_Alpha_2
             {
                 exceptions.Add(new ProductWorthlessException());
             }
+            return exceptions;
+        }
+
+        //ToDo: revisar código experimental
+        public override List<Exception> GetListExceptions()
+        {
+            Validating?.Invoke(this, "Validando");
+            List<Exception> exceptions = new List<Exception>();
+
+            Func<string, bool> isEmpty = new Func<string, bool>(s => string.IsNullOrWhiteSpace(s));
+            Func<object, bool> isCero = new Func<object, bool>(delegate (object arg)
+            {
+                decimal.TryParse(arg.ToString(), out decimal result);
+                return result <= 0;
+            });
+
+            Action<Exception> addException = new Action<Exception>(ex => exceptions.Add(ex));
+            Action<string> criticalValue = new Action<string>(delegate (string arg)
+            {
+                if (isEmpty(arg)) addException(new ProductCriticalValuesException());
+            });
+
+            criticalValue(Description);
+            criticalValue(TradeMark);
+            if (isCero(Quantity)) addException(new ProductNoQuantityException());
+            if (isCero(Price)) addException(new ProductWorthlessException());
             return exceptions;
         }
 
@@ -338,12 +382,10 @@ namespace SalesApp_Alpha_2
         {
             if (GetListExceptions().Count == 0)
             {
-                Update U = new Update(TableWork, GetListDataFields(), DataField(TableFields.ID))
+                ActionNonQuery(new Update(TableWork, GetListDataFields(), DataField(TableFields.ID))
                 {
                     CommandDescription = "Actualización(es)"
-                };
-                U.Interaction += DBInteraction;
-                U.ExecuteNonQuery();
+                }, Updated);
             }
             else throw new ProductInvalidException();
         }
@@ -360,57 +402,26 @@ namespace SalesApp_Alpha_2
         #endregion
 
         #region Exclusives Methods
-        /// <summary>
-        /// Evento que se lanza al comprar un producto
-        /// </summary>
         public event CrudEventHandler Purchased;
-        /// <summary>
-        /// Evento que se lanza al vender un producto
-        /// </summary>
         public event CrudEventHandler Selled;
 
-        /// <summary>
-        /// Procesa la compra del producto
-        /// </summary>
-        /// <param name="Quantity">Cantidad de unidades</param>
-        public void Purchase(int Quantity)
+        public void Purchase(int quantity)
         {
-            this.Quantity += Quantity;
-            Update Purchase = new Update(TableWork, DataField(TableFields.Quantity), DataField(TableFields.ID))
+            Quantity += quantity;
+            ActionNonQuery(new Update(TableWork, DataField(TableFields.Quantity), DataField(TableFields.ID))
             {
                 CommandDescription = "Compra de Producto"
-            };
-            Purchase.Interaction += Purchase_Interaction;
-            Purchase.ExecuteNonQuery();
+            }, Purchased);
         }
 
-        private void Purchase_Interaction(DataBaseInteraction sender, int AffectedRows, Type T, string QueryDescription)
+        public void Sell(int quantity)
         {
-            Purchased?.Invoke(this, QueryDescription, AffectedRows);
-        }
-
-        /// <summary>
-        /// Procesa la venta del producto
-        /// </summary>
-        /// <param name="Quantity">Cantidad de unidades</param>
-        public void Sell(int Quantity)
-        {
-            this.Quantity -= Quantity;
-            Update Sell = new Update(TableWork, DataField(TableFields.Quantity), DataField(TableFields.ID))
+            Quantity -= quantity;
+            ActionNonQuery(new Update(TableWork, DataField(TableFields.Quantity), DataField(TableFields.ID))
             {
                 CommandDescription = "Venta de Producto"
-            };
-            Sell.Interaction += Sell_Interaction;
-            Sell.ExecuteNonQuery();
+            }, Selled);
         }
-
-        private void Sell_Interaction(DataBaseInteraction sender, int AffectedRows, Type T, string CommandDetails)
-        {
-            Selled?.Invoke(this, CommandDetails, AffectedRows);
-        }
-
-
-
         #endregion
 
     }
