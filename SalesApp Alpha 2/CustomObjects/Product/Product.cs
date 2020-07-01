@@ -30,7 +30,7 @@ namespace SalesApp_Alpha_2
     /// <summary>
     /// Objeto de tipo Producto con métodos de compra/venta
     /// </summary>
-    public class Product : CObjectCRUD, IEquatable<Product>, INegotiable
+    public class Product : CObjectCRUD<Product.TableFields>, IEquatable<Product>, INegotiable
     {
         #region Constructor and Properties
         /// <summary>
@@ -70,9 +70,9 @@ namespace SalesApp_Alpha_2
         /// </summary>
         /// <param name="IncludesID">True  incluye la clave primaria "ID"</param>
         /// <returns><see cref="List{T}"/> de <see cref="Enum"/> de los campos activos</returns>
-        public static List<Enum> GetActiveFields(bool IncludesID)
+        public static List<TableFields> GetActiveFields(bool IncludesID)
         {
-            List<Enum> f = new List<Enum>();
+            List<TableFields> f = new List<TableFields>();
             if (IncludesID)
             {
                 f.Add(TableFields.ID);
@@ -127,9 +127,9 @@ namespace SalesApp_Alpha_2
         /// <param name="UnconditionalReturnsAll">Si la búsqueda no retorna resultados,
         /// se cargan todos los datos</param>
         /// <returns></returns>
-        public static DataTable GetTableProducts(List<Enum> Fields, DataFieldTemplate Filter = null, bool UnconditionalReturnsAll = false)
+        public static DataTable GetTableProducts(List<TableFields> Fields, DataFieldTemplate Filter = null, bool UnconditionalReturnsAll = false)
         {
-            return GetDataTable(TableWork, Fields, Filter, null, UnconditionalReturnsAll);
+            return GetDataTable(TableWork, Fields, Filter, UnconditionalReturnsAll);
         }
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace SalesApp_Alpha_2
         /// <returns>Lista de marcas</returns>
         public static List<object> GetTradeMarks()
         {
-            return new Select(TableFields.TradeMark, SQLTable.Products)
+            return new Select<TableFields>(TableFields.TradeMark, SQLTable.Products)
             {
                 GroupByField = TableFields.TradeMark,
                 OrderByField = TableFields.TradeMark
@@ -189,7 +189,7 @@ namespace SalesApp_Alpha_2
         /// <summary>
         /// Tiene lugar al procesar una lista de compra de productos
         /// </summary>
-        public static event EventHandler<ECrud> ListPurchased;
+        public static event EventHandler ListPurchased;
 
         ///// <summary>
         ///// Procesa una lista de compra de productos
@@ -233,7 +233,7 @@ namespace SalesApp_Alpha_2
             }
             if (ListPurchased != null)
             {
-                ListPurchased(ShoppingCart, null);
+                ListPurchased(ShoppingCart, EventArgs.Empty);
                 ListPurchased = null;
             }
         }
@@ -246,7 +246,7 @@ namespace SalesApp_Alpha_2
         public override event CrudEventHandler Deleted;
         
 
-        protected override DataFieldTemplate DataField(Enum Field)
+        protected override DataFieldTemplate DataField(TableFields Field)
         {
             if (Field is TableFields F)
             {
@@ -290,13 +290,6 @@ namespace SalesApp_Alpha_2
                 SecondaryEvent = Deleted
             });
         }
-
-        //protected override void DBInteraction(DataBaseInteraction sender, int AffectedRows, Type T, string QueryDetails)
-        //{
-        //    if (T.Equals(typeof(InsertInto))) Added?.Invoke(this, QueryDetails, AffectedRows);
-        //    else if (T.Equals(typeof(Update))) Updated?.Invoke(this, QueryDetails, AffectedRows);
-        //    else if (T.Equals(typeof(Delete))) Deleted?.Invoke(this, QueryDetails, AffectedRows);
-        //}
 
         //undone: si funciona el nuevo método de reemplazo deshacer este.
         public List<Exception> GetListExceptionsOld()
@@ -359,7 +352,7 @@ namespace SalesApp_Alpha_2
         //TODO: intentar ver si la validación puede ir vinculada de algún modo a SQL y que dependiendo la excepción sql retorne una excepción personalizada
         public bool ValidateTrial()
         {
-            List<Enum> f = GetActiveFields(false);
+            List<TableFields> f = GetActiveFields(false);
 
             if (f.Contains(TableFields.Description) && string.IsNullOrWhiteSpace(Description))
             {
@@ -396,10 +389,7 @@ namespace SalesApp_Alpha_2
         protected override List<DataFieldTemplate> GetListDataFields()
         {
             List<DataFieldTemplate> dft = new List<DataFieldTemplate>();
-            foreach (Enum e in GetActiveFields(false))
-            {
-                dft.Add(DataField(e));
-            }
+            GetActiveFields(false).ForEach(field => dft.Add(DataField(field)));
             return dft;
         }
         #endregion

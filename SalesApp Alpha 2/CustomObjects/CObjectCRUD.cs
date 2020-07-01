@@ -38,16 +38,16 @@ namespace SalesApp_Alpha_2
     /// <summary>
     /// Clase abstracta encargada de delegar objetos CRUD
     /// </summary>
-    public abstract class CObjectCRUD : ICrud
+    public abstract class CObjectCRUD<TEnum> : ICrud
     {
-        public static SQLTable Table(Type T)
-        {
-            if (T.Equals(typeof(Product)))
-            {
-                return SQLTable.Products;
-            }
-            else throw new Exception("Clase no implementada");
-        }
+        //public static SQLTable Table(Type T)
+        //{
+        //    if (T.Equals(typeof(Product)))
+        //    {
+        //        return SQLTable.Products;
+        //    }
+        //    else throw new Exception("Clase no implementada");
+        //}
 
         #region Interface Implementation
         //Events
@@ -82,7 +82,7 @@ namespace SalesApp_Alpha_2
         /// <param name="Field">Campo de la propiedad a empaquetar</param>
         /// <returns>Retorna DataFieldTemplate</returns>
         /// <exception cref="InvalidFieldException"></exception>
-        protected abstract DataFieldTemplate DataField(Enum Field);
+        protected abstract DataFieldTemplate DataField(TEnum Field);
 
         #endregion
 
@@ -99,21 +99,27 @@ namespace SalesApp_Alpha_2
         /// aunque no coincidan con la búsqueda</param>
         /// <returns></returns>
         protected static DataTable GetDataTable(SQLTable Table,
-                                                List<Enum> ListFields,
+                                                List<TEnum> ListFields,
                                                 DataFieldTemplate Filter,
-                                                Enum OrderBy = null,
-                                                bool UnconditionalReturnsAll = false)
+                                                bool UnconditionalReturnsAll,
+                                                TEnum OrderBy)
         {
-            Select S = new Select(ListFields, Table);
-            if (Filter != null)
+            Select<TEnum> S = new Select<TEnum>(ListFields, Table)
             {
-                S.Conditional = Filter;
-            }
-            if (OrderBy != null)
-            {
-                S.OrderByField = OrderBy;
-            }
+                Conditional = Filter,
+                OrderByField = OrderBy
+            };
             return !UnconditionalReturnsAll && !S.IsConditionable ? null : S.ExecuteSelect();
+        }
+
+        protected static DataTable GetDataTable(SQLTable Table, List<TEnum> ListFields, DataFieldTemplate Filter, bool UnconditionalReturnsAll)
+        {
+            return GetDataTable(Table, ListFields, Filter, UnconditionalReturnsAll, ListFields[0]);
+        }
+
+        protected static DataTable GetDataTable(SQLTable Table, List<TEnum> ListFields)
+        {
+            return GetDataTable(Table, ListFields, null, false);
         }
 
         protected void ActionNonQuery(DataBaseInteraction dbInteraction)

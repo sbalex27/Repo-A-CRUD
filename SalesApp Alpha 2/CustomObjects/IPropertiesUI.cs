@@ -9,7 +9,7 @@ namespace SalesApp_Alpha_2
     /// </summary>
     /// <typeparam name="T">Tipo de objeto que manejará 
     /// la interfaz de usuario</typeparam>
-    public interface IPropertiesUI<T> where T : CObjectCRUD
+    public interface IPropertiesUI<T> where T : ICrud
     {
         /// <summary>
         /// Recopila los valores de las propiedades en la

@@ -73,28 +73,29 @@ namespace SalesApp_Alpha_2
 
         public void ExecuteNonQuery()
         {
-            if (GetType() != typeof(Select))
+            try
             {
                 TryOpen();
                 int Rows = Command.ExecuteNonQuery();
-                TryClose();
-
                 Interaction?.Invoke(this, Rows, GetType(), CommandDescription ?? "NonQuery", SecondaryEvent);
             }
-            else throw new InvalidOperationException();
+            finally
+            {
+                TryClose();
+            }
         }
     }
 
-    public class Select : DataBaseInteraction
+    public class Select<TField> : DataBaseInteraction
     {
         #region Constructors
-        public Select(List<Enum> Fields, SQLTable Table)
+        public Select(List<TField> Fields, SQLTable Table)
         {
             this.Fields = Fields;
             this.Table = Table;
         }
 
-        public Select(Enum Field, SQLTable Table)
+        public Select(TField Field, SQLTable Table)
         {
             this.Field = Field;
             this.Table = Table;
@@ -102,17 +103,17 @@ namespace SalesApp_Alpha_2
         #endregion
 
         #region Properties
-        public Enum OrderByField { get; set; }
-        public Enum GroupByField { get; set; }
-        private List<Enum> PFields { get; set; }
-        public List<Enum> Fields
+        public TField OrderByField { get; set; }
+        public TField GroupByField { get; set; }
+        private List<TField> PFields { get; set; }
+        public List<TField> Fields
         {
             get => PFields;
             set => PFields = value is null || value.Count == 0 ? throw new ArgumentNullException(nameof(Fields)) : value;
         }
-        private Enum Field
+        private TField Field
         {
-            set => Fields = value is null ? throw new ArgumentNullException(nameof(Field)) : new List<Enum> { value };
+            set => Fields = value != null ? new List<TField> { value } : throw new ArgumentNullException(nameof(TField));
         }
         #endregion
 

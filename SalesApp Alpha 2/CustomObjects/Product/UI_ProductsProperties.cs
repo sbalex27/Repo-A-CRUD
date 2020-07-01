@@ -54,7 +54,7 @@ namespace SalesApp_Alpha_2
 
         private void InitializeOptionals()
         {
-            List<Enum> fields = Product.GetActiveFields(true);
+            List<Product.TableFields> fields = Product.GetActiveFields(true);
             inputBox_Text_ID.Visible = fields.Contains(Product.TableFields.ID);
             inputBox_Text_Description.Visible = fields.Contains(Product.TableFields.Description);
             inputBox_Combo_TradeMark.Visible = fields.Contains(Product.TableFields.TradeMark);
