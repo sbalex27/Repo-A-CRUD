@@ -13,43 +13,41 @@ namespace SalesApp_Alpha_2
         }
 
         #region Getters
-        Product Selected => (Product)(SearchValue ?? Product.GetFromID((int)SearchValue));
 
-        Product Modified => UI_SelectProductsProperties.GetObject();
+        private List<Product> Products = new List<Product>();
+        private readonly List<Product> ListToAddProducts = new List<Product>();
 
-        DataTable ProductsDataTable
+        private Product GetSelected()
         {
-            get
-            {
-                return Product.GetTableProducts(Product.GetActiveFields(true), SearchDataField);
-            }
+            return Products.Find(P => P.ID.Equals((int)LB_SearchResults.SelectedValue));
         }
 
-        DataFieldTemplate SearchDataField
+        private Product GetModified()
         {
-            get => new DataFieldTemplate(Product.TableFields.Description,
-                                             IB_Text_Search.InputValue,
-                                             SQLValueType.SqlString, SQLOperator.Like);
+            return UI_SelectProductsProperties.GetObject();
         }
 
-        object SearchValue
+        List<Product> GetProducts()
         {
-            get => LB_SearchResults.SelectedValue;
+            return Products = Product.GetProductListed(GetConditional());
+        }
+
+        private DataFieldTemplate GetConditional()
+        {
+            return new DataFieldTemplate(Product.TableFields.Description,
+                                         IB_Text_Search.InputValue,
+                                         SQLValueType.SqlString,
+                                         SQLOperator.Like);
         }
         #endregion
 
-        private readonly List<Product> ListToAddProducts = new List<Product>();
+        private void IB_Text_Search_InputChanged(object sender, EventArgs e) => Search();
 
-        private void IB_Text_Search_InputChanged(object sender, EventArgs e)
-        {
-            ShowSearchResults();
-        }
-
-        private void ShowSearchResults()
+        private void Search()
         {
             LB_SearchResults.DisplayMember = Product.TableFields.Description.ToString();
             LB_SearchResults.ValueMember = Product.TableFields.ID.ToString();
-            LB_SearchResults.DataSource = ProductsDataTable;
+            LB_SearchResults.DataSource = GetProducts();
         }
 
         private void LB_SearchResults_SelectedIndexChanged(object sender, EventArgs e)
@@ -59,15 +57,14 @@ namespace SalesApp_Alpha_2
 
         private void LoadProperties()
         {
-            Product P = Selected;
-            if (P is null)
+            Product Selected = GetSelected();
+            if (Selected is null)
             {
                 UI_SelectProductsProperties.ClearProperties();
             }
             else
             {
-                UI_SelectProductsProperties.inputBox_Text_Description.InputValue = P.Description;
-                UI_SelectProductsProperties.inputBox_Combo_TradeMark.InputValue = P.TradeMark;
+                UI_SelectProductsProperties.SemiSetObject(Selected);
             }
         }
 
@@ -76,7 +73,7 @@ namespace SalesApp_Alpha_2
         {
             try
             {
-                Product P = Modified;
+                Product P = GetModified();
                 if (!ListToAddProducts.Contains(P))
                 {
                     AddToList(P);
@@ -118,7 +115,7 @@ namespace SalesApp_Alpha_2
 
         private void IB_Text_Search_Leave(object sender, EventArgs e)
         {
-            if (Selected == null)
+            if (GetSelected() == null)
             {
                 UI_SelectProductsProperties.SetFocus();
             }
@@ -132,7 +129,7 @@ namespace SalesApp_Alpha_2
 
         private void UI_SelectProductsProperties_Enter(object sender, EventArgs e)
         {
-            if (Selected != null)
+            if (GetSelected() != null)
             {
                 UI_SelectProductsProperties.inputBox_Numeric_Quantity.Focus();
             }

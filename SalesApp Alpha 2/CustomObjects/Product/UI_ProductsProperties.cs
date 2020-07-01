@@ -31,10 +31,15 @@ namespace SalesApp_Alpha_2
             ValidateObject();
             return _ProductObject;
         }
+
         public void SetObject(Product value)
         {
             _ProductObject = value;
-            if (_ProductObject != null)
+            if (_ProductObject is null)
+            {
+                ClearProperties();
+            }
+            else
             {
                 inputBox_Text_ID.InputValue = value.ID.ToString();
                 inputBox_Text_Description.InputValue = value.Description;
@@ -42,13 +47,33 @@ namespace SalesApp_Alpha_2
                 inputBox_Numeric_Quantity.InputValue = value.Quantity;
                 inputBox_Numeric_Price.InputValue = (decimal)value.Price;
             }
-            else ClearProperties();
+        }
+
+        public void SemiSetObject(Product value)
+        {
+            if (value is null)
+            {
+                ClearProperties();
+            }
+            else
+            {
+                inputBox_Text_Description.InputValue = value.Description;
+                inputBox_Combo_TradeMark.InputValue = value.TradeMark;
+            }
         }
 
         public bool PropertyID
         {
             get => inputBox_Text_ID.Visible;
             set => inputBox_Text_ID.Visible = value;
+        }
+
+        public bool IsValid
+        {
+            get
+            {
+
+            }
         }
         #endregion
 
@@ -82,42 +107,64 @@ namespace SalesApp_Alpha_2
             }
         }
 
+        //toDo: borrar método de lanzamiento de excepciones antigüo si funciona el nuevo
+        public void ExceptionsHandlerOLD(Exception ex)
+        {
+            switch (ex)
+            {
+                case ProductCriticalValuesException _:
+                    inputBox_Text_ID.VisualError = true;
+                    inputBox_Text_Description.VisualError = true;
+                    inputBox_Combo_TradeMark.VisualError = true;
+                    break;
+                case ProductRepeatedException _:
+                    inputBox_Text_ID.VisualError = true;
+                    inputBox_Text_Description.VisualError = true;
+                    inputBox_Combo_TradeMark.VisualError = true;
+                    break;
+                case ProductNoQuantityException _:
+                    inputBox_Numeric_Quantity.VisualError = true;
+                    break;
+                case ProductWorthlessException _:
+                    inputBox_Numeric_Price.VisualError = true;
+                    break;
+                default:
+                    throw new InvalidCastException();
+            }
+        }
+
         public void ExceptionsHandler(Exception ex)
         {
-            Type t = ex.GetType();
-            if (t.Equals(typeof(ProductCriticalValuesException)))
+            try
+            {
+                throw new Exception("Producto inválido", ex);
+            }
+            catch (ProductCriticalValuesException)
             {
                 inputBox_Text_ID.VisualError = true;
                 inputBox_Text_Description.VisualError = true;
                 inputBox_Combo_TradeMark.VisualError = true;
             }
-            else if (t.Equals(typeof(ProductRepeatedException)))
+            catch (ProductRepeatedException)
             {
                 inputBox_Text_ID.VisualError = true;
                 inputBox_Text_Description.VisualError = true;
                 inputBox_Combo_TradeMark.VisualError = true;
             }
-            else if (t.Equals(typeof(ProductNoQuantityException)))
+            catch (ProductNoQuantityException)
             {
                 inputBox_Numeric_Quantity.VisualError = true;
             }
-            else if (t.Equals(typeof(ProductWorthlessException)))
+            catch (ProductWorthlessException)
             {
                 inputBox_Numeric_Price.VisualError = true;
-            }
-            else
-            {
-                throw new InvalidCastException();
             }
         }
 
         public void ExceptionsHandler(List<Exception> exceptions)
         {
             DisableVisualErrors();
-            foreach (Exception ex in exceptions)
-            {
-                ExceptionsHandler(ex);
-            }
+            exceptions.ForEach(ex => ExceptionsHandler(ex));
         }
 
         private void inputBox_Combo_TradeMark_Load(object sender, EventArgs e)

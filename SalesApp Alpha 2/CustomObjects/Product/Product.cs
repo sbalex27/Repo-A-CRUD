@@ -116,8 +116,7 @@ namespace SalesApp_Alpha_2
         {
             List<Product> Products = new List<Product>();
             DataTable Results = GetTableProducts(GetActiveFields(true), Filter, UnconditionalReturnsAll);
-
-            if (!(Results?.Rows.Count == 0))
+            if (Results != null && Results.Rows.Count != 0)
             {
                 foreach (DataRow row in Results.Rows)
                 {
@@ -130,7 +129,6 @@ namespace SalesApp_Alpha_2
                         Price = Convert.ToDouble(row[TableFields.Price.ToString()])
                     });
                 }
-
             }
             return Products;
         }
