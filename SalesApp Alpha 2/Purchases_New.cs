@@ -111,7 +111,7 @@ namespace SalesApp_Alpha_2
             Product.ListToPurchase(ListToAddProducts);
         }
 
-        private void Product_ListPurchased(object sender, ECrud e)
+        private void Product_ListPurchased(object sender, EventArgs e)
         {
             PremadeMessage.PMNotification("Lista de compras procesada correctamente", "Procesado");
         }
