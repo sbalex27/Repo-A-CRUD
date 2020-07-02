@@ -4,6 +4,44 @@ namespace SalesApp_Alpha_2
 {
 
     [Serializable]
+    public class ProductException : Exception
+    {
+        public Product.TableFields ExceptionField { get; private set; }
+
+        public ProductException() : base("Producto Inválido") { }
+        public ProductException(Product.TableFields Field, string message) : base (message)
+        {
+            ExceptionField = Field;
+        }
+
+        protected ProductException(string message, Exception inner) : base(message, inner) { }
+        protected ProductException(
+          System.Runtime.Serialization.SerializationInfo info,
+          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+    }
+
+
+    [Serializable]
+    public class ProductObligatoryFieldException : ProductException
+    {
+        public ProductObligatoryFieldException(Product.TableFields Field) : base(Field, "Este es un campo obligatorio") { }
+    }
+
+    [Serializable]
+    public class ProductInvalidPriceException : ProductException
+    {
+        public ProductInvalidPriceException() : base(Product.TableFields.Price, "Precio inválido") { }
+    }
+
+    [Serializable]
+    public class ProductSoldOutException : ProductException
+    {
+        public ProductSoldOutException() : base(Product.TableFields.Quantity, "Producto agotado") { }
+    }
+
+
+
+    [Serializable]
     public class ProductInvalidException : Exception
     {
         public ProductInvalidException() : base("Producto Inválido") { }

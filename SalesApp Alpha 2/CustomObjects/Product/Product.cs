@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySqlX.XDevAPI.Relational;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Runtime.Remoting.Messaging;
@@ -295,7 +296,6 @@ namespace SalesApp_Alpha_2
             return exceptions;
         }
 
-        //ToDo: revisar código experimental
         public override List<Exception> GetListExceptions()
         {
             Validating?.Invoke(this, "Validando");
@@ -318,6 +318,41 @@ namespace SalesApp_Alpha_2
             criticalValue(TradeMark);
             if (isCero(Quantity)) addException(new ProductNoQuantityException());
             if (isCero(Price)) addException(new ProductWorthlessException());
+            return exceptions;
+        }
+
+        //toDO: IMPORTANTE continuar agregando el código para implementer la nueva excepción ProductException
+        public List<Exception> GetExceptions()
+        {
+            List<Exception> exceptions = new List<Exception>();
+            Predicate<object> IsEmpty = new Predicate<object>(o => string.IsNullOrEmpty(o.ToString()));
+            Action<TableFields> AddEmpty = new Action<TableFields>(f => exceptions.Add(new ProductObligatoryFieldException(f)));
+
+            if (IsEmpty(Description))
+            {
+                AddEmpty(TableFields.Description);
+            }
+            if (IsEmpty(TradeMark))
+            {
+                AddEmpty(TableFields.TradeMark);
+            }
+            if (IsEmpty(Quantity))
+            {
+                AddEmpty(TableFields.Quantity);
+            }
+            if (IsEmpty(Price))
+            {
+                AddEmpty(TableFields.Price);
+            }
+            if (Price <= 0)
+            {
+                exceptions.Add(new ProductInvalidPriceException());
+            }
+            if (Quantity <= 0)
+            {
+                exceptions.Add(new ProductSoldOutException());
+            }
+
             return exceptions;
         }
 
