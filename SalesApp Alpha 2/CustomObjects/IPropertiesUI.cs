@@ -11,10 +11,10 @@ namespace SalesApp_Alpha_2
     /// la interfaz de usuario</typeparam>
     public interface IPropertiesUI<T> where T : ICrud
     {
-        /// <summary>
-        /// Expone si el objeto está validado
-        /// </summary>
-        bool IsValid { get; }
+        ///// <summary>
+        ///// Expone si el objeto está validado
+        ///// </summary>
+        //bool IsValid { get; }
 
         /// <summary>
         /// Recopila los valores de las propiedades en la

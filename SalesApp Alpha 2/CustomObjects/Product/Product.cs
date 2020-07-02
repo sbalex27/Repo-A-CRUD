@@ -52,6 +52,7 @@ namespace SalesApp_Alpha_2
         }
         public int Quantity
         {
+            //todo: la cantidad puede estar en cero
             get => quantity;
             set => quantity = value <= 0 ? throw new ProductSoldOutException() : value;
         }

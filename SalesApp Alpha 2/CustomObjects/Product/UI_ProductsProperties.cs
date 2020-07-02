@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.CodeDom;
+using System.Reflection;
 
 namespace SalesApp_Alpha_2
 {
@@ -15,9 +16,18 @@ namespace SalesApp_Alpha_2
     {
         public UI_ProductsProperties()
         {
+
             InitializeComponent();
             InitializeOptionals();
         }
+
+        Dictionary<Product.TableFields, UserControl> KeyValuePairs => new Dictionary<Product.TableFields, UserControl>()
+        {
+            {Product.TableFields.Description, inputBox_Text_Description },
+            {Product.TableFields.TradeMark, inputBox_Combo_TradeMark },
+            {Product.TableFields.Quantity, inputBox_Numeric_Quantity },
+            {Product.TableFields.Price, inputBox_Numeric_Price }
+        };
 
         #region Properties
         private Product _ProductObject;
@@ -31,10 +41,12 @@ namespace SalesApp_Alpha_2
                 _ProductObject.Quantity = (int)inputBox_Numeric_Quantity.InputValue;
                 _ProductObject.Price = (double)inputBox_Numeric_Price.InputValue;
             }
-            catch (Exception)
+            catch (ProductObligatoryFieldException ex)
             {
-
-                throw;
+                KeyValuePairs.TryGetValue(ex.ExceptionField, out UserControl control);
+                if (control is InputBox_Text ibt) ibt.VisualError = true;
+                if (control is InputBox_Combo ibc) ibc.VisualError = true;
+                if (control is InputBox_Numeric ibn) ibn.VisualError = true;
             }
             ValidateObject();
             return _ProductObject;
@@ -74,14 +86,6 @@ namespace SalesApp_Alpha_2
         {
             get => inputBox_Text_ID.Visible;
             set => inputBox_Text_ID.Visible = value;
-        }
-
-        public bool IsValid
-        {
-            get
-            {
-
-            }
         }
         #endregion
 
