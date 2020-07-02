@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Reflection.Emit;
 using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
 
@@ -32,11 +33,33 @@ namespace SalesApp_Alpha_2
             else throw new ArgumentOutOfRangeException(nameof(ID));
         }
 
+        private string description;
+        private string trademark;
+        private int quantity;
+        private double price;
+
         public int ID { get; private set; }
-        public string Description { get; set; }
-        public string TradeMark { get; set; }
-        public int Quantity { get; set; }
-        public double Price { get; set; }
+
+        public string Description
+        {
+            get => description;
+            set => description = string.IsNullOrWhiteSpace(value) ? throw new ProductObligatoryFieldException(TableFields.Description) : value;
+        }
+        public string TradeMark
+        {
+            get => trademark;
+            set => trademark = string.IsNullOrWhiteSpace(value) ? throw new ProductObligatoryFieldException(TableFields.TradeMark) : value;
+        }
+        public int Quantity
+        {
+            get => quantity;
+            set => quantity = value <= 0 ? throw new ProductSoldOutException() : value;
+        }
+        public double Price
+        {
+            get => price;
+            set => price = value <= 0 ? throw new ProductInvalidPriceException() : value;
+        }
 
         public const SQLTable TableWork = SQLTable.Products;
 
@@ -322,7 +345,7 @@ namespace SalesApp_Alpha_2
         }
 
         //toDO: IMPORTANTE continuar agregando el código para implementer la nueva excepción ProductException
-        public List<Exception> GetExceptions()
+        public List<Exception> GetExceptionsBETA()
         {
             List<Exception> exceptions = new List<Exception>();
             Predicate<object> IsEmpty = new Predicate<object>(o => string.IsNullOrEmpty(o.ToString()));

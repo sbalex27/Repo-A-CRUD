@@ -24,10 +24,18 @@ namespace SalesApp_Alpha_2
         public Product GetObject()
         {
             _ProductObject = _ProductObject ?? new Product();
-            _ProductObject.Description = inputBox_Text_Description.InputValue;
-            _ProductObject.TradeMark = inputBox_Combo_TradeMark.InputValue;
-            _ProductObject.Quantity = (int)inputBox_Numeric_Quantity.InputValue;
-            _ProductObject.Price = (double)inputBox_Numeric_Price.InputValue;
+            try
+            {
+                _ProductObject.Description = inputBox_Text_Description.InputValue;
+                _ProductObject.TradeMark = inputBox_Combo_TradeMark.InputValue;
+                _ProductObject.Quantity = (int)inputBox_Numeric_Quantity.InputValue;
+                _ProductObject.Price = (double)inputBox_Numeric_Price.InputValue;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             ValidateObject();
             return _ProductObject;
         }
