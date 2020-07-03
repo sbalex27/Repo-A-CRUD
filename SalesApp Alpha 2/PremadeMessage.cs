@@ -30,7 +30,7 @@ namespace SalesApp_Alpha_2
                 _title = arg;
                 _caption = $"{affected} {arg}: {o}";
                 _buttons = MessageBoxButtons.OK;
-                _icon = MessageBoxIcon.Information;
+                _icon = MessageBoxIcon.None;
                 Show();
             }
         }
@@ -61,45 +61,6 @@ namespace SalesApp_Alpha_2
             _icon = MessageBoxIcon.Information;
             Show();
         }
-
-        //public static void PMFormatException(string InvalidValue = "")
-        //{
-        //    _title = "El formato es incorrecto";
-        //    _caption = "No se permiten el ingreso de estos valores";
-        //    if (!IsEmptyText(InvalidValue)) { _caption += " - " + InvalidValue; }
-        //    _buttons = MessageBoxButtons.OK;
-        //    _icon = MessageBoxIcon.Exclamation;
-
-        //    Show();
-        //}
-
-        //public static void PMFatalException()
-        //{
-        //    _title = "Error";
-        //    _caption = "Ha ocurrido un error intentelo de nuevo";
-        //    _buttons = MessageBoxButtons.OK;
-        //    _icon = MessageBoxIcon.Error;
-
-        //    Show();
-        //}
-
-        //public static void PMDataBaseException(int ExceptionNumber = 0)
-        //{
-        //    switch (ExceptionNumber)
-        //    {
-        //        case (int)MySqlExceptionList.VeryLong:
-        //            _caption = "El valor es demasiado largo";
-        //            break;
-
-        //        default:
-        //            _caption = "Ha ocurrido un error al manipular la base de datos, reintente";
-        //            break;
-        //    }
-        //    _title = "Base de Datos";
-        //    _buttons = MessageBoxButtons.OK;
-        //    _icon = MessageBoxIcon.Error;
-        //    Show();
-        //}
 
         private static void Show()
         {
