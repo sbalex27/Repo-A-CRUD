@@ -40,7 +40,7 @@ namespace SalesApp_Alpha_2
 
         public void ResetInputValue()
         {
-            InputValue = null;
+            InputValue = string.Empty;
             VisualError = false;
         }
 

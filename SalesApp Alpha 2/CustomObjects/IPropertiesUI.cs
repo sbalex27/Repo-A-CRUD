@@ -46,22 +46,6 @@ namespace SalesApp_Alpha_2
         void SetFocus();
 
         /// <summary>
-        /// Arroja un error en la interfaz de usuario en la propiedad correspondiente
-        /// según la excepción proveida
-        /// </summary>
-        /// <param name="exception">Excepción a analizar</param>
-        /// <exception cref="InvalidCastException"></exception>
-        void ExceptionsHandler(Exception exception);
-
-        /// <summary>
-        /// Arroja una serie de errores en la interfaz de usuario en las propiedades
-        /// correspondientes según la excepciones proveidas
-        /// </summary>
-        /// <param name="exceptions">Lista de excepciones</param>
-        /// <exception cref="InvalidCastException">Excepción no valida</exception>
-        void ExceptionsHandler(List<Exception> exceptions);
-
-        /// <summary>
         /// Valida el objeto obteniendo las excepciones
         /// de <see cref="CObjectCRUD.GetListExceptions"/> y manejandolas por el método
         /// <see cref="ExceptionsHandler(List{Exception})"/> si existen excepciones debe

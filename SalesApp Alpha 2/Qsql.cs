@@ -130,7 +130,9 @@ namespace SalesApp_Alpha_2
     [Serializable]
     public class QsqlConnectionException : Exception
     {
-        public QsqlConnectionException() : base("No se puede conectar a la base de datos") { }
+        private static readonly string m = "No se puede conectar con la base de datos";
+        public QsqlConnectionException() : base(m) { }
+        public QsqlConnectionException(Exception inner) : base(m, inner) { }
         public QsqlConnectionException(string message) : base(message) { }
         public QsqlConnectionException(string message, Exception inner) : base(message, inner) { }
         protected QsqlConnectionException(

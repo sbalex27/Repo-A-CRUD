@@ -21,15 +21,7 @@ namespace SalesApp_Alpha_2
             {
                 Product p = UI_ProductsPropertiesInput.GetObject();
                 p.Added += P_Event;
-                p.Updated += P_Event;
-
-                if (FormActionModify)
-                {
-                    Product ToModify = Product.GetFromID(p.ID);
-                    ToModify = p;
-                    ToModify.Update();
-                }
-                else p.Add();
+                p.Add();
             }
             catch (Exception ex)
             {

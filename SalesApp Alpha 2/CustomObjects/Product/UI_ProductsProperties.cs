@@ -30,32 +30,26 @@ namespace SalesApp_Alpha_2
         };
 
         #region Properties
-        private Product _ProductObject;
+        private Product productObject;
         public Product GetObject()
         {
-            _ProductObject = _ProductObject ?? new Product();
-            try
-            {
-                _ProductObject.Description = inputBox_Text_Description.InputValue;
-                _ProductObject.TradeMark = inputBox_Combo_TradeMark.InputValue;
-                _ProductObject.Quantity = (int)inputBox_Numeric_Quantity.InputValue;
-                _ProductObject.Price = (double)inputBox_Numeric_Price.InputValue;
-            }
-            catch (ProductObligatoryFieldException ex)
-            {
-                KeyValuePairs.TryGetValue(ex.ExceptionField, out UserControl control);
-                if (control is InputBox_Text ibt) ibt.VisualError = true;
-                if (control is InputBox_Combo ibc) ibc.VisualError = true;
-                if (control is InputBox_Numeric ibn) ibn.VisualError = true;
-            }
+            DisableVisualErrors();
+            productObject = productObject ?? new Product();
             ValidateObject();
-            return _ProductObject;
+            return productObject;
+        }
+
+        private void VisualError(Control control, bool value)
+        {
+            if (control is InputBox_Text ibt) ibt.VisualError = value;
+            if (control is InputBox_Numeric ibn) ibn.VisualError = value;
+            if (control is InputBox_Combo ibc) ibc.VisualError = value;
         }
 
         public void SetObject(Product value)
         {
-            _ProductObject = value;
-            if (_ProductObject is null)
+            productObject = value;
+            if (productObject is null)
             {
                 ClearProperties();
             }
@@ -101,11 +95,19 @@ namespace SalesApp_Alpha_2
 
         public void ValidateObject()
         {
-            List<Exception> exceptions = _ProductObject.GetListExceptions();
-            ExceptionsHandler(exceptions);
-            if (exceptions.Count != 0)
+            try
             {
-                throw new ProductInvalidException();
+                productObject.Description = inputBox_Text_Description.InputValue;
+                productObject.TradeMark = inputBox_Combo_TradeMark.InputValue;
+                productObject.Quantity = (int)inputBox_Numeric_Quantity.InputValue;
+                productObject.Price = (double)inputBox_Numeric_Price.InputValue;
+            }
+            catch (ProductException ex)
+            {
+                KeyValuePairs.TryGetValue(ex.ExceptionField, out UserControl ctrl);
+                VisualError(ctrl, true);
+                ctrl.Focus();
+                throw;
             }
         }
 
@@ -113,70 +115,8 @@ namespace SalesApp_Alpha_2
         {
             foreach (Control item in Controls)
             {
-                if (item is InputBox_Numeric ibn) ibn.VisualError = false;
-                if (item is InputBox_Combo ibc) ibc.VisualError = false;
-                if (item is InputBox_Text ibt) ibt.VisualError = false;
+                VisualError(item, false);
             }
-        }
-
-        //toDo: borrar método de lanzamiento de excepciones antigüo si funciona el nuevo
-        public void ExceptionsHandlerOLD(Exception ex)
-        {
-            switch (ex)
-            {
-                case ProductCriticalValuesException _:
-                    inputBox_Text_ID.VisualError = true;
-                    inputBox_Text_Description.VisualError = true;
-                    inputBox_Combo_TradeMark.VisualError = true;
-                    break;
-                case ProductRepeatedException _:
-                    inputBox_Text_ID.VisualError = true;
-                    inputBox_Text_Description.VisualError = true;
-                    inputBox_Combo_TradeMark.VisualError = true;
-                    break;
-                case ProductNoQuantityException _:
-                    inputBox_Numeric_Quantity.VisualError = true;
-                    break;
-                case ProductWorthlessException _:
-                    inputBox_Numeric_Price.VisualError = true;
-                    break;
-                default:
-                    throw new InvalidCastException();
-            }
-        }
-
-        public void ExceptionsHandler(Exception ex)
-        {
-            try
-            {
-                throw new Exception("Producto inválido", ex);
-            }
-            catch (ProductCriticalValuesException)
-            {
-                inputBox_Text_ID.VisualError = true;
-                inputBox_Text_Description.VisualError = true;
-                inputBox_Combo_TradeMark.VisualError = true;
-            }
-            catch (ProductRepeatedException)
-            {
-                inputBox_Text_ID.VisualError = true;
-                inputBox_Text_Description.VisualError = true;
-                inputBox_Combo_TradeMark.VisualError = true;
-            }
-            catch (ProductNoQuantityException)
-            {
-                inputBox_Numeric_Quantity.VisualError = true;
-            }
-            catch (ProductWorthlessException)
-            {
-                inputBox_Numeric_Price.VisualError = true;
-            }
-        }
-
-        public void ExceptionsHandler(List<Exception> exceptions)
-        {
-            DisableVisualErrors();
-            exceptions.ForEach(ex => ExceptionsHandler(ex));
         }
 
         private void inputBox_Combo_TradeMark_Load(object sender, EventArgs e)

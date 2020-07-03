@@ -74,15 +74,18 @@ namespace SalesApp_Alpha_2
             try
             {
                 Product P = GetModified();
-                if (!ListToAddProducts.Contains(P))
+                if (ListToAddProducts.Contains(P))
+                {
+                    throw new ProductRepeatedException();
+                }
+                else
                 {
                     AddToList(P);
+                    
                 }
-                else throw new ProductRepeatedException();
             }
-            catch (ProductRepeatedException ex)
+            catch (ProductException ex)
             {
-                UI_SelectProductsProperties.ExceptionsHandler(ex);
                 PremadeMessage.PMNotification(ex.Message);
             }
         }

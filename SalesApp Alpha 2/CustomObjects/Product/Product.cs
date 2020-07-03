@@ -1,4 +1,5 @@
-﻿using MySqlX.XDevAPI.Relational;
+﻿using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI.Relational;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -52,9 +53,8 @@ namespace SalesApp_Alpha_2
         }
         public int Quantity
         {
-            //todo: la cantidad puede estar en cero
             get => quantity;
-            set => quantity = value <= 0 ? throw new ProductSoldOutException() : value;
+            set => quantity = value < 0 ? throw new ProductQuantityException() : value;
         }
         public double Price
         {
@@ -245,47 +245,48 @@ namespace SalesApp_Alpha_2
 
         protected override DataFieldTemplate DataField(TableFields Field)
         {
-            if (Field is TableFields F)
+            switch (Field)
             {
-                switch (F)
-                {
-                    case TableFields.ID:
-                        return new DataFieldTemplate(Field, ID, SQLValueType.SqlInt);
-                    case TableFields.Description:
-                        return new DataFieldTemplate(Field, Description, SQLValueType.SqlString);
-                    case TableFields.TradeMark:
-                        return new DataFieldTemplate(Field, TradeMark, SQLValueType.SqlString);
-                    case TableFields.Quantity:
-                        return new DataFieldTemplate(Field, Quantity, SQLValueType.SqlInt);
-                    case TableFields.Price:
-                        return new DataFieldTemplate(Field, Price, SQLValueType.SqlDouble);
-                    default:
-                        throw new InvalidFieldException();
-                }
+                case TableFields.ID:
+                    return new DataFieldTemplate(Field, ID, SQLValueType.SqlInt);
+                case TableFields.Description:
+                    return new DataFieldTemplate(Field, Description, SQLValueType.SqlString);
+                case TableFields.TradeMark:
+                    return new DataFieldTemplate(Field, TradeMark, SQLValueType.SqlString);
+                case TableFields.Quantity:
+                    return new DataFieldTemplate(Field, Quantity, SQLValueType.SqlInt);
+                case TableFields.Price:
+                    return new DataFieldTemplate(Field, Price, SQLValueType.SqlDouble);
+                default:
+                    throw new InvalidFieldException();
             }
-            else throw new InvalidFieldException();
         }
 
         public override void Add()
         {
-            if (GetListExceptions().Count == 0)
+            try
             {
-                ActionNonQuery(new InsertInto(TableWork, GetListDataFields())
+                NonQueryResult result = new InsertInto(TableWork, GetListDataFields()).ExecuteNonQuery();
+
+                if (result.IsRunned)
                 {
-                    CommandDescription = "Añadido(s)",
-                    SecondaryEvent = Added
-                });
+                    Added?.Invoke(this, "Añadido(s)", result.AffectedRecords);
+                }
             }
-            else throw new ProductInvalidException();
+            catch (Exception ex) when (!(ex is QsqlConnectionException))
+            {
+                throw new ProductException();
+            }
         }
 
         public override void Delete()
         {
-            ActionNonQuery(new Delete(TableWork, DataField(TableFields.ID))
+            NonQueryResult result = new Delete(TableWork, DataField(TableFields.ID)).ExecuteNonQuery();
+
+            if (result.IsRunned)
             {
-                CommandDescription = "Eliminado(s)",
-                SecondaryEvent = Deleted
-            });
+                Deleted?.Invoke(this, "Eliminado(s)", result.AffectedRecords);
+            }
         }
 
         //undone: si funciona el nuevo método de reemplazo deshacer este.
@@ -298,7 +299,7 @@ namespace SalesApp_Alpha_2
             Action<List<Exception>, Exception> action = (ex, li) => ex.Add(li);
             Action CriticalValues = new Action(delegate ()
             {
-                exceptions.Add(new ProductCriticalValuesException());
+                //exceptions.Add(new ProductCriticalValuesException());
             });
 
             if (IsEmpty(Description))
@@ -311,11 +312,11 @@ namespace SalesApp_Alpha_2
             }
             if (Quantity < 0)
             {
-                exceptions.Add(new ProductNoQuantityException());
+                //exceptions.Add(new ProductNoQuantityException());
             }
             if (Price <= 0)
             {
-                exceptions.Add(new ProductWorthlessException());
+                //exceptions.Add(new ProductWorthlessException());
             }
             return exceptions;
         }
@@ -335,13 +336,13 @@ namespace SalesApp_Alpha_2
             Action<Exception> addException = new Action<Exception>(ex => exceptions.Add(ex));
             Action<string> criticalValue = new Action<string>(delegate (string arg)
             {
-                if (isEmpty(arg)) addException(new ProductCriticalValuesException());
+                //if (isEmpty(arg)) addException(new ProductCriticalValuesException());
             });
 
             criticalValue(Description);
             criticalValue(TradeMark);
-            if (isCero(Quantity)) addException(new ProductNoQuantityException());
-            if (isCero(Price)) addException(new ProductWorthlessException());
+            //if (isCero(Quantity)) addException(new ProductNoQuantityException());
+            //if (isCero(Price)) addException(new ProductWorthlessException());
             return exceptions;
         }
 
@@ -374,7 +375,7 @@ namespace SalesApp_Alpha_2
             }
             if (Quantity <= 0)
             {
-                exceptions.Add(new ProductSoldOutException());
+                exceptions.Add(new ProductQuantityException());
             }
 
             return exceptions;
@@ -383,38 +384,43 @@ namespace SalesApp_Alpha_2
         //TODO: intentar ver si la validación puede ir vinculada de algún modo a SQL y que dependiendo la excepción sql retorne una excepción personalizada
         public bool ValidateTrial()
         {
-            List<TableFields> f = GetActiveFields(false);
+            //List<TableFields> f = GetActiveFields(false);
 
-            if (f.Contains(TableFields.Description) && string.IsNullOrWhiteSpace(Description))
-            {
-                throw new ProductCriticalValuesException();
-            }
-            if (f.Contains(TableFields.TradeMark) && string.IsNullOrWhiteSpace(TradeMark))
-            {
-                throw new ProductCriticalValuesException();
-            }
-            if (f.Contains(TableFields.Quantity) && Quantity < 0)
-            {
-                throw new ProductNoQuantityException();
-            }
-            if (f.Contains(TableFields.Price) && Price <= 0)
-            {
-                throw new ProductWorthlessException();
-            }
-            return true;
+            //if (f.Contains(TableFields.Description) && string.IsNullOrWhiteSpace(Description))
+            //{
+            //    throw new ProductCriticalValuesException();
+            //}
+            //if (f.Contains(TableFields.TradeMark) && string.IsNullOrWhiteSpace(TradeMark))
+            //{
+            //    throw new ProductCriticalValuesException();
+            //}
+            //if (f.Contains(TableFields.Quantity) && Quantity < 0)
+            //{
+            //    throw new ProductNoQuantityException();
+            //}
+            //if (f.Contains(TableFields.Price) && Price <= 0)
+            //{
+            //    throw new ProductWorthlessException();
+            //}
+            //return true;
+            throw new NotImplementedException();
         }
 
         public override void Update()
         {
-            if (GetListExceptions().Count == 0)
+            try
             {
-                ActionNonQuery(new Update(TableWork, GetListDataFields(), DataField(TableFields.ID))
+                NonQueryResult result = new Update(TableWork, GetListDataFields(), DataField(TableFields.ID)).ExecuteNonQuery();
+
+                if (result.IsRunned)
                 {
-                    CommandDescription = "Actualización(es)",
-                    SecondaryEvent = Updated
-                });
+                    Updated?.Invoke(this, "Actualizado(s)", result.AffectedRecords);
+                }
             }
-            else throw new ProductInvalidException();
+            catch (Exception ex) when (!(ex is QsqlConnectionException))
+            {
+                throw new ProductException();
+            }
         }
 
         protected override List<DataFieldTemplate> GetListDataFields()
