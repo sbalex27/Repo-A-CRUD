@@ -75,7 +75,7 @@ namespace SalesApp_Alpha_2
                 LinkedListNode<Product> linkedListNode = new LinkedListNode<Product>(typed);
                 ToCartLinked.AddLast(linkedListNode);
             }
-            else PremadeMessage.PMNotification("Producto ya existente");
+            else PremadeMessage.Notification("Producto ya existente");
             RefreshGridView();
         }
 

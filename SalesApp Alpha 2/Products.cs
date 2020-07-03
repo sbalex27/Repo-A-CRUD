@@ -116,7 +116,7 @@ namespace SalesApp_Alpha_2
 
         private void BTT_Eliminar_Click(object sender, EventArgs e)
         {
-            if (PremadeMessage.PMYesNo($"Se eliminará permanentemente {Selected}"))
+            if (PremadeMessage.YesNo($"Se eliminará permanentemente {Selected}"))
             {
                 Selected.Deleted += ProductActioned;
                 Selected.Delete();

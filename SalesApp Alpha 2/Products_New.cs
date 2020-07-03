@@ -25,7 +25,7 @@ namespace SalesApp_Alpha_2
             }
             catch (Exception ex)
             {
-                PremadeMessage.PMNotification(ex.Message);
+                PremadeMessage.Notification(ex.Message);
             }
         }
 

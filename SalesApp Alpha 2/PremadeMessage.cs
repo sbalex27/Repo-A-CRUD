@@ -35,7 +35,7 @@ namespace SalesApp_Alpha_2
             }
         }
 
-        public static bool PMYesNo(string Caption)
+        public static bool YesNo(string Caption)
         {
             DialogResult result = MessageBox.Show(Caption, "¿Continuar?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
@@ -44,7 +44,7 @@ namespace SalesApp_Alpha_2
             } else return false;
         }
 
-        public static void PMNotification(string Caption, string Title)
+        public static void Notification(string Caption, string Title)
         {
             _title = Title;
             _caption = Caption;
@@ -53,7 +53,7 @@ namespace SalesApp_Alpha_2
             Show();
         }
 
-        public static void PMNotification(string Caption)
+        public static void Notification(string Caption)
         {
             _title = "Notificación";
             _caption = Caption;
@@ -62,44 +62,44 @@ namespace SalesApp_Alpha_2
             Show();
         }
 
-        public static void PMFormatException(string InvalidValue = "")
-        {
-            _title = "El formato es incorrecto";
-            _caption = "No se permiten el ingreso de estos valores";
-            if (!IsEmptyText(InvalidValue)) { _caption += " - " + InvalidValue; }
-            _buttons = MessageBoxButtons.OK;
-            _icon = MessageBoxIcon.Exclamation;
+        //public static void PMFormatException(string InvalidValue = "")
+        //{
+        //    _title = "El formato es incorrecto";
+        //    _caption = "No se permiten el ingreso de estos valores";
+        //    if (!IsEmptyText(InvalidValue)) { _caption += " - " + InvalidValue; }
+        //    _buttons = MessageBoxButtons.OK;
+        //    _icon = MessageBoxIcon.Exclamation;
 
-            Show();
-        }
+        //    Show();
+        //}
 
-        public static void PMFatalException()
-        {
-            _title = "Error";
-            _caption = "Ha ocurrido un error intentelo de nuevo";
-            _buttons = MessageBoxButtons.OK;
-            _icon = MessageBoxIcon.Error;
+        //public static void PMFatalException()
+        //{
+        //    _title = "Error";
+        //    _caption = "Ha ocurrido un error intentelo de nuevo";
+        //    _buttons = MessageBoxButtons.OK;
+        //    _icon = MessageBoxIcon.Error;
 
-            Show();
-        }
+        //    Show();
+        //}
 
-        public static void PMDataBaseException(int ExceptionNumber = 0)
-        {
-            switch (ExceptionNumber)
-            {
-                case (int)MySqlExceptionList.VeryLong:
-                    _caption = "El valor es demasiado largo";
-                    break;
+        //public static void PMDataBaseException(int ExceptionNumber = 0)
+        //{
+        //    switch (ExceptionNumber)
+        //    {
+        //        case (int)MySqlExceptionList.VeryLong:
+        //            _caption = "El valor es demasiado largo";
+        //            break;
 
-                default:
-                    _caption = "Ha ocurrido un error al manipular la base de datos, reintente";
-                    break;
-            }
-            _title = "Base de Datos";
-            _buttons = MessageBoxButtons.OK;
-            _icon = MessageBoxIcon.Error;
-            Show();
-        }
+        //        default:
+        //            _caption = "Ha ocurrido un error al manipular la base de datos, reintente";
+        //            break;
+        //    }
+        //    _title = "Base de Datos";
+        //    _buttons = MessageBoxButtons.OK;
+        //    _icon = MessageBoxIcon.Error;
+        //    Show();
+        //}
 
         private static void Show()
         {

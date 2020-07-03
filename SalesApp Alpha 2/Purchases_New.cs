@@ -80,7 +80,7 @@ namespace SalesApp_Alpha_2
             }
             catch (ProductException ex)
             {
-                PremadeMessage.PMNotification(ex.Message);
+                PremadeMessage.Notification(ex.Message);
             }
         }
 
@@ -108,7 +108,7 @@ namespace SalesApp_Alpha_2
 
         private void Product_ListPurchased(object sender, string e)
         {
-            PremadeMessage.PMNotification(e);
+            PremadeMessage.Notification(e);
         }
 
         private void IB_Text_Search_Leave(object sender, EventArgs e)
