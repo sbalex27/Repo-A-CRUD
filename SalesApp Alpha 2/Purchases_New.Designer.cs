@@ -37,7 +37,7 @@
             this.BTT_ConfirmPurchase = new System.Windows.Forms.Button();
             this.BOX_Provider = new System.Windows.Forms.GroupBox();
             this.BOX_Select = new System.Windows.Forms.GroupBox();
-            this.UI_SelectProductsProperties = new SalesApp_Alpha_2.UI_ProductsProperties();
+            this.ProductProperties = new SalesApp_Alpha_2.UI_ProductsProperties();
             this.LPANEL_SelectProduct = new System.Windows.Forms.FlowLayoutPanel();
             this.BTT_AddToList = new System.Windows.Forms.Button();
             this.BTT_New = new System.Windows.Forms.Button();
@@ -145,7 +145,7 @@
             // BOX_Select
             // 
             this.BOX_Select.Controls.Add(this.LB_SearchResults);
-            this.BOX_Select.Controls.Add(this.UI_SelectProductsProperties);
+            this.BOX_Select.Controls.Add(this.ProductProperties);
             this.BOX_Select.Controls.Add(this.LPANEL_SelectProduct);
             this.BOX_Select.Controls.Add(this.IB_Text_Search);
             this.BOX_Select.Dock = System.Windows.Forms.DockStyle.Left;
@@ -159,18 +159,18 @@
             // 
             // UI_SelectProductsProperties
             // 
-            this.UI_SelectProductsProperties.AutoScroll = true;
-            this.UI_SelectProductsProperties.AutoSize = true;
-            this.UI_SelectProductsProperties.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.UI_SelectProductsProperties.Location = new System.Drawing.Point(6, 247);
-            this.UI_SelectProductsProperties.MaximumSize = new System.Drawing.Size(0, 400);
-            this.UI_SelectProductsProperties.MinimumSize = new System.Drawing.Size(200, 0);
-            this.UI_SelectProductsProperties.Name = "UI_SelectProductsProperties";
-            this.UI_SelectProductsProperties.Padding = new System.Windows.Forms.Padding(3, 3, 3, 6);
-            this.UI_SelectProductsProperties.PropertyID = false;
-            this.UI_SelectProductsProperties.Size = new System.Drawing.Size(244, 190);
-            this.UI_SelectProductsProperties.TabIndex = 2;
-            this.UI_SelectProductsProperties.Enter += new System.EventHandler(this.UI_SelectProductsProperties_Enter);
+            this.ProductProperties.AutoScroll = true;
+            this.ProductProperties.AutoSize = true;
+            this.ProductProperties.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.ProductProperties.Location = new System.Drawing.Point(6, 247);
+            this.ProductProperties.MaximumSize = new System.Drawing.Size(0, 400);
+            this.ProductProperties.MinimumSize = new System.Drawing.Size(200, 0);
+            this.ProductProperties.Name = "UI_SelectProductsProperties";
+            this.ProductProperties.Padding = new System.Windows.Forms.Padding(3, 3, 3, 6);
+            this.ProductProperties.PropertyID = false;
+            this.ProductProperties.Size = new System.Drawing.Size(244, 190);
+            this.ProductProperties.TabIndex = 2;
+            this.ProductProperties.Enter += new System.EventHandler(this.UI_SelectProductsProperties_Enter);
             // 
             // LPANEL_SelectProduct
             // 
@@ -261,7 +261,7 @@
         private System.Windows.Forms.Button BTT_AddToList;
         private System.Windows.Forms.Panel PANEL_AllPurchase;
         private System.Windows.Forms.ListBox LB_SearchResults;
-        private UI_ProductsProperties UI_SelectProductsProperties;
+        private UI_ProductsProperties ProductProperties;
         private System.Windows.Forms.Panel PANEL_DockFill;
         private System.Windows.Forms.GroupBox BOX_Select;
         private System.Windows.Forms.GroupBox BOX_Provider;

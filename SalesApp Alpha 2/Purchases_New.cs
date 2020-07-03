@@ -15,16 +15,11 @@ namespace SalesApp_Alpha_2
         #region Getters
 
         private List<Product> Products = new List<Product>();
-        private readonly List<Product> ListToAddProducts = new List<Product>();
+        private readonly List<Product> ShoppingCart = new List<Product>();
 
         private Product GetSelected()
         {
             return Products.Find(P => P.ID.Equals((int)LB_SearchResults.SelectedValue));
-        }
-
-        private Product GetModified()
-        {
-            return UI_SelectProductsProperties.GetObject();
         }
 
         List<Product> GetProducts()
@@ -60,11 +55,11 @@ namespace SalesApp_Alpha_2
             Product Selected = GetSelected();
             if (Selected is null)
             {
-                UI_SelectProductsProperties.ClearProperties();
+                ProductProperties.ClearProperties();
             }
             else
             {
-                UI_SelectProductsProperties.SemiSetObject(Selected);
+                ProductProperties.SemiSetObject(Selected);
             }
         }
 
@@ -73,8 +68,8 @@ namespace SalesApp_Alpha_2
         {
             try
             {
-                Product P = GetModified();
-                if (ListToAddProducts.Contains(P))
+                Product P = ProductProperties.GetObject();
+                if (ShoppingCart.Contains(P))
                 {
                     throw new ProductRepeatedException();
                 }
@@ -92,7 +87,7 @@ namespace SalesApp_Alpha_2
 
         private void AddToList(Product P)
         {
-            ListToAddProducts.Add(P);
+            ShoppingCart.Add(P);
             RefreshCart();
             IB_Text_Search.ResetInputValue();
             IB_Text_Search.Focus();
@@ -102,39 +97,39 @@ namespace SalesApp_Alpha_2
         private void RefreshCart()
         {
             DGV_ProductsLoaded.DataSource = null;
-            DGV_ProductsLoaded.DataSource = ListToAddProducts;
+            DGV_ProductsLoaded.DataSource = ShoppingCart;
         }
 
         private void BTT_ConfirmPurchase_Click(object sender, EventArgs e)
         {
             Product.ListPurchased += Product_ListPurchased;
-            Product.ListToPurchase(ListToAddProducts);
+            Product.ListToPurchase(ShoppingCart);
         }
 
-        private void Product_ListPurchased(object sender, EventArgs e)
+        private void Product_ListPurchased(object sender, string e)
         {
-            PremadeMessage.PMNotification("Lista de compras procesada correctamente", "Procesado");
+            PremadeMessage.PMNotification(e);
         }
 
         private void IB_Text_Search_Leave(object sender, EventArgs e)
         {
             if (GetSelected() == null)
             {
-                UI_SelectProductsProperties.SetFocus();
+                ProductProperties.SetFocus();
             }
         }
 
         private void BTT_New_Click(object sender, EventArgs e)
         {
-            UI_SelectProductsProperties.ClearProperties();
-            UI_SelectProductsProperties.SetFocus();
+            ProductProperties.ClearProperties();
+            ProductProperties.SetFocus();
         }
 
         private void UI_SelectProductsProperties_Enter(object sender, EventArgs e)
         {
             if (GetSelected() != null)
             {
-                UI_SelectProductsProperties.inputBox_Numeric_Quantity.Focus();
+                ProductProperties.inputBox_Numeric_Quantity.Focus();
             }
         }
     }

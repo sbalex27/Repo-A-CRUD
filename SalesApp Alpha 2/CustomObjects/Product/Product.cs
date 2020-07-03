@@ -186,7 +186,7 @@ namespace SalesApp_Alpha_2
         /// <summary>
         /// Tiene lugar al procesar una lista de compra de productos
         /// </summary>
-        public static event EventHandler ListPurchased;
+        public static event EventHandler<string> ListPurchased;
 
         ///// <summary>
         ///// Procesa una lista de compra de productos
@@ -230,7 +230,7 @@ namespace SalesApp_Alpha_2
             }
             if (ListPurchased != null)
             {
-                ListPurchased(ShoppingCart, EventArgs.Empty);
+                ListPurchased(ShoppingCart, "Lista de compras procesada correctamente");
                 ListPurchased = null;
             }
         }
