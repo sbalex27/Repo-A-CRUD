@@ -37,7 +37,6 @@ namespace SalesApp_Alpha_2
         private MySqlCommand Command => new MySqlCommand(ToString(), Connection);
         private MySqlDataAdapter DataAdapter => new MySqlDataAdapter(Command);
         private readonly static MySqlConnection Connection = new MySqlConnection(Properties.Settings.Default.StringConnectionMySQL);
-        //private DataFieldTemplate PFilter { get; set; }
         private List<DataFieldTemplate> PDataFieldCollection { get; set; }
         public DataFieldTemplate Conditional { get; set; }
         public List<DataFieldTemplate> DataFieldCollection

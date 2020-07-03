@@ -188,37 +188,6 @@ namespace SalesApp_Alpha_2
         /// </summary>
         public static event EventHandler<string> ListPurchased;
 
-        ///// <summary>
-        ///// Procesa una lista de compra de productos
-        ///// </summary>
-        ///// <param name="Products">Lista de productos</param>
-        //public static void ListToPurchaseOld(List<Product> Products)
-        //{
-        //    foreach (Product ToPurchase in Products)
-        //    {
-        //        bool Procesed = false;
-        //        foreach (Product Existent in GetProductListed())
-        //        {
-        //            if (ToPurchase.Equals(Existent))
-        //            {
-        //                Existent.Purchase(ToPurchase.Quantity);
-        //                Procesed = true;
-        //                break;
-        //            }
-        //        }
-        //        if (!Procesed)
-        //        {
-        //            ToPurchase.Add();
-        //        }
-        //    }
-        //    if (ListPurchased != null)
-        //    {
-        //        ListPurchased(Products, new ECrud("Lista Procesada"));
-        //        ListPurchased = null;
-        //    }
-        //}
-
-        //UNDONE: Revisar código optimizado en la modificación del método ListToPurchase
         public static void ListToPurchase(List<Product> ShoppingCart)
         {
             List<Product> Listed = GetProductListed(UnconditionalReturnsAll: true);
@@ -289,38 +258,6 @@ namespace SalesApp_Alpha_2
             }
         }
 
-        //undone: si funciona el nuevo método de reemplazo deshacer este.
-        public List<Exception> GetListExceptionsOld()
-        {
-            Validating?.Invoke(this, "Validando Producto");
-            List<Exception> exceptions = new List<Exception>();
-
-            Func<string, bool> IsEmpty = new Func<string, bool>(val => string.IsNullOrEmpty(val));
-            Action<List<Exception>, Exception> action = (ex, li) => ex.Add(li);
-            Action CriticalValues = new Action(delegate ()
-            {
-                //exceptions.Add(new ProductCriticalValuesException());
-            });
-
-            if (IsEmpty(Description))
-            {
-                CriticalValues();
-            }
-            if (IsEmpty(TradeMark))
-            {
-                CriticalValues();
-            }
-            if (Quantity < 0)
-            {
-                //exceptions.Add(new ProductNoQuantityException());
-            }
-            if (Price <= 0)
-            {
-                //exceptions.Add(new ProductWorthlessException());
-            }
-            return exceptions;
-        }
-
         public override List<Exception> GetListExceptions()
         {
             Validating?.Invoke(this, "Validando");
@@ -344,66 +281,6 @@ namespace SalesApp_Alpha_2
             //if (isCero(Quantity)) addException(new ProductNoQuantityException());
             //if (isCero(Price)) addException(new ProductWorthlessException());
             return exceptions;
-        }
-
-        //toDO: IMPORTANTE continuar agregando el código para implementer la nueva excepción ProductException
-        public List<Exception> GetExceptionsBETA()
-        {
-            List<Exception> exceptions = new List<Exception>();
-            Predicate<object> IsEmpty = new Predicate<object>(o => string.IsNullOrEmpty(o.ToString()));
-            Action<TableFields> AddEmpty = new Action<TableFields>(f => exceptions.Add(new ProductObligatoryFieldException(f)));
-
-            if (IsEmpty(Description))
-            {
-                AddEmpty(TableFields.Description);
-            }
-            if (IsEmpty(TradeMark))
-            {
-                AddEmpty(TableFields.TradeMark);
-            }
-            if (IsEmpty(Quantity))
-            {
-                AddEmpty(TableFields.Quantity);
-            }
-            if (IsEmpty(Price))
-            {
-                AddEmpty(TableFields.Price);
-            }
-            if (Price <= 0)
-            {
-                exceptions.Add(new ProductInvalidPriceException());
-            }
-            if (Quantity <= 0)
-            {
-                exceptions.Add(new ProductQuantityException());
-            }
-
-            return exceptions;
-        }
-
-        //TODO: intentar ver si la validación puede ir vinculada de algún modo a SQL y que dependiendo la excepción sql retorne una excepción personalizada
-        public bool ValidateTrial()
-        {
-            //List<TableFields> f = GetActiveFields(false);
-
-            //if (f.Contains(TableFields.Description) && string.IsNullOrWhiteSpace(Description))
-            //{
-            //    throw new ProductCriticalValuesException();
-            //}
-            //if (f.Contains(TableFields.TradeMark) && string.IsNullOrWhiteSpace(TradeMark))
-            //{
-            //    throw new ProductCriticalValuesException();
-            //}
-            //if (f.Contains(TableFields.Quantity) && Quantity < 0)
-            //{
-            //    throw new ProductNoQuantityException();
-            //}
-            //if (f.Contains(TableFields.Price) && Price <= 0)
-            //{
-            //    throw new ProductWorthlessException();
-            //}
-            //return true;
-            throw new NotImplementedException();
         }
 
         public override void Update()
