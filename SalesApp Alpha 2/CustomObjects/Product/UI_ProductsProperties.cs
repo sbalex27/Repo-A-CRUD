@@ -33,8 +33,8 @@ namespace SalesApp_Alpha_2
         private Product productObject;
         public Product GetObject()
         {
-            DisableVisualErrors();
             productObject = productObject ?? new Product();
+            DisableVisualErrors();
             ValidateObject();
             return productObject;
         }
@@ -71,6 +71,7 @@ namespace SalesApp_Alpha_2
             }
             else
             {
+                productObject = value;
                 inputBox_Text_Description.InputValue = value.Description;
                 inputBox_Combo_TradeMark.InputValue = value.TradeMark;
             }
@@ -126,6 +127,7 @@ namespace SalesApp_Alpha_2
 
         public void ClearProperties()
         {
+            productObject = null;
             foreach (Control item in Controls)
             {
                 if (item is InputBox_Numeric ibn) ibn.ResetInputValue();

@@ -221,7 +221,7 @@ namespace SalesApp_Alpha_2
         //UNDONE: Revisar código optimizado en la modificación del método ListToPurchase
         public static void ListToPurchase(List<Product> ShoppingCart)
         {
-            List<Product> Listed = GetProductListed();
+            List<Product> Listed = GetProductListed(UnconditionalReturnsAll: true);
             foreach (Product ToShop in ShoppingCart)
             {
                 Product Finded = Listed.Find(P => P.Equals(ToShop));

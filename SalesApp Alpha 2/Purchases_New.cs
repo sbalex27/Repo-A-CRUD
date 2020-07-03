@@ -76,7 +76,6 @@ namespace SalesApp_Alpha_2
                 else
                 {
                     AddToList(P);
-                    
                 }
             }
             catch (ProductException ex)
@@ -88,6 +87,7 @@ namespace SalesApp_Alpha_2
         private void AddToList(Product P)
         {
             ShoppingCart.Add(P);
+            ProductProperties.ClearProperties();
             RefreshCart();
             IB_Text_Search.ResetInputValue();
             IB_Text_Search.Focus();
