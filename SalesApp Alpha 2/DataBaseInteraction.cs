@@ -84,7 +84,7 @@ namespace SalesApp_Alpha_2
             }
             catch (MySqlException ex)
             {
-                throw new QsqlConnectionException(ex);
+                throw new Exception("La conexión no se ha podido abrir", ex);
             }
         }
 
@@ -96,7 +96,7 @@ namespace SalesApp_Alpha_2
             }
             catch (MySqlException ex)
             {
-                throw new QsqlConnectionException(ex);
+                throw new Exception("La conexión no se ha podido cerrar", ex);
             }
         }
 

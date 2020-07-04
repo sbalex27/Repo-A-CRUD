@@ -241,7 +241,11 @@ namespace SalesApp_Alpha_2
                     CommandDescription = "Añadido(s)"
                 });
             }
-            catch (Exception ex) when (!(ex is QsqlConnectionException))
+            catch (MySqlException)
+            {
+                throw;
+            }
+            catch (Exception ex)
             {
                 throw new ProductException(ex);
             }
@@ -291,9 +295,13 @@ namespace SalesApp_Alpha_2
                     SecondaryEvent = Updated
                 });
             }
-            catch (Exception ex) when (!(ex is QsqlConnectionException))
+            catch (MySqlException)
             {
-                throw new ProductException();
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new ProductException(ex);
             }
         }
 
