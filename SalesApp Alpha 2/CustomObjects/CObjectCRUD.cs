@@ -107,12 +107,24 @@ namespace SalesApp_Alpha_2
             return GetDataTable(Table, ListFields, null, false);
         }
 
+        /// <summary>
+        /// Ejecuta una interacción con la base de datos sin retornar ningún resultado directamente
+        /// y prepara un método para recibir al evento de interacción
+        /// </summary>
+        /// <param name="dbInteraction">Interacción a ejecutar</param>
         protected void ActionNonQuery(DataBaseInteraction dbInteraction)
         {
             dbInteraction.Interaction += DBInteraction;
             dbInteraction.ExecuteNonQuery();
         }
 
+        /// <summary>
+        /// Recibe el evento <see cref="DataBaseInteraction.Interaction"/> e invoca el
+        /// <see cref="DataBaseInteraction.SecondaryEvent"/>
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="AffectedRows"></param>
+        /// <param name="secondaryEvent"></param>
         private void DBInteraction(DataBaseInteraction sender, int AffectedRows, CrudEventHandler secondaryEvent)
         {
             secondaryEvent?.Invoke(this, sender.CommandDescription, AffectedRows);
