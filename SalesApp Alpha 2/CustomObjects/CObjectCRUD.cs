@@ -40,15 +40,6 @@ namespace SalesApp_Alpha_2
     /// </summary>
     public abstract class CObjectCRUD<TEnum> : ICrud
     {
-        //public static SQLTable Table(Type T)
-        //{
-        //    if (T.Equals(typeof(Product)))
-        //    {
-        //        return SQLTable.Products;
-        //    }
-        //    else throw new Exception("Clase no implementada");
-        //}
-
         #region Interface Implementation
         //Events
         public abstract event EventHandler<string> Validating;

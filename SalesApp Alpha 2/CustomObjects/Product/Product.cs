@@ -267,7 +267,7 @@ namespace SalesApp_Alpha_2
                 SecondaryEvent = Deleted
             });
         }
-
+        
         public override void Update()
         {
             try

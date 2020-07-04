@@ -71,11 +71,5 @@ namespace SalesApp_Alpha_2
         /// Elimina el objeto de la Base de Datos
         /// </summary>
         void Delete();
-
-        /// <summary>
-        /// Analiza cada una de las posibles excepciones del objeto
-        /// </summary>
-        /// <returns><see cref="List{T}"/> de tipo <see cref="Exception"/></returns>
-        List<Exception> GetListExceptions();
     }
 }
