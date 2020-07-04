@@ -10,25 +10,70 @@ namespace SalesApp_Alpha_2
     public class DataBaseInteraction
     {
         #region Events
+        /// <summary>
+        /// Delegado para controlar eventos de interacción con las base de datos
+        /// </summary>
+        /// <param name="sender">Objeto que invoca al evento</param>
+        /// <param name="AffectedRows">Número de filas que se han visto involucradas en la interacción</param>
+        /// <param name="secondaryEvent">Evento que se pasa como argumento de parámetro para su posterior invocación</param>
         public delegate void DataBaseEventHandler(DataBaseInteraction sender, int AffectedRows, CrudEventHandler secondaryEvent);
+
+        /// <summary>
+        /// Evento que se lanza al realizar una interacción exitosa con la base de datos
+        /// </summary>
         public event DataBaseEventHandler Interaction;
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Tabla de la base de datos
+        /// </summary>
         public SQLTable Table { get; protected set; }
+
+        /// <summary>
+        /// Argumento de la interacción
+        /// </summary>
         public string CommandDescription { get; set; }
+
+        /// <summary>
+        /// Evento secundario que se lanza en el evento <see cref="Interaction"/>
+        /// </summary>
         public CrudEventHandler SecondaryEvent { get; set; }
+
+        /// <summary>
+        /// <see langword="true"/> si <see cref="Command"/> contiene una condición válida
+        /// </summary>
         public bool IsConditionable => !string.IsNullOrWhiteSpace(Conditional?.Value.ToString());
+
+        /// <summary>
+        /// Comando SQL
+        /// </summary>
         private MySqlCommand Command => new MySqlCommand(ToString(), Connection);
+
+        /// <summary>
+        /// Adaptador que obtiene datos de <see cref="Command"/>
+        /// </summary>
         private MySqlDataAdapter DataAdapter => new MySqlDataAdapter(Command);
+
+        /// <summary>
+        /// Conexión SQL con la base de datos
+        /// </summary>
         private readonly static MySqlConnection Connection = new MySqlConnection(Properties.Settings.Default.StringConnectionMySQL);
-        private List<DataFieldTemplate> PDataFieldCollection { get; set; }
+
+        /// <summary>
+        /// Condicional lógica que se incluirá en el comando
+        /// </summary>
         public DataFieldTemplate Conditional { get; set; }
+
+        /// <summary>
+        /// Colección de paquetes de datos empaquetados para procesamiento SQL
+        /// </summary>
         public List<DataFieldTemplate> DataFieldCollection
         {
             get => PDataFieldCollection;
             set => PDataFieldCollection = value is null | value.Count == 0 ? throw new ArgumentNullException(nameof(DataFieldCollection)) : value;
         }
+        private List<DataFieldTemplate> PDataFieldCollection { get; set; }
         #endregion
 
         private void TryOpen()
@@ -55,6 +100,10 @@ namespace SalesApp_Alpha_2
             }
         }
 
+        /// <summary>
+        /// Ejecuta la interacción según las propiedades
+        /// </summary>
+        /// <returns>Tabla de datos con resultados de la interacción</returns>
         public DataTable ExecuteSelect()
         {
             TryOpen();
@@ -66,6 +115,9 @@ namespace SalesApp_Alpha_2
             return dataTable;
         }
 
+        /// <summary>
+        /// Ejecuta el comando generado en la base de datos sin devolver un resultado en concreto
+        /// </summary>
         public void ExecuteNonQuery()
         {
             try
