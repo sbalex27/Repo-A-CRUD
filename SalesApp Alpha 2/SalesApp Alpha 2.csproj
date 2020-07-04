@@ -124,7 +124,6 @@
       <DependentUpon>Purchases_New.cs</DependentUpon>
     </Compile>
     <Compile Include="QFunctions.cs" />
-    <Compile Include="Qsql.cs" />
     <Compile Include="Sale.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="CustomObjects\Product\UI_ProductsProperties.cs">
