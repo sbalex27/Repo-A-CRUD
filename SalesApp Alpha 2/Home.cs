@@ -40,11 +40,5 @@ namespace SalesApp_Alpha_2
             Form form = new Purchases_New();
             form.Show();
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Form form = new NewPurchase();
-            form.Show();
-        }
     }
 }
