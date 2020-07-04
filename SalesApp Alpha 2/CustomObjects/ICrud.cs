@@ -8,29 +8,13 @@ using System.Windows.Forms;
 
 namespace SalesApp_Alpha_2
 {
-    //public delegate void EventHandler(object sender, ECrud e);
-    public delegate void CrudEventHandler(object sender, string Action, int AffectedsRecords);
-
     /// <summary>
-    /// Clase hija de EventArgs encargada de gestionar las acciones
-    /// de un objeto CRUD
+    /// Método delegado para control de eventos generados por objeto CRUD
     /// </summary>
-    public class ECrud : EventArgs
-    {
-        /// <summary>
-        /// Constructor de la gestion de un nuevo argumento
-        /// </summary>
-        /// <param name="action">Acción del objeto CRUD</param>
-        public ECrud(string action)
-        {
-            Action = action;
-        }
-
-        /// <summary>
-        /// Acción del objeto CRUD
-        /// </summary>
-        public string Action { get; private set; }
-    }
+    /// <param name="sender">Objeto CRUD</param>
+    /// <param name="Action">Acción descriptiva evento</param>
+    /// <param name="AffectedsRecords">Número de registros involucrados</param>
+    public delegate void CrudEventHandler(object sender, string Action, int AffectedsRecords);
 
     /// <summary>
     /// Interfaz que delega funciones básicas de un objeto CRUD
