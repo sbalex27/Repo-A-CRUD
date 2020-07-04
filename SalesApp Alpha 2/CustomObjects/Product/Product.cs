@@ -235,16 +235,15 @@ namespace SalesApp_Alpha_2
         {
             try
             {
-                NonQueryResult result = new InsertInto(TableWork, GetListDataFields()).ExecuteNonQuery();
-
-                if (result.IsRunned)
+                ActionNonQuery(new InsertInto(TableWork, GetListDataFields())
                 {
-                    Added?.Invoke(this, "Añadido(s)", result.AffectedRecords);
-                }
+                    SecondaryEvent = Added,
+                    CommandDescription = "Añadido(s)"
+                });
             }
             catch (Exception ex) when (!(ex is QsqlConnectionException))
             {
-                throw new ProductException();
+                throw new ProductException(ex);
             }
         }
 
