@@ -103,9 +103,17 @@ namespace SalesApp_Alpha_2
 
         private void BTT_Modificar_Click(object sender, EventArgs e)
         {
-            Product FromProperties = UI_ProductsProperties_Input.GetObject();
-            FromProperties.Updated += ProductActioned;
-            FromProperties.Update();
+            try
+            {
+                Product FromProperties = UI_ProductsProperties_Input.GetObject();
+                FromProperties.Updated += ProductActioned;
+                FromProperties.Update();
+            }
+            catch (Exception ex)
+            {
+                PremadeMessage.Notification(ex.Message);
+            }
+            
         }
 
         private void ProductActioned(object sender, string Action, int AffectedsRecords)
@@ -116,10 +124,17 @@ namespace SalesApp_Alpha_2
 
         private void BTT_Eliminar_Click(object sender, EventArgs e)
         {
-            if (PremadeMessage.YesNo($"Se eliminará permanentemente {Selected}"))
+            try
             {
-                Selected.Deleted += ProductActioned;
-                Selected.Delete();
+                if (PremadeMessage.YesNo($"Se eliminará permanentemente {Selected}"))
+                {
+                    Selected.Deleted += ProductActioned;
+                    Selected.Delete();
+                }
+            }
+            catch (Exception ex)
+            {
+                PremadeMessage.Notification(ex.Message);
             }
         }
 
