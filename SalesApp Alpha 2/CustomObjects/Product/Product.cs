@@ -212,7 +212,7 @@ namespace SalesApp_Alpha_2
         public override event CrudEventHandler Deleted;
         
 
-        protected override DataFieldTemplate DataField(TableFields Field)
+        protected override DataFieldTemplate GetDataField(TableFields Field)
         {
             switch (Field)
             {
@@ -249,12 +249,11 @@ namespace SalesApp_Alpha_2
 
         public override void Delete()
         {
-            NonQueryResult result = new Delete(TableWork, DataField(TableFields.ID)).ExecuteNonQuery();
-
-            if (result.IsRunned)
+            ActionNonQuery(new Delete(TableWork, GetDataField(TableFields.ID))
             {
-                Deleted?.Invoke(this, "Eliminado(s)", result.AffectedRecords);
-            }
+                CommandDescription = "Eliminado(s)",
+                SecondaryEvent = Deleted
+            });
         }
 
         public override List<Exception> GetListExceptions()
@@ -286,12 +285,11 @@ namespace SalesApp_Alpha_2
         {
             try
             {
-                NonQueryResult result = new Update(TableWork, GetListDataFields(), DataField(TableFields.ID)).ExecuteNonQuery();
-
-                if (result.IsRunned)
+                ActionNonQuery(new Update(TableWork, GetListDataFields(), GetDataField(TableFields.ID))
                 {
-                    Updated?.Invoke(this, "Actualizado(s)", result.AffectedRecords);
-                }
+                    CommandDescription = "Actualizado(s)",
+                    SecondaryEvent = Updated
+                });
             }
             catch (Exception ex) when (!(ex is QsqlConnectionException))
             {
@@ -302,7 +300,7 @@ namespace SalesApp_Alpha_2
         protected override List<DataFieldTemplate> GetListDataFields()
         {
             List<DataFieldTemplate> dft = new List<DataFieldTemplate>();
-            GetActiveFields(false).ForEach(field => dft.Add(DataField(field)));
+            GetActiveFields(false).ForEach(field => dft.Add(GetDataField(field)));
             return dft;
         }
         #endregion
@@ -314,7 +312,7 @@ namespace SalesApp_Alpha_2
         public void Purchase(int quantity)
         {
             Quantity += quantity;
-            ActionNonQuery(new Update(TableWork, DataField(TableFields.Quantity), DataField(TableFields.ID))
+            ActionNonQuery(new Update(TableWork, GetDataField(TableFields.Quantity), GetDataField(TableFields.ID))
             {
                 CommandDescription = "Compra de Producto",
                 SecondaryEvent = Purchased
@@ -324,7 +322,7 @@ namespace SalesApp_Alpha_2
         public void Sell(int quantity)
         {
             Quantity -= quantity;
-            ActionNonQuery(new Update(TableWork, DataField(TableFields.Quantity), DataField(TableFields.ID))
+            ActionNonQuery(new Update(TableWork, GetDataField(TableFields.Quantity), GetDataField(TableFields.ID))
             {
                 CommandDescription = "Venta de Producto",
                 SecondaryEvent = Selled

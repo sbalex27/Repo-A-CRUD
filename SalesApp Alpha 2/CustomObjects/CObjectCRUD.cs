@@ -82,7 +82,7 @@ namespace SalesApp_Alpha_2
         /// <param name="Field">Campo de la propiedad a empaquetar</param>
         /// <returns>Retorna DataFieldTemplate</returns>
         /// <exception cref="InvalidFieldException"></exception>
-        protected abstract DataFieldTemplate DataField(TEnum Field);
+        protected abstract DataFieldTemplate GetDataField(TEnum Field);
 
         #endregion
 
