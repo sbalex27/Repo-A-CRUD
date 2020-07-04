@@ -15,97 +15,73 @@ namespace SalesApp_Alpha_2
         public NewPurchase()
         {
             InitializeComponent();
+            //ListBox_SearchResults.DisplayMember = Product.TableFields.Description.ToString();
+            //ListBox_SearchResults.ValueMember = Product.TableFields.ID.ToString();
         }
-
-        private DataFieldTemplate GetSearchDataField()
+        
+        private DataFieldTemplate GetConditional()
         {
             return new DataFieldTemplate(Product.TableFields.Description,
                                          InputBox_Search.InputValue,
                                          SQLValueType.SqlString);
         }
 
-        private DataTable GetSearchResult()
+        private List<Product> GetSearchResult()
         {
-            return Product.GetTableProducts(Product.GetActiveFields(true), GetSearchDataField());
+            return SearchResults = Product.GetProductListed(GetConditional());
+        }
+
+        private object GetSelectedValue()
+        {
+            return ListBox_SearchResults.SelectedValue;
         }
 
         private Product GetProductSelected()
         {
-            int i = ListBox_SearchResults.SelectedIndex;
-            if (i != -1)
-            {
-                try
-                {
-                    return Product.GetFromID((int)ListBox_SearchResults.SelectedValue);
-                }
-                catch (Exception)
-                {
-                    return null;
-                }
-            }
-            else return null;
+            return SearchResults.Find(P => P.ID.Equals(GetSelectedValue()));
         }
 
-        private Product GetProductTyped()
+        private Product GetFromPropertiesUI()
         {
             return ProductProperties_Selected.GetObject();
         }
 
-        private List<Product> products = new List<Product>();
-        private LinkedList<Product> ToCartLinked = new LinkedList<Product>();
+        private List<Product> SearchResults = new List<Product>();
+        private readonly List<Product> ShoppingCart = new List<Product>();
 
         private void InputBox_Search_InputChanged(object sender, EventArgs e)
         {
-            RefreshSearchResults();
+            Search();
         }
 
-        private void RefreshSearchResults()
+        private void Search()
         {
-            ListBox_SearchResults.DataSource = null;
             ListBox_SearchResults.DataSource = GetSearchResult();
-            ListBox_SearchResults.DisplayMember = Product.TableFields.Description.ToString();
-            ListBox_SearchResults.ValueMember = Product.TableFields.ID.ToString();
+            
         }
 
         private void BTT_AddToList_Click(object sender, EventArgs e)
         {
-            Product typed = GetProductTyped();
-            if (!IsLoaded(typed))
+            Product typed = GetFromPropertiesUI();
+            if (!ShoppingCart.Contains(typed))
             {
-                LinkedListNode<Product> linkedListNode = new LinkedListNode<Product>(typed);
-                ToCartLinked.AddLast(linkedListNode);
+                ShoppingCart.Add(typed);
+                RefreshGridView();
             }
-            else PremadeMessage.Notification("Producto ya existente");
-            RefreshGridView();
+            else PremadeMessage.Notification("Producto ya cargado");
+            
         }
 
         private void RefreshGridView()
         {
             GridView_Products.DataSource = null;
-            GridView_Products.DataSource = ToCartLinked;
-        }
-
-        private bool IsLoaded(Product p)
-        {
-            foreach (Product item in products)
-            {
-                if (p.Equals(item))
-                {
-                    return true;
-                }
-            }
-            return false;
+            GridView_Products.DataSource = ShoppingCart;
         }
 
         private void ListBox_SearchResults_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Product pp = GetProductSelected();
-            if (pp != null)
-            {
-                ProductProperties_Selected.inputBox_Text_Description.InputValue = pp.Description;
-                ProductProperties_Selected.inputBox_Combo_TradeMark.InputValue = pp.TradeMark;
-            }
-            else ProductProperties_Selected.ClearProperties();
+            Product P = GetProductSelected();
+            ProductProperties_Selected.SemiSetObject(P);
         }
     }
 }
