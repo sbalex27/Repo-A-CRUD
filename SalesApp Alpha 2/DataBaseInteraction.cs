@@ -7,21 +7,6 @@ using System.Runtime.CompilerServices;
 
 namespace SalesApp_Alpha_2
 {
-    public class NonQueryResult
-    {
-        public MySqlConnection Connection { get; private set; }
-        public DataBaseInteraction Interaction { get; private set; }
-        public int AffectedRecords { get; private set; }
-        public bool IsRunned => AffectedRecords != 0;
-
-        public NonQueryResult(DataBaseInteraction interaction, int affected, MySqlConnection connection)
-        {
-            Interaction = interaction;
-            AffectedRecords = affected;
-            Connection = connection;
-        }
-    }
-
     public class DataBaseInteraction
     {
         #region Events
@@ -81,14 +66,13 @@ namespace SalesApp_Alpha_2
             return dataTable;
         }
 
-        public NonQueryResult ExecuteNonQuery()
+        public void ExecuteNonQuery()
         {
             try
             {
                 TryOpen();
                 int Rows = Command.ExecuteNonQuery();
                 Interaction?.Invoke(this, Rows, GetType(), CommandDescription ?? "NonQuery", SecondaryEvent);
-                return new NonQueryResult(this, Rows, Connection);
             }
             finally
             {
