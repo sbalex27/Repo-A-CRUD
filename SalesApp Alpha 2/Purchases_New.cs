@@ -10,6 +10,8 @@ namespace SalesApp_Alpha_2
         public Purchases_New()
         {
             InitializeComponent();
+            LB_SearchResults.DisplayMember = Product.TableFields.Description.ToString();
+            LB_SearchResults.ValueMember = Product.TableFields.ID.ToString();
         }
 
         #region Getters
@@ -17,9 +19,14 @@ namespace SalesApp_Alpha_2
         private List<Product> Products = new List<Product>();
         private readonly List<Product> ShoppingCart = new List<Product>();
 
+        private object GetSelectedValue()
+        {
+            return LB_SearchResults.SelectedValue;
+        }
+
         private Product GetSelected()
         {
-            return Products.Find(P => P.ID.Equals((int)LB_SearchResults.SelectedValue));
+            return Products.Find(P => P.ID.Equals(GetSelectedValue()));
         }
 
         List<Product> GetProducts()
@@ -40,8 +47,6 @@ namespace SalesApp_Alpha_2
 
         private void Search()
         {
-            LB_SearchResults.DisplayMember = Product.TableFields.Description.ToString();
-            LB_SearchResults.ValueMember = Product.TableFields.ID.ToString();
             LB_SearchResults.DataSource = GetProducts();
         }
 
@@ -52,15 +57,7 @@ namespace SalesApp_Alpha_2
 
         private void LoadProperties()
         {
-            Product Selected = GetSelected();
-            if (Selected is null)
-            {
-                ProductProperties.ClearProperties();
-            }
-            else
-            {
-                ProductProperties.SemiSetObject(Selected);
-            }
+            ProductProperties.SemiSetObject(GetSelected());
         }
 
         #region Add to list
