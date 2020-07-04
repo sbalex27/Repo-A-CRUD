@@ -62,31 +62,7 @@ namespace SalesApp_Alpha_2
             set => price = value <= 0 ? throw new ProductInvalidPriceException() : value;
         }
 
-        public const SQLTable TableWork = SQLTable.Products;
-
-        public enum TableFields
-        {
-            ID, Description, TradeMark, Quantity, Price
-        }
-
-        /// <summary>
-        /// Configura los campos activos del producto
-        /// </summary>
-        /// <param name="IncludesID">True  incluye la clave primaria "ID"</param>
-        /// <returns><see cref="List{T}"/> de <see cref="Enum"/> de los campos activos</returns>
-        public static List<TableFields> GetActiveFields(bool IncludesID)
-        {
-            List<TableFields> f = new List<TableFields>();
-            if (IncludesID)
-            {
-                f.Add(TableFields.ID);
-            }
-            f.Add(TableFields.Description);
-            f.Add(TableFields.TradeMark);
-            f.Add(TableFields.Quantity);
-            f.Add(TableFields.Price);
-            return f;
-        }
+        
         #endregion
 
         #region Override virtual object
@@ -109,6 +85,38 @@ namespace SalesApp_Alpha_2
         #endregion
 
         #region Exclusive Statics
+        /// <summary>
+        /// Enumeradores de campos del objeto producto
+        /// </summary>
+        public enum TableFields
+        {
+            ID, Description, TradeMark, Quantity, Price
+        }
+
+        /// <summary>
+        /// Tabla principal de la clase
+        /// </summary>
+        public const SQLTable TableWork = SQLTable.Products;
+
+        /// <summary>
+        /// Configura los campos activos del producto
+        /// </summary>
+        /// <param name="IncludesID">True  incluye la clave primaria "ID"</param>
+        /// <returns><see cref="List{T}"/> de <see cref="Enum"/> de los campos activos</returns>
+        public static List<TableFields> GetActiveFields(bool IncludesID)
+        {
+            List<TableFields> f = new List<TableFields>();
+            if (IncludesID)
+            {
+                f.Add(TableFields.ID);
+            }
+            f.Add(TableFields.Description);
+            f.Add(TableFields.TradeMark);
+            f.Add(TableFields.Quantity);
+            f.Add(TableFields.Price);
+            return f;
+        }
+
         /// <summary>
         /// Devuelve toda la tabla de productos
         /// </summary>
@@ -286,7 +294,6 @@ namespace SalesApp_Alpha_2
             GetActiveFields(false).ForEach(field => dft.Add(GetDataField(field)));
             return dft;
         }
-        #endregion
 
         public event CrudEventHandler Purchased;
         public event CrudEventHandler Selled;
@@ -310,6 +317,6 @@ namespace SalesApp_Alpha_2
                 SecondaryEvent = Selled
             });
         }
-
+        #endregion
     }
 }
