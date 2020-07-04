@@ -128,9 +128,9 @@ namespace SalesApp_Alpha_2
             dbInteraction.ExecuteNonQuery();
         }
 
-        private void DBInteraction(DataBaseInteraction sender, int AffectedRows, Type T, string CommandDetails, CrudEventHandler secondEventHandler)
+        private void DBInteraction(DataBaseInteraction sender, int AffectedRows, CrudEventHandler secondaryEvent)
         {
-            secondEventHandler?.Invoke(this, CommandDetails, AffectedRows);
+            secondaryEvent?.Invoke(this, sender.CommandDescription, AffectedRows);
         }
         #endregion
     }

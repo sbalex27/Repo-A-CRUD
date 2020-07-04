@@ -10,8 +10,8 @@ namespace SalesApp_Alpha_2
     public class DataBaseInteraction
     {
         #region Events
-        public delegate void DBEventHandler(DataBaseInteraction sender, int AffectedRows, Type T, string CommandDetails, CrudEventHandler secondaryEvent);
-        public event DBEventHandler Interaction;
+        public delegate void DataBaseEventHandler(DataBaseInteraction sender, int AffectedRows, CrudEventHandler secondaryEvent);
+        public event DataBaseEventHandler Interaction;
         #endregion
 
         #region Properties
@@ -62,7 +62,7 @@ namespace SalesApp_Alpha_2
             int Rows = DataAdapter.Fill(dataTable);
             TryClose();
 
-            Interaction?.Invoke(this, Rows, GetType(), CommandDescription ?? "Seleción", SecondaryEvent);
+            Interaction?.Invoke(this, Rows, SecondaryEvent);
             return dataTable;
         }
 
@@ -72,7 +72,7 @@ namespace SalesApp_Alpha_2
             {
                 TryOpen();
                 int Rows = Command.ExecuteNonQuery();
-                Interaction?.Invoke(this, Rows, GetType(), CommandDescription ?? "NonQuery", SecondaryEvent);
+                Interaction?.Invoke(this, Rows, SecondaryEvent);
             }
             finally
             {
