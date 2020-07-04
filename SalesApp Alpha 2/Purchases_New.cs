@@ -41,12 +41,28 @@ namespace SalesApp_Alpha_2
                                          SQLValueType.SqlString,
                                          SQLOperator.Like);
         }
+
+        private string TextSearch => IB_Text_Search.InputValue;
+        private bool IsEmptyTextSearch => string.IsNullOrWhiteSpace(TextSearch);
+
         #endregion
 
-        private void IB_Text_Search_InputChanged(object sender, EventArgs e) => Search();
+        private void IB_Text_Search_InputChanged(object sender, EventArgs e)
+        {
+            Search();
+
+            if (Products.Count.Equals(0))
+            {
+                ProductProperties.SemiSetObject(IsEmptyTextSearch ? null : new Product()
+                {
+                    Description = TextSearch
+                });
+            }
+        }
 
         private void Search()
         {
+            LB_SearchResults.SelectedIndex = -1;
             LB_SearchResults.DataSource = GetProducts();
         }
 
@@ -57,7 +73,7 @@ namespace SalesApp_Alpha_2
 
         private void LoadProperties()
         {
-            ProductProperties.SemiSetObject(GetSelected());
+            ProductProperties.SetObject(GetSelected());
         }
 
         #region Add to list
@@ -66,14 +82,8 @@ namespace SalesApp_Alpha_2
             try
             {
                 Product P = ProductProperties.GetObject();
-                if (ShoppingCart.Contains(P))
-                {
-                    throw new ProductRepeatedException();
-                }
-                else
-                {
-                    AddToList(P);
-                }
+                if (ShoppingCart.Contains(P)) throw new ProductRepeatedException(); 
+                else AddToList(P);
             }
             catch (ProductException ex)
             {
@@ -93,8 +103,7 @@ namespace SalesApp_Alpha_2
 
         private void RefreshCart()
         {
-            DGV_ProductsLoaded.DataSource = null;
-            DGV_ProductsLoaded.DataSource = ShoppingCart;
+            DGV_ProductsLoaded.DataSource = new List<Product>(ShoppingCart);
         }
 
         private void BTT_ConfirmPurchase_Click(object sender, EventArgs e)
@@ -106,6 +115,7 @@ namespace SalesApp_Alpha_2
         private void Product_ListPurchased(object sender, string e)
         {
             PremadeMessage.Notification(e);
+            Close();
         }
 
         private void IB_Text_Search_Leave(object sender, EventArgs e)

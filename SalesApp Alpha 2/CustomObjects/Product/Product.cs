@@ -144,11 +144,11 @@ namespace SalesApp_Alpha_2
         /// </summary>
         /// <param name="Filter">Filtro de búsqueda</param>
         /// <returns></returns>
-        /// <exception cref="NoResultsException"></exception>
         public static List<Product> GetProductListed(DataFieldTemplate Filter = null, bool UnconditionalReturnsAll = false)
         {
-            List<Product> Products = new List<Product>();
             DataTable Results = GetTableProducts(GetActiveFields(true), Filter, UnconditionalReturnsAll);
+            List<Product> Products = new List<Product>();
+
             if (Results != null && Results.Rows.Count != 0)
             {
                 foreach (DataRow row in Results.Rows)
