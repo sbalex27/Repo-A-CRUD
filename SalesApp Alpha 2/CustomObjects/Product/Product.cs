@@ -260,31 +260,6 @@ namespace SalesApp_Alpha_2
             });
         }
 
-        public override List<Exception> GetListExceptions()
-        {
-            Validating?.Invoke(this, "Validando");
-            List<Exception> exceptions = new List<Exception>();
-
-            Func<string, bool> isEmpty = new Func<string, bool>(s => string.IsNullOrWhiteSpace(s));
-            Func<object, bool> isCero = new Func<object, bool>(delegate (object arg)
-            {
-                decimal.TryParse(arg.ToString(), out decimal result);
-                return result <= 0;
-            });
-
-            Action<Exception> addException = new Action<Exception>(ex => exceptions.Add(ex));
-            Action<string> criticalValue = new Action<string>(delegate (string arg)
-            {
-                //if (isEmpty(arg)) addException(new ProductCriticalValuesException());
-            });
-
-            criticalValue(Description);
-            criticalValue(TradeMark);
-            //if (isCero(Quantity)) addException(new ProductNoQuantityException());
-            //if (isCero(Price)) addException(new ProductWorthlessException());
-            return exceptions;
-        }
-
         public override void Update()
         {
             try
@@ -313,7 +288,6 @@ namespace SalesApp_Alpha_2
         }
         #endregion
 
-        #region Exclusives Methods
         public event CrudEventHandler Purchased;
         public event CrudEventHandler Selled;
 
@@ -336,7 +310,6 @@ namespace SalesApp_Alpha_2
                 SecondaryEvent = Selled
             });
         }
-        #endregion
 
     }
 }

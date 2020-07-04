@@ -71,12 +71,6 @@ namespace SalesApp_Alpha_2
         protected abstract List<DataFieldTemplate> GetListDataFields();
 
         /// <summary>
-        /// Devuelve una lista de las excepciones que contiene un objeto
-        /// </summary>
-        /// <returns></returns>
-        public abstract List<Exception> GetListExceptions();
-
-        /// <summary>
         /// Devuelve la propiedad empaquetada para el uso SQL
         /// </summary>
         /// <param name="Field">Campo de la propiedad a empaquetar</param>
