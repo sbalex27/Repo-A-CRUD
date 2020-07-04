@@ -170,7 +170,6 @@
             this.ProductProperties.PropertyID = false;
             this.ProductProperties.Size = new System.Drawing.Size(244, 190);
             this.ProductProperties.TabIndex = 2;
-            this.ProductProperties.Enter += new System.EventHandler(this.UI_SelectProductsProperties_Enter);
             // 
             // LPANEL_SelectProduct
             // 

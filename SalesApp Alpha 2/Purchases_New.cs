@@ -73,7 +73,7 @@ namespace SalesApp_Alpha_2
 
         private void LoadProperties()
         {
-            ProductProperties.SetObject(GetSelected());
+            ProductProperties.SemiSetObject(GetSelected());
         }
 
         #region Add to list
@@ -120,9 +120,20 @@ namespace SalesApp_Alpha_2
 
         private void IB_Text_Search_Leave(object sender, EventArgs e)
         {
-            if (GetSelected() == null)
+            if (GetSelected() is null)
             {
-                ProductProperties.SetFocus();
+                if (IsEmptyTextSearch)
+                {
+                    ProductProperties.inputBox_Text_Description.Focus();
+                }
+                else
+                {
+                    ProductProperties.inputBox_Combo_TradeMark.Focus();
+                }
+            }
+            else
+            {
+                ProductProperties.inputBox_Numeric_Quantity.Focus();
             }
         }
 
@@ -132,12 +143,12 @@ namespace SalesApp_Alpha_2
             ProductProperties.SetFocus();
         }
 
-        private void UI_SelectProductsProperties_Enter(object sender, EventArgs e)
-        {
-            if (GetSelected() != null)
-            {
-                ProductProperties.inputBox_Numeric_Quantity.Focus();
-            }
-        }
+        //private void UI_SelectProductsProperties_Enter(object sender, EventArgs e)
+        //{
+        //    if (GetSelected() != null)
+        //    {
+        //        ProductProperties.inputBox_Numeric_Quantity.Focus();
+        //    }
+        //}
     }
 }

@@ -202,7 +202,7 @@ namespace SalesApp_Alpha_2
             foreach (Product ToShop in ShoppingCart)
             {
                 Product Finded = Listed.Find(P => P.Equals(ToShop));
-                if (Finded is null) Finded.Add(); 
+                if (Finded is null) ToShop.Add(); 
                 else Finded.Purchase(ToShop.Quantity);
             }
             if (ListPurchased != null)
