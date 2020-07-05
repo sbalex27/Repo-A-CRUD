@@ -29,104 +29,104 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI_ProductsProperties));
-            this.inputBox_Numeric_Price = new SalesApp_Alpha_2.InputBox_Numeric();
-            this.inputBox_Numeric_Quantity = new SalesApp_Alpha_2.InputBox_Numeric();
-            this.inputBox_Combo_TradeMark = new SalesApp_Alpha_2.InputBox_Combo();
-            this.inputBox_Text_Description = new SalesApp_Alpha_2.InputBox_Text();
-            this.inputBox_Text_ID = new SalesApp_Alpha_2.InputBox_Text();
+            this.Box_Price = new SalesApp_Alpha_2.InputBox_Numeric();
+            this.Box_Quantity = new SalesApp_Alpha_2.InputBox_Numeric();
+            this.Box_Trademark = new SalesApp_Alpha_2.InputBox_Combo();
+            this.Box_Description = new SalesApp_Alpha_2.InputBox_Text();
+            this.Box_ID = new SalesApp_Alpha_2.InputBox_Text();
             this.SuspendLayout();
             // 
             // inputBox_Numeric_Price
             // 
-            this.inputBox_Numeric_Price.AutoSize = true;
-            this.inputBox_Numeric_Price.DecimalPlaces = 2;
-            this.inputBox_Numeric_Price.Dock = System.Windows.Forms.DockStyle.Top;
-            this.inputBox_Numeric_Price.InputEnabled = true;
-            this.inputBox_Numeric_Price.InputValue = new decimal(new int[] {
+            this.Box_Price.AutoSize = true;
+            this.Box_Price.DecimalPlaces = 2;
+            this.Box_Price.Dock = System.Windows.Forms.DockStyle.Top;
+            this.Box_Price.InputEnabled = true;
+            this.Box_Price.InputValue = new decimal(new int[] {
             0,
             0,
             0,
             0});
-            this.inputBox_Numeric_Price.Location = new System.Drawing.Point(3, 184);
-            this.inputBox_Numeric_Price.MinimumSize = new System.Drawing.Size(100, 0);
-            this.inputBox_Numeric_Price.Name = "inputBox_Numeric_Price";
-            this.inputBox_Numeric_Price.Padding = new System.Windows.Forms.Padding(0, 3, 0, 6);
-            this.inputBox_Numeric_Price.Picture = global::SalesApp_Alpha_2.Properties.Resources.icons8_etiqueta_de_precio_usd_16;
-            this.inputBox_Numeric_Price.Size = new System.Drawing.Size(244, 45);
-            this.inputBox_Numeric_Price.TabIndex = 3;
-            this.inputBox_Numeric_Price.Title = "Precio";
-            this.inputBox_Numeric_Price.VisualError = false;
+            this.Box_Price.Location = new System.Drawing.Point(3, 184);
+            this.Box_Price.MinimumSize = new System.Drawing.Size(100, 0);
+            this.Box_Price.Name = "inputBox_Numeric_Price";
+            this.Box_Price.Padding = new System.Windows.Forms.Padding(0, 3, 0, 6);
+            this.Box_Price.Picture = global::SalesApp_Alpha_2.Properties.Resources.icons8_etiqueta_de_precio_usd_16;
+            this.Box_Price.Size = new System.Drawing.Size(244, 45);
+            this.Box_Price.TabIndex = 3;
+            this.Box_Price.Title = "Precio";
+            this.Box_Price.VisualError = false;
             // 
             // inputBox_Numeric_Quantity
             // 
-            this.inputBox_Numeric_Quantity.AutoSize = true;
-            this.inputBox_Numeric_Quantity.DecimalPlaces = 0;
-            this.inputBox_Numeric_Quantity.Dock = System.Windows.Forms.DockStyle.Top;
-            this.inputBox_Numeric_Quantity.InputEnabled = true;
-            this.inputBox_Numeric_Quantity.InputValue = new decimal(new int[] {
+            this.Box_Quantity.AutoSize = true;
+            this.Box_Quantity.DecimalPlaces = 0;
+            this.Box_Quantity.Dock = System.Windows.Forms.DockStyle.Top;
+            this.Box_Quantity.InputEnabled = true;
+            this.Box_Quantity.InputValue = new decimal(new int[] {
             0,
             0,
             0,
             0});
-            this.inputBox_Numeric_Quantity.Location = new System.Drawing.Point(3, 139);
-            this.inputBox_Numeric_Quantity.MinimumSize = new System.Drawing.Size(100, 0);
-            this.inputBox_Numeric_Quantity.Name = "inputBox_Numeric_Quantity";
-            this.inputBox_Numeric_Quantity.Padding = new System.Windows.Forms.Padding(0, 3, 0, 6);
-            this.inputBox_Numeric_Quantity.Picture = global::SalesApp_Alpha_2.Properties.Resources.icons8_lista_con_viñetas_16;
-            this.inputBox_Numeric_Quantity.Size = new System.Drawing.Size(244, 45);
-            this.inputBox_Numeric_Quantity.TabIndex = 2;
-            this.inputBox_Numeric_Quantity.Title = "Cantidad";
-            this.inputBox_Numeric_Quantity.VisualError = false;
+            this.Box_Quantity.Location = new System.Drawing.Point(3, 139);
+            this.Box_Quantity.MinimumSize = new System.Drawing.Size(100, 0);
+            this.Box_Quantity.Name = "inputBox_Numeric_Quantity";
+            this.Box_Quantity.Padding = new System.Windows.Forms.Padding(0, 3, 0, 6);
+            this.Box_Quantity.Picture = global::SalesApp_Alpha_2.Properties.Resources.icons8_lista_con_viñetas_16;
+            this.Box_Quantity.Size = new System.Drawing.Size(244, 45);
+            this.Box_Quantity.TabIndex = 2;
+            this.Box_Quantity.Title = "Cantidad";
+            this.Box_Quantity.VisualError = false;
             // 
             // inputBox_Combo_TradeMark
             // 
-            this.inputBox_Combo_TradeMark.AutoSize = true;
-            this.inputBox_Combo_TradeMark.Dock = System.Windows.Forms.DockStyle.Top;
-            this.inputBox_Combo_TradeMark.InputDataSource = null;
-            this.inputBox_Combo_TradeMark.InputEnabled = true;
-            this.inputBox_Combo_TradeMark.InputValue = "";
-            this.inputBox_Combo_TradeMark.Location = new System.Drawing.Point(3, 93);
-            this.inputBox_Combo_TradeMark.MinimumSize = new System.Drawing.Size(150, 0);
-            this.inputBox_Combo_TradeMark.Name = "inputBox_Combo_TradeMark";
-            this.inputBox_Combo_TradeMark.Padding = new System.Windows.Forms.Padding(0, 3, 0, 6);
-            this.inputBox_Combo_TradeMark.Picture = global::SalesApp_Alpha_2.Properties.Resources.icons8_marca_16;
-            this.inputBox_Combo_TradeMark.Size = new System.Drawing.Size(244, 46);
-            this.inputBox_Combo_TradeMark.TabIndex = 1;
-            this.inputBox_Combo_TradeMark.Title = "Marca";
-            this.inputBox_Combo_TradeMark.VisualError = false;
-            this.inputBox_Combo_TradeMark.Load += new System.EventHandler(this.inputBox_Combo_TradeMark_Load);
+            this.Box_Trademark.AutoSize = true;
+            this.Box_Trademark.Dock = System.Windows.Forms.DockStyle.Top;
+            this.Box_Trademark.InputDataSource = null;
+            this.Box_Trademark.InputEnabled = true;
+            this.Box_Trademark.InputValue = "";
+            this.Box_Trademark.Location = new System.Drawing.Point(3, 93);
+            this.Box_Trademark.MinimumSize = new System.Drawing.Size(150, 0);
+            this.Box_Trademark.Name = "inputBox_Combo_TradeMark";
+            this.Box_Trademark.Padding = new System.Windows.Forms.Padding(0, 3, 0, 6);
+            this.Box_Trademark.Picture = global::SalesApp_Alpha_2.Properties.Resources.icons8_marca_16;
+            this.Box_Trademark.Size = new System.Drawing.Size(244, 46);
+            this.Box_Trademark.TabIndex = 1;
+            this.Box_Trademark.Title = "Marca";
+            this.Box_Trademark.VisualError = false;
+            this.Box_Trademark.Load += new System.EventHandler(this.inputBox_Combo_TradeMark_Load);
             // 
             // inputBox_Text_Description
             // 
-            this.inputBox_Text_Description.AutoSize = true;
-            this.inputBox_Text_Description.Dock = System.Windows.Forms.DockStyle.Top;
-            this.inputBox_Text_Description.InputEnabled = true;
-            this.inputBox_Text_Description.InputValue = "";
-            this.inputBox_Text_Description.Location = new System.Drawing.Point(3, 48);
-            this.inputBox_Text_Description.MinimumSize = new System.Drawing.Size(150, 0);
-            this.inputBox_Text_Description.Name = "inputBox_Text_Description";
-            this.inputBox_Text_Description.Padding = new System.Windows.Forms.Padding(0, 3, 0, 6);
-            this.inputBox_Text_Description.Picture = global::SalesApp_Alpha_2.Properties.Resources.icons8_producto_16;
-            this.inputBox_Text_Description.Size = new System.Drawing.Size(244, 45);
-            this.inputBox_Text_Description.TabIndex = 0;
-            this.inputBox_Text_Description.Title = "Descripción";
-            this.inputBox_Text_Description.VisualError = false;
+            this.Box_Description.AutoSize = true;
+            this.Box_Description.Dock = System.Windows.Forms.DockStyle.Top;
+            this.Box_Description.InputEnabled = true;
+            this.Box_Description.InputValue = "";
+            this.Box_Description.Location = new System.Drawing.Point(3, 48);
+            this.Box_Description.MinimumSize = new System.Drawing.Size(150, 0);
+            this.Box_Description.Name = "inputBox_Text_Description";
+            this.Box_Description.Padding = new System.Windows.Forms.Padding(0, 3, 0, 6);
+            this.Box_Description.Picture = global::SalesApp_Alpha_2.Properties.Resources.icons8_producto_16;
+            this.Box_Description.Size = new System.Drawing.Size(244, 45);
+            this.Box_Description.TabIndex = 0;
+            this.Box_Description.Title = "Descripción";
+            this.Box_Description.VisualError = false;
             // 
             // inputBox_Text_ID
             // 
-            this.inputBox_Text_ID.AutoSize = true;
-            this.inputBox_Text_ID.Dock = System.Windows.Forms.DockStyle.Top;
-            this.inputBox_Text_ID.InputEnabled = false;
-            this.inputBox_Text_ID.InputValue = "";
-            this.inputBox_Text_ID.Location = new System.Drawing.Point(3, 3);
-            this.inputBox_Text_ID.MinimumSize = new System.Drawing.Size(150, 0);
-            this.inputBox_Text_ID.Name = "inputBox_Text_ID";
-            this.inputBox_Text_ID.Padding = new System.Windows.Forms.Padding(0, 3, 0, 6);
-            this.inputBox_Text_ID.Picture = ((System.Drawing.Image)(resources.GetObject("inputBox_Text_ID.Picture")));
-            this.inputBox_Text_ID.Size = new System.Drawing.Size(244, 45);
-            this.inputBox_Text_ID.TabIndex = 4;
-            this.inputBox_Text_ID.Title = "ID";
-            this.inputBox_Text_ID.VisualError = false;
+            this.Box_ID.AutoSize = true;
+            this.Box_ID.Dock = System.Windows.Forms.DockStyle.Top;
+            this.Box_ID.InputEnabled = false;
+            this.Box_ID.InputValue = "";
+            this.Box_ID.Location = new System.Drawing.Point(3, 3);
+            this.Box_ID.MinimumSize = new System.Drawing.Size(150, 0);
+            this.Box_ID.Name = "inputBox_Text_ID";
+            this.Box_ID.Padding = new System.Windows.Forms.Padding(0, 3, 0, 6);
+            this.Box_ID.Picture = ((System.Drawing.Image)(resources.GetObject("inputBox_Text_ID.Picture")));
+            this.Box_ID.Size = new System.Drawing.Size(244, 45);
+            this.Box_ID.TabIndex = 4;
+            this.Box_ID.Title = "ID";
+            this.Box_ID.VisualError = false;
             // 
             // UI_ProductsProperties
             // 
@@ -134,11 +134,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoSize = true;
-            this.Controls.Add(this.inputBox_Numeric_Price);
-            this.Controls.Add(this.inputBox_Numeric_Quantity);
-            this.Controls.Add(this.inputBox_Combo_TradeMark);
-            this.Controls.Add(this.inputBox_Text_Description);
-            this.Controls.Add(this.inputBox_Text_ID);
+            this.Controls.Add(this.Box_Price);
+            this.Controls.Add(this.Box_Quantity);
+            this.Controls.Add(this.Box_Trademark);
+            this.Controls.Add(this.Box_Description);
+            this.Controls.Add(this.Box_ID);
             this.MaximumSize = new System.Drawing.Size(0, 400);
             this.MinimumSize = new System.Drawing.Size(200, 0);
             this.Name = "UI_ProductsProperties";
@@ -151,10 +151,10 @@
 
         #endregion
 
-        public InputBox_Text inputBox_Text_Description;
-        public InputBox_Combo inputBox_Combo_TradeMark;
-        public InputBox_Numeric inputBox_Numeric_Quantity;
-        public InputBox_Numeric inputBox_Numeric_Price;
-        public InputBox_Text inputBox_Text_ID;
+        public InputBox_Text Box_Description;
+        public InputBox_Combo Box_Trademark;
+        public InputBox_Numeric Box_Quantity;
+        public InputBox_Numeric Box_Price;
+        public InputBox_Text Box_ID;
     }
 }

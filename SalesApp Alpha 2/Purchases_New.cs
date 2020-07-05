@@ -124,16 +124,16 @@ namespace SalesApp_Alpha_2
             {
                 if (IsEmptyTextSearch)
                 {
-                    ProductProperties.inputBox_Text_Description.Focus();
+                    ProductProperties.Box_Description.Focus();
                 }
                 else
                 {
-                    ProductProperties.inputBox_Combo_TradeMark.Focus();
+                    ProductProperties.Box_Trademark.Focus();
                 }
             }
             else
             {
-                ProductProperties.inputBox_Numeric_Quantity.Focus();
+                ProductProperties.Box_Quantity.Focus();
             }
         }
 

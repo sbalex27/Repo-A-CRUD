@@ -23,10 +23,10 @@ namespace SalesApp_Alpha_2
 
         Dictionary<Product.TableFields, UserControl> KeyValuePairs => new Dictionary<Product.TableFields, UserControl>()
         {
-            {Product.TableFields.Description, inputBox_Text_Description },
-            {Product.TableFields.TradeMark, inputBox_Combo_TradeMark },
-            {Product.TableFields.Quantity, inputBox_Numeric_Quantity },
-            {Product.TableFields.Price, inputBox_Numeric_Price }
+            {Product.TableFields.Description, Box_Description },
+            {Product.TableFields.TradeMark, Box_Trademark },
+            {Product.TableFields.Quantity, Box_Quantity },
+            {Product.TableFields.Price, Box_Price }
         };
 
         #region Properties
@@ -55,11 +55,11 @@ namespace SalesApp_Alpha_2
             }
             else
             {
-                inputBox_Text_ID.InputValue = value.ID.ToString();
-                inputBox_Text_Description.InputValue = value.Description;
-                inputBox_Combo_TradeMark.InputValue = value.TradeMark;
-                inputBox_Numeric_Quantity.InputValue = value.Quantity;
-                inputBox_Numeric_Price.InputValue = (decimal)value.Price;
+                Box_ID.InputValue = value.ID.ToString();
+                Box_Description.InputValue = value.Description;
+                Box_Trademark.InputValue = value.TradeMark;
+                Box_Quantity.InputValue = value.Quantity;
+                Box_Price.InputValue = (decimal)value.Price;
             }
         }
 
@@ -72,36 +72,36 @@ namespace SalesApp_Alpha_2
             else
             {
                 productObject = value;
-                inputBox_Text_Description.InputValue = value.Description;
-                inputBox_Combo_TradeMark.InputValue = value.TradeMark;
+                Box_Description.InputValue = value.Description;
+                Box_Trademark.InputValue = value.TradeMark;
             }
         }
 
         public bool PropertyID
         {
-            get => inputBox_Text_ID.Visible;
-            set => inputBox_Text_ID.Visible = value;
+            get => Box_ID.Visible;
+            set => Box_ID.Visible = value;
         }
         #endregion
 
         private void InitializeOptionals()
         {
             List<Product.TableFields> fields = Product.GetActiveFields(true);
-            inputBox_Text_ID.Visible = fields.Contains(Product.TableFields.ID);
-            inputBox_Text_Description.Visible = fields.Contains(Product.TableFields.Description);
-            inputBox_Combo_TradeMark.Visible = fields.Contains(Product.TableFields.TradeMark);
-            inputBox_Numeric_Quantity.Visible = fields.Contains(Product.TableFields.Quantity);
-            inputBox_Numeric_Price.Visible = fields.Contains(Product.TableFields.Price);
+            Box_ID.Visible = fields.Contains(Product.TableFields.ID);
+            Box_Description.Visible = fields.Contains(Product.TableFields.Description);
+            Box_Trademark.Visible = fields.Contains(Product.TableFields.TradeMark);
+            Box_Quantity.Visible = fields.Contains(Product.TableFields.Quantity);
+            Box_Price.Visible = fields.Contains(Product.TableFields.Price);
         }
 
         public void ValidateObject()
         {
             try
             {
-                productObject.Description = inputBox_Text_Description.InputValue;
-                productObject.TradeMark = inputBox_Combo_TradeMark.InputValue;
-                productObject.Quantity = (int)inputBox_Numeric_Quantity.InputValue;
-                productObject.Price = (double)inputBox_Numeric_Price.InputValue;
+                productObject.Description = Box_Description.InputValue;
+                productObject.TradeMark = Box_Trademark.InputValue;
+                productObject.Quantity = (int)Box_Quantity.InputValue;
+                productObject.Price = (double)Box_Price.InputValue;
             }
             catch (ProductException ex)
             {
@@ -122,7 +122,7 @@ namespace SalesApp_Alpha_2
 
         private void inputBox_Combo_TradeMark_Load(object sender, EventArgs e)
         {
-            inputBox_Combo_TradeMark.ChangeDataSource(Product.GetTradeMarks());
+            Box_Trademark.ChangeDataSource(Product.GetTradeMarks());
         }
 
         public void ClearProperties()
@@ -138,8 +138,7 @@ namespace SalesApp_Alpha_2
 
         public void SetFocus()
         {
-            if (PropertyID) inputBox_Text_ID.Focus(); else inputBox_Text_Description.Focus();
+            if (PropertyID) Box_ID.Focus(); else Box_Description.Focus();
         }
-
     }
 }
