@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SalesApp_Alpha_2.UserInterfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,9 @@ namespace SalesApp_Alpha_2
         public Home()
         {
             InitializeComponent();
+
+            InputBox_Generic<object> generic = new InputBox_Generic<object>("Propiedad básica", Properties.Resources.icons8_búsqueda_16__1_);
+            this.Controls.Add(generic);
         }
 
         private void ingresarProductoToolStripMenuItem_Click(object sender, EventArgs e)

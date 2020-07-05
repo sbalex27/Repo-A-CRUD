@@ -137,6 +137,9 @@
     <EmbeddedResource Include="UserInterfaces\InputBox_Combo.resx">
       <DependentUpon>InputBox_Combo.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserInterfaces\InputBox_Generic.resx">
+      <DependentUpon>InputBox_Generic.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserInterfaces\InputBox_Numeric.resx">
       <DependentUpon>InputBox_Numeric.cs</DependentUpon>
     </EmbeddedResource>
