@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.Label_Title = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.Picture_Icon = new System.Windows.Forms.PictureBox();
             this.Panel_Input = new System.Windows.Forms.Panel();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Picture_Icon)).BeginInit();
             this.SuspendLayout();
             // 
             // Label_Title
@@ -44,16 +44,16 @@
             this.Label_Title.TabIndex = 0;
             this.Label_Title.Text = "Title";
             // 
-            // pictureBox1
+            // Picture_Icon
             // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pictureBox1.Image = global::SalesApp_Alpha_2.Properties.Resources.icons8_archivo_de_imagen_16;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 15);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(32, 138);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.pictureBox1.TabIndex = 1;
-            this.pictureBox1.TabStop = false;
+            this.Picture_Icon.Dock = System.Windows.Forms.DockStyle.Left;
+            this.Picture_Icon.Image = global::SalesApp_Alpha_2.Properties.Resources.icons8_archivo_de_imagen_16;
+            this.Picture_Icon.Location = new System.Drawing.Point(0, 15);
+            this.Picture_Icon.Name = "Picture_Icon";
+            this.Picture_Icon.Size = new System.Drawing.Size(32, 138);
+            this.Picture_Icon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.Picture_Icon.TabIndex = 1;
+            this.Picture_Icon.TabStop = false;
             // 
             // Panel_Input
             // 
@@ -70,11 +70,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.Controls.Add(this.Panel_Input);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.Picture_Icon);
             this.Controls.Add(this.Label_Title);
             this.Name = "InputBox_Generic";
             this.Size = new System.Drawing.Size(150, 153);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Picture_Icon)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -83,7 +83,7 @@
         #endregion
 
         private System.Windows.Forms.Label Label_Title;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox Picture_Icon;
         private System.Windows.Forms.Panel Panel_Input;
     }
 }

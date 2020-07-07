@@ -13,20 +13,9 @@ namespace SalesApp_Alpha_2
 {
     public partial class Home : Form
     {
-
-        private readonly InputBox_Generic<double> generic = new InputBox_Generic<double>("Propiedad básica", Properties.Resources.icons8_búsqueda_16__1_);
-
         public Home()
         {
             InitializeComponent();
-
-            this.Controls.Add(generic);
-            generic.InputValueChanged += Generic_InputValueChanged;
-        }
-
-        private void Generic_InputValueChanged(object sender, EventArgs e)
-        {
-            MessageBox.Show(generic.InputValue.ToString());
         }
 
         private void ingresarProductoToolStripMenuItem_Click(object sender, EventArgs e)

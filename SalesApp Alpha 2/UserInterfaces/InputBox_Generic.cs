@@ -41,10 +41,20 @@ namespace SalesApp_Alpha_2.UserInterfaces
 
         readonly List<Type> AllowedTypes = new List<Type>()
         {
-            typeof(string), typeof(double), typeof(object)
+            typeof(string), typeof(double), typeof(object), typeof(int)
         };
 
         public InputBox_Generic(string title, Image icon16px)
+        {
+            MasterConstructor(title, icon16px, new Padding(0));
+        }
+
+        public InputBox_Generic(string title, Image icon16px, Padding padding)
+        {
+            MasterConstructor(title, icon16px, padding);
+        }
+
+        private void MasterConstructor(string title, Image icon16px, Padding padding)
         {
             if (!AllowedTypes.Contains(InputValueType)) throw new ArgumentOutOfRangeException();
             InitializeComponent();
@@ -52,12 +62,13 @@ namespace SalesApp_Alpha_2.UserInterfaces
             DrawVariant();
             Title = title;
             Icon16 = icon16px;
+            Padding = padding;
         }
 
         private void InitializeProperties()
         {
             Dock = DockStyle.Top;
-            BackColor = Color.Red;
+            //BackColor = Color.Red;
         }
 
         private void DrawVariant()
@@ -118,8 +129,8 @@ namespace SalesApp_Alpha_2.UserInterfaces
         /// </summary>
         public Image Icon16
         {
-            get => pictureBox1.Image;
-            set => pictureBox1.Image = value;
+            get => Picture_Icon.Image;
+            set => Picture_Icon.Image = value;
         }
 
         /// <summary>
