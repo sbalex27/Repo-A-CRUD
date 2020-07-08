@@ -24,22 +24,13 @@ namespace SalesApp_Alpha_2.UserInterfaces
     public partial class InputBox_Generic<T> : UserControl
     {
         public event EventHandler InputValueChanged;
+
         private Control controlUsed = new Control();
-        TextBox textBox = new TextBox();
-        ComboBox comboBox = new ComboBox();
-        NumericUpDown numericBox = new NumericUpDown();
+        private readonly TextBox textBox = new TextBox();
+        private readonly ComboBox comboBox = new ComboBox();
+        private readonly NumericUpDown numericBox = new NumericUpDown();
 
-        //readonly List<Type> typesNumeric = new List<Type>()
-        //{
-        //    typeof(double), typeof(int), typeof(short), typeof(decimal)
-        //};
-
-        //readonly List<Type> typesMoney = new List<Type>()
-        //{
-        //    typeof(double), typeof(short), typeof(decimal)
-        //};
-
-        readonly List<Type> AllowedTypes = new List<Type>()
+        private readonly List<Type> AllowedTypes = new List<Type>()
         {
             typeof(string), typeof(double), typeof(object), typeof(int)
         };
@@ -49,12 +40,7 @@ namespace SalesApp_Alpha_2.UserInterfaces
             MasterConstructor(title, icon16px, new Padding(0));
         }
 
-        public InputBox_Generic(string title, Image icon16px, Padding padding)
-        {
-            MasterConstructor(title, icon16px, padding);
-        }
-
-        private void MasterConstructor(string title, Image icon16px, Padding padding)
+        private void MasterConstructor(string title, Image icon16px, Padding padding, Predicate<T> predicate = null)
         {
             if (!AllowedTypes.Contains(InputValueType)) throw new ArgumentOutOfRangeException();
             InitializeComponent();
@@ -63,12 +49,12 @@ namespace SalesApp_Alpha_2.UserInterfaces
             Title = title;
             Icon16 = icon16px;
             Padding = padding;
+            DelegatePredicate = predicate;
         }
 
         private void InitializeProperties()
         {
             Dock = DockStyle.Top;
-            //BackColor = Color.Red;
         }
 
         private void DrawVariant()
@@ -98,6 +84,16 @@ namespace SalesApp_Alpha_2.UserInterfaces
             InputValueChanged?.Invoke(this, e);
         }
 
+        private Predicate<T> predicate;
+        public Predicate<T> DelegatePredicate
+        {
+            get => predicate;
+            set
+            {
+                predicate = value;
+                CausesValidation = !(value is null);
+            }
+        }
         public Type InputValueType => typeof(T);
         public InputBoxType BoxType
         {
@@ -199,5 +195,19 @@ namespace SalesApp_Alpha_2.UserInterfaces
             }
         }
         #endregion
+
+        private void InputBox_Generic_Validating(object sender, CancelEventArgs e)
+        {
+            if (DelegatePredicate(InputValue))
+            {
+                VisualError = false;
+            }
+            else
+            {
+                e.Cancel = true;
+                VisualError = true;
+                //controlUsed.Select();
+            }
+        }
     }
 }

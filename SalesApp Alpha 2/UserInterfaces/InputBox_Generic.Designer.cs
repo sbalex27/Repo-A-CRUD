@@ -69,11 +69,13 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
+            this.CausesValidation = false;
             this.Controls.Add(this.Panel_Input);
             this.Controls.Add(this.Picture_Icon);
             this.Controls.Add(this.Label_Title);
             this.Name = "InputBox_Generic";
             this.Size = new System.Drawing.Size(150, 153);
+            this.Validating += new System.ComponentModel.CancelEventHandler(this.InputBox_Generic_Validating);
             ((System.ComponentModel.ISupportInitialize)(this.Picture_Icon)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
