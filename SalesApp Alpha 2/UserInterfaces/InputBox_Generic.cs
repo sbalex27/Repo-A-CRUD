@@ -44,16 +44,11 @@ namespace SalesApp_Alpha_2.UserInterfaces
         {
             if (!AllowedTypes.Contains(InputValueType)) throw new ArgumentOutOfRangeException();
             InitializeComponent();
-            InitializeProperties();
-            DrawVariant();
+            Dock = DockStyle.Top;
             Title = title;
             Icon16 = icon16px;
             TabIndex = tabIndex;
-        }
-
-        private void InitializeProperties()
-        {
-            Dock = DockStyle.Top;
+            DrawVariant();
         }
 
         private void DrawVariant()
@@ -83,16 +78,7 @@ namespace SalesApp_Alpha_2.UserInterfaces
             InputValueChanged?.Invoke(this, e);
         }
 
-        private Predicate<T> predicate;
-        public Predicate<T> DelegatePredicate
-        {
-            get => predicate;
-            set
-            {
-                predicate = value;
-                CausesValidation = !(value is null);
-            }
-        }
+        public Predicate<T> DelegatePredicate { get; set; }
         public Type InputValueType => typeof(T);
         public InputBoxType BoxType
         {
@@ -197,15 +183,11 @@ namespace SalesApp_Alpha_2.UserInterfaces
 
         private void InputBox_Generic_Validating(object sender, CancelEventArgs e)
         {
-            if (DelegatePredicate(InputValue))
+            if (DelegatePredicate != null)
             {
-                VisualError = false;
-            }
-            else
-            {
-                e.Cancel = true;
-                VisualError = true;
-                //controlUsed.Select();
+                bool result = !DelegatePredicate(InputValue);
+                VisualError = result;
+                e.Cancel = result;
             }
         }
     }

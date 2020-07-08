@@ -34,6 +34,8 @@ namespace SalesApp_Alpha_2
             else throw new ArgumentOutOfRangeException(nameof(ID));
         }
 
+        public static readonly Predicate<string> PredicateDescription = new Predicate<string>(arg => !string.IsNullOrWhiteSpace(arg));
+
         private string description;
         private string trademark;
         private int quantity;
@@ -44,7 +46,7 @@ namespace SalesApp_Alpha_2
         public string Description
         {
             get => description;
-            set => description = string.IsNullOrWhiteSpace(value) ? throw new ProductObligatoryFieldException(TableFields.Description) : value;
+            set => description = PredicateDescription(value) ? throw new ProductObligatoryFieldException(TableFields.Description) : value;
         }
         public string TradeMark
         {
