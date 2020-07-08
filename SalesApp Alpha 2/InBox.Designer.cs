@@ -93,7 +93,7 @@
             // Picture_16px
             // 
             this.Picture_16px.Dock = System.Windows.Forms.DockStyle.Top;
-            this.Picture_16px.Image = global::SalesApp_Alpha_2.Properties.Resources.icons8_archivo_de_imagen_16;
+            this.Picture_16px.Image = global::SalesApp_Alpha_2.Properties.Resources._16px_Image;
             this.Picture_16px.Location = new System.Drawing.Point(0, 16);
             this.Picture_16px.Name = "Picture_16px";
             this.Picture_16px.Size = new System.Drawing.Size(31, 20);

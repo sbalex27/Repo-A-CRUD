@@ -120,7 +120,7 @@
             // BTT_ConfirmPurchase
             // 
             this.BTT_ConfirmPurchase.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.BTT_ConfirmPurchase.Image = global::SalesApp_Alpha_2.Properties.Resources.icons8_de_acuerdo_16;
+            this.BTT_ConfirmPurchase.Image = global::SalesApp_Alpha_2.Properties.Resources._16px_Ok;
             this.BTT_ConfirmPurchase.Location = new System.Drawing.Point(319, 3);
             this.BTT_ConfirmPurchase.MinimumSize = new System.Drawing.Size(0, 25);
             this.BTT_ConfirmPurchase.Name = "BTT_ConfirmPurchase";
@@ -187,7 +187,7 @@
             // 
             this.BTT_AddToList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.BTT_AddToList.AutoSize = true;
-            this.BTT_AddToList.Image = global::SalesApp_Alpha_2.Properties.Resources.icons8_carrito_de_la_compra_cargado_16;
+            this.BTT_AddToList.Image = global::SalesApp_Alpha_2.Properties.Resources._16px_AddToCart;
             this.BTT_AddToList.Location = new System.Drawing.Point(120, 3);
             this.BTT_AddToList.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
             this.BTT_AddToList.Name = "BTT_AddToList";
@@ -200,7 +200,7 @@
             // 
             // BTT_New
             // 
-            this.BTT_New.Image = global::SalesApp_Alpha_2.Properties.Resources.icons8_añadir_16;
+            this.BTT_New.Image = global::SalesApp_Alpha_2.Properties.Resources._16px_Add;
             this.BTT_New.Location = new System.Drawing.Point(15, 3);
             this.BTT_New.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
             this.BTT_New.Name = "BTT_New";
@@ -221,7 +221,7 @@
             this.IB_Text_Search.MinimumSize = new System.Drawing.Size(150, 0);
             this.IB_Text_Search.Name = "IB_Text_Search";
             this.IB_Text_Search.Padding = new System.Windows.Forms.Padding(0, 0, 0, 9);
-            this.IB_Text_Search.Picture = global::SalesApp_Alpha_2.Properties.Resources.icons8_búsqueda_16__1_;
+            this.IB_Text_Search.Picture = global::SalesApp_Alpha_2.Properties.Resources._16px_Search;
             this.IB_Text_Search.Size = new System.Drawing.Size(244, 45);
             this.IB_Text_Search.TabIndex = 0;
             this.IB_Text_Search.Title = "Buscar";

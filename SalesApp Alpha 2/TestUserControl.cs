@@ -14,55 +14,32 @@ namespace SalesApp_Alpha_2
 {
     public partial class TestUserControl : UserControl
     {
-        #region Variables
-        private readonly InputBox_Generic<string> Box_Nombre;
-        private readonly InputBox_Generic<string> Box_Apellido;
-        private readonly InputBox_Generic<int> Box_Edad;
-        private readonly InputBox_Generic<double> Box_Sueldo;
-        private readonly InputBox_Generic<object> Box_Area;
-        private readonly Padding customPadding = new Padding(0, 3, 0, 3);
+        #region Control Variables
+        private readonly InputBox_Generic<double> Box_Price;
+        private readonly InputBox_Generic<int> Box_Quantity;
+        private readonly InputBox_Generic<string> Box_TradeMark;
+        private readonly InputBox_Generic<string> Box_Description;
+        private readonly InputBox_Generic<int> Box_ID;
         #endregion
 
         public TestUserControl()
         {
             InitializeComponent();
 
-            #region Instances
-            Box_Nombre = new InputBox_Generic<string>("Nombre", Properties.Resources.icons8_archivo_de_imagen_16)
-            {
-                Padding = customPadding,
-                DelegatePredicate = new Predicate<string>(s => !string.IsNullOrWhiteSpace(s)),
-            };
-            Box_Apellido = new InputBox_Generic<string>("Apellido", Properties.Resources.icons8_añadir_16);
-            Box_Edad = new InputBox_Generic<int>("Edad", Properties.Resources.icons8_búsqueda_16__1_);
-            Box_Sueldo = new InputBox_Generic<double>("Sueldo", Properties.Resources.icons8_carrito_de_la_compra_cargado_16);
-            Box_Area = new InputBox_Generic<object>("Área", Properties.Resources.icons8_de_acuerdo_16);
+            int i = 0;
+            #region Instanciate
+            Box_ID = new InputBox_Generic<int>("ID", Properties.Resources._16px_List, i++);
+            Box_Description = new InputBox_Generic<string>("Descripción", Properties.Resources._16px_Product, i++);
+            Box_TradeMark = new InputBox_Generic<string>("Marca", Properties.Resources._16px_Trademark, i++);
+            Box_Quantity = new InputBox_Generic<int>("Cantidad", Properties.Resources._16px_List, i++);
+            Box_Price = new InputBox_Generic<double>("Precio", Properties.Resources._16px_Price, i++);
             #endregion
 
             Controls.AddRange(new Control[]
             {
-                Box_Area,
-                Box_Sueldo,
-                Box_Edad,
-                Box_Apellido,
-                Box_Nombre
+                Box_Price,Box_Quantity,Box_TradeMark,Box_Description,Box_ID
             });
 
-            AutoSize = true;
-        }
-
-        private void Box_Nombre_Validated(object sender, EventArgs e)
-        {
-            MessageBox.Show(e.ToString());
-        }
-
-        public void DisableVisualErrors()
-        {
-            Box_Nombre.VisualError = false;
-            Box_Apellido.VisualError = false;
-            Box_Edad.VisualError = false;
-            Box_Sueldo.VisualError = false;
-            Box_Area.VisualError = false;
         }
     }
 }

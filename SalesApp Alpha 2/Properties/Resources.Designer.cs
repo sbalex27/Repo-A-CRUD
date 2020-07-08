@@ -63,9 +63,9 @@ namespace SalesApp_Alpha_2.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_añadir_16 {
+        internal static System.Drawing.Bitmap _16px_Add {
             get {
-                object obj = ResourceManager.GetObject("icons8-añadir-16", resourceCulture);
+                object obj = ResourceManager.GetObject("16px_Add", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace SalesApp_Alpha_2.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_archivo_de_imagen_16 {
+        internal static System.Drawing.Bitmap _16px_AddProduct {
             get {
-                object obj = ResourceManager.GetObject("icons8-archivo-de-imagen-16", resourceCulture);
+                object obj = ResourceManager.GetObject("16px_AddProduct", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace SalesApp_Alpha_2.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_búsqueda_16__1_ {
+        internal static System.Drawing.Bitmap _16px_AddToCart {
             get {
-                object obj = ResourceManager.GetObject("icons8-búsqueda-16 (1)", resourceCulture);
+                object obj = ResourceManager.GetObject("16px_AddToCart", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace SalesApp_Alpha_2.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_carrito_de_la_compra_cargado_16 {
+        internal static System.Drawing.Bitmap _16px_Image {
             get {
-                object obj = ResourceManager.GetObject("icons8-carrito-de-la-compra-cargado-16", resourceCulture);
+                object obj = ResourceManager.GetObject("16px_Image", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,9 @@ namespace SalesApp_Alpha_2.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_de_acuerdo_16 {
+        internal static System.Drawing.Bitmap _16px_List {
             get {
-                object obj = ResourceManager.GetObject("icons8-de-acuerdo-16", resourceCulture);
+                object obj = ResourceManager.GetObject("16px_List", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -113,9 +113,9 @@ namespace SalesApp_Alpha_2.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_etiqueta_de_precio_usd_16 {
+        internal static System.Drawing.Bitmap _16px_NewProduct {
             get {
-                object obj = ResourceManager.GetObject("icons8-etiqueta-de-precio-usd-16", resourceCulture);
+                object obj = ResourceManager.GetObject("16px_NewProduct", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,9 +123,9 @@ namespace SalesApp_Alpha_2.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_lista_con_viñetas_16 {
+        internal static System.Drawing.Bitmap _16px_Ok {
             get {
-                object obj = ResourceManager.GetObject("icons8-lista-con-viñetas-16", resourceCulture);
+                object obj = ResourceManager.GetObject("16px_Ok", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,9 +133,9 @@ namespace SalesApp_Alpha_2.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_marca_16 {
+        internal static System.Drawing.Bitmap _16px_Price {
             get {
-                object obj = ResourceManager.GetObject("icons8-marca-16", resourceCulture);
+                object obj = ResourceManager.GetObject("16px_Price", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -143,9 +143,9 @@ namespace SalesApp_Alpha_2.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_producto_16 {
+        internal static System.Drawing.Bitmap _16px_Product {
             get {
-                object obj = ResourceManager.GetObject("icons8-producto-16", resourceCulture);
+                object obj = ResourceManager.GetObject("16px_Product", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -153,9 +153,9 @@ namespace SalesApp_Alpha_2.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_producto_16__1_ {
+        internal static System.Drawing.Bitmap _16px_Search {
             get {
-                object obj = ResourceManager.GetObject("icons8-producto-16 (1)", resourceCulture);
+                object obj = ResourceManager.GetObject("16px_Search", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -163,9 +163,9 @@ namespace SalesApp_Alpha_2.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap icons8_producto_nuevo_16 {
+        internal static System.Drawing.Bitmap _16px_Trademark {
             get {
-                object obj = ResourceManager.GetObject("icons8-producto-nuevo-16", resourceCulture);
+                object obj = ResourceManager.GetObject("16px_Trademark", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

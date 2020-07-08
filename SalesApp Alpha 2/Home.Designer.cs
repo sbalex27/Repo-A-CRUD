@@ -63,7 +63,7 @@
             // 
             // ingresarProductoToolStripMenuItem
             // 
-            this.ingresarProductoToolStripMenuItem.Image = global::SalesApp_Alpha_2.Properties.Resources.icons8_producto_16__1_;
+            this.ingresarProductoToolStripMenuItem.Image = global::SalesApp_Alpha_2.Properties.Resources._16px_AddProduct;
             this.ingresarProductoToolStripMenuItem.Name = "ingresarProductoToolStripMenuItem";
             this.ingresarProductoToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.ingresarProductoToolStripMenuItem.Text = "Ingreso a Inventario";
@@ -78,7 +78,7 @@
             // 
             // verTablaDeProductosToolStripMenuItem
             // 
-            this.verTablaDeProductosToolStripMenuItem.Image = global::SalesApp_Alpha_2.Properties.Resources.icons8_lista_con_viñetas_16;
+            this.verTablaDeProductosToolStripMenuItem.Image = global::SalesApp_Alpha_2.Properties.Resources._16px_List;
             this.verTablaDeProductosToolStripMenuItem.Name = "verTablaDeProductosToolStripMenuItem";
             this.verTablaDeProductosToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.verTablaDeProductosToolStripMenuItem.Text = "Lista de Inventario";

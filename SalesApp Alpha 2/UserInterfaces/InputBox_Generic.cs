@@ -35,12 +35,12 @@ namespace SalesApp_Alpha_2.UserInterfaces
             typeof(string), typeof(double), typeof(object), typeof(int)
         };
 
-        public InputBox_Generic(string title, Image icon16px)
+        public InputBox_Generic(string title, Image icon16px, int tabIndex = 0)
         {
-            MasterConstructor(title, icon16px, new Padding(0));
+            MasterConstructor(title, icon16px, tabIndex);
         }
 
-        private void MasterConstructor(string title, Image icon16px, Padding padding, Predicate<T> predicate = null)
+        private void MasterConstructor(string title, Image icon16px, int tabIndex)
         {
             if (!AllowedTypes.Contains(InputValueType)) throw new ArgumentOutOfRangeException();
             InitializeComponent();
@@ -48,8 +48,7 @@ namespace SalesApp_Alpha_2.UserInterfaces
             DrawVariant();
             Title = title;
             Icon16 = icon16px;
-            Padding = padding;
-            DelegatePredicate = predicate;
+            TabIndex = tabIndex;
         }
 
         private void InitializeProperties()

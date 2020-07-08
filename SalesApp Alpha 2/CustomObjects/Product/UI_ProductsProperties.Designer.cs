@@ -51,7 +51,7 @@
             this.Box_Price.MinimumSize = new System.Drawing.Size(100, 0);
             this.Box_Price.Name = "inputBox_Numeric_Price";
             this.Box_Price.Padding = new System.Windows.Forms.Padding(0, 3, 0, 6);
-            this.Box_Price.Picture = global::SalesApp_Alpha_2.Properties.Resources.icons8_etiqueta_de_precio_usd_16;
+            this.Box_Price.Picture = global::SalesApp_Alpha_2.Properties.Resources._16px_Price;
             this.Box_Price.Size = new System.Drawing.Size(244, 45);
             this.Box_Price.TabIndex = 3;
             this.Box_Price.Title = "Precio";
@@ -72,7 +72,7 @@
             this.Box_Quantity.MinimumSize = new System.Drawing.Size(100, 0);
             this.Box_Quantity.Name = "inputBox_Numeric_Quantity";
             this.Box_Quantity.Padding = new System.Windows.Forms.Padding(0, 3, 0, 6);
-            this.Box_Quantity.Picture = global::SalesApp_Alpha_2.Properties.Resources.icons8_lista_con_viñetas_16;
+            this.Box_Quantity.Picture = global::SalesApp_Alpha_2.Properties.Resources._16px_List;
             this.Box_Quantity.Size = new System.Drawing.Size(244, 45);
             this.Box_Quantity.TabIndex = 2;
             this.Box_Quantity.Title = "Cantidad";
@@ -89,7 +89,7 @@
             this.Box_Trademark.MinimumSize = new System.Drawing.Size(150, 0);
             this.Box_Trademark.Name = "inputBox_Combo_TradeMark";
             this.Box_Trademark.Padding = new System.Windows.Forms.Padding(0, 3, 0, 6);
-            this.Box_Trademark.Picture = global::SalesApp_Alpha_2.Properties.Resources.icons8_marca_16;
+            this.Box_Trademark.Picture = global::SalesApp_Alpha_2.Properties.Resources._16px_Trademark;
             this.Box_Trademark.Size = new System.Drawing.Size(244, 46);
             this.Box_Trademark.TabIndex = 1;
             this.Box_Trademark.Title = "Marca";
@@ -106,7 +106,7 @@
             this.Box_Description.MinimumSize = new System.Drawing.Size(150, 0);
             this.Box_Description.Name = "inputBox_Text_Description";
             this.Box_Description.Padding = new System.Windows.Forms.Padding(0, 3, 0, 6);
-            this.Box_Description.Picture = global::SalesApp_Alpha_2.Properties.Resources.icons8_producto_16;
+            this.Box_Description.Picture = global::SalesApp_Alpha_2.Properties.Resources._16px_Product;
             this.Box_Description.Size = new System.Drawing.Size(244, 45);
             this.Box_Description.TabIndex = 0;
             this.Box_Description.Title = "Descripción";

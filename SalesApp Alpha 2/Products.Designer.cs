@@ -164,7 +164,7 @@
             this.inBox_Buscar.MinimumSize = new System.Drawing.Size(200, 48);
             this.inBox_Buscar.Name = "inBox_Buscar";
             this.inBox_Buscar.Padding = new System.Windows.Forms.Padding(12, 6, 12, 6);
-            this.inBox_Buscar.Picture = global::SalesApp_Alpha_2.Properties.Resources.icons8_producto_16;
+            this.inBox_Buscar.Picture = global::SalesApp_Alpha_2.Properties.Resources._16px_Product;
             this.inBox_Buscar.Size = new System.Drawing.Size(630, 48);
             this.inBox_Buscar.TabIndex = 0;
             this.inBox_Buscar.Title = "Buscar";

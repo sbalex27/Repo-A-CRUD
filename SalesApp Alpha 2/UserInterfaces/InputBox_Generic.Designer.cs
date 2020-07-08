@@ -47,7 +47,7 @@
             // Picture_Icon
             // 
             this.Picture_Icon.Dock = System.Windows.Forms.DockStyle.Left;
-            this.Picture_Icon.Image = global::SalesApp_Alpha_2.Properties.Resources.icons8_archivo_de_imagen_16;
+            this.Picture_Icon.Image = global::SalesApp_Alpha_2.Properties.Resources._16px_Image;
             this.Picture_Icon.Location = new System.Drawing.Point(0, 15);
             this.Picture_Icon.Name = "Picture_Icon";
             this.Picture_Icon.Size = new System.Drawing.Size(32, 138);
