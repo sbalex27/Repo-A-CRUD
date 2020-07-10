@@ -22,35 +22,43 @@ namespace SalesApp_Alpha_2
         private readonly InputBox_Generic<int> Box_ID;
         #endregion
 
-        private readonly Padding CustomPadding = new Padding(0);
+        private readonly Padding CustomPadding = new Padding(3);
 
         public TestUserControl()
         {
+            InitializeComponent();
+
             int i = 0;
             #region Instanciate
-            Box_ID = new InputBox_Generic<int>("ID", Properties.Resources._16px_List, i++);
+            Box_ID = new InputBox_Generic<int>("ID", Properties.Resources._16px_List, i++)
+            {
+                Padding = CustomPadding
+            };
             Box_Description = new InputBox_Generic<string>("Descripción", Properties.Resources._16px_Product, i++)
             {
                 Padding = CustomPadding,
-                DelegatePredicate = new Predicate<string>(arg => arg.Contains("x")),
-                CausesValidation = true,
             };
-            Box_Description.Validated += Box_Description_Validated;
 
-            Box_TradeMark = new InputBox_Generic<string>("Marca", Properties.Resources._16px_Trademark, i++);
-            Box_Quantity = new InputBox_Generic<int>("Cantidad", Properties.Resources._16px_List, i++);
-            Box_Price = new InputBox_Generic<double>("Precio", Properties.Resources._16px_Price, i++);
+            Box_TradeMark = new InputBox_Generic<string>("Marca", Properties.Resources._16px_Trademark, i++)
+            {
+                Padding = CustomPadding
+            };
+
+            Box_Quantity = new InputBox_Generic<int>("Cantidad", Properties.Resources._16px_List, i++)
+            {
+                Padding = CustomPadding
+            };
+
+            Box_Price = new InputBox_Generic<double>("Precio", Properties.Resources._16px_Price, i++)
+            {
+                Padding = CustomPadding
+            };
             #endregion
 
             Controls.AddRange(new Control[]
             {
                 Box_Price,Box_Quantity,Box_TradeMark,Box_Description,Box_ID
             });
-        }
-
-        private void Box_Description_Validated(object sender, EventArgs e)
-        {
-            MessageBox.Show(Box_Description.InputValue + " Validado");
         }
     }
 }

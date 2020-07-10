@@ -36,7 +36,6 @@
             this.comprasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nuevaCompraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.button1 = new System.Windows.Forms.Button();
-            this.testUserControl1 = new SalesApp_Alpha_2.TestUserControl();
             this.Strip_Principal.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -108,20 +107,11 @@
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
             // 
-            // testUserControl1
-            // 
-            this.testUserControl1.AutoSize = true;
-            this.testUserControl1.Location = new System.Drawing.Point(505, 124);
-            this.testUserControl1.Name = "testUserControl1";
-            this.testUserControl1.Size = new System.Drawing.Size(187, 176);
-            this.testUserControl1.TabIndex = 2;
-            // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.testUserControl1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.Strip_Principal);
             this.MainMenuStrip = this.Strip_Principal;
@@ -144,7 +134,6 @@
         private System.Windows.Forms.ToolStripMenuItem comprasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nuevaCompraToolStripMenuItem;
         private System.Windows.Forms.Button button1;
-        private TestUserControl testUserControl1;
     }
 }
 
