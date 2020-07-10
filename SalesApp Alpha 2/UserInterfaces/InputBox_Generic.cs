@@ -35,6 +35,12 @@ namespace SalesApp_Alpha_2.UserInterfaces
             typeof(string), typeof(double), typeof(object), typeof(int)
         };
 
+        /// <summary>
+        /// Constructor para una caja de entrada genérica
+        /// </summary>
+        /// <param name="title">Título de la caja</param>
+        /// <param name="icon16px">Ícono de la caja</param>
+        /// <param name="tabIndex">Índice de tabulación de la caja</param>
         public InputBox_Generic(string title, Image icon16px, int tabIndex = 0)
         {
             MasterConstructor(title, icon16px, tabIndex);
@@ -79,6 +85,7 @@ namespace SalesApp_Alpha_2.UserInterfaces
         }
 
         public Predicate<T> DelegatePredicate { get; set; }
+        public Action DelegateAction { get; set; }
         public Type InputValueType => typeof(T);
         public InputBoxType BoxType
         {
@@ -185,10 +192,18 @@ namespace SalesApp_Alpha_2.UserInterfaces
         {
             if (DelegatePredicate != null)
             {
-                bool result = !DelegatePredicate(InputValue);
-                VisualError = result;
-                e.Cancel = result;
+                if (!DelegatePredicate(InputValue))
+                {
+                    VisualError = true;
+                    e.Cancel = true;
+                }
             }
+        }
+
+        private void InputBox_Generic_Validated(object sender, EventArgs e)
+        {
+            VisualError = false;
+            DelegateAction?.Invoke();
         }
     }
 }
