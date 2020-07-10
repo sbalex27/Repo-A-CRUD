@@ -49,22 +49,22 @@ namespace SalesApp_Alpha_2
         public string Description
         {
             get => description;
-            set => description = PredicateDescription(value) ? throw new ProductObligatoryFieldException(TableFields.Description) : value;
+            set => description = PredicateDescription(value) ? value : throw new ProductObligatoryFieldException(TableFields.Description);
         }
         public string TradeMark
         {
             get => trademark;
-            set => trademark = string.IsNullOrWhiteSpace(value) ? throw new ProductObligatoryFieldException(TableFields.TradeMark) : value;
+            set => trademark = PredicateTradeMark(value) ? value: throw new ProductObligatoryFieldException(TableFields.TradeMark);
         }
         public int Quantity
         {
             get => quantity;
-            set => quantity = value < 0 ? throw new ProductQuantityException() : value;
+            set => quantity = PredicateQuantity(value) ? value : throw new ProductQuantityException();
         }
         public double Price
         {
             get => price;
-            set => price = value <= 0 ? throw new ProductInvalidPriceException() : value;
+            set => price = PredicatePrice(value) ? value : throw new ProductInvalidPriceException();
         }
 
         

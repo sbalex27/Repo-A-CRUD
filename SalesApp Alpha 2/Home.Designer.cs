@@ -35,7 +35,8 @@
             this.verTablaDeProductosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.comprasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nuevaCompraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.button1 = new System.Windows.Forms.Button();
+            this.BTT_Test = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.uiProductProperties1 = new SalesApp_Alpha_2.UiProductProperties();
             this.Strip_Principal.SuspendLayout();
             this.SuspendLayout();
@@ -99,23 +100,32 @@
             this.nuevaCompraToolStripMenuItem.Text = "Nueva Compra";
             this.nuevaCompraToolStripMenuItem.Click += new System.EventHandler(this.nuevaCompraToolStripMenuItem_Click);
             // 
-            // button1
+            // BTT_Test
             // 
-            this.button1.Location = new System.Drawing.Point(226, 162);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.BTT_Test.Location = new System.Drawing.Point(422, 290);
+            this.BTT_Test.Name = "BTT_Test";
+            this.BTT_Test.Size = new System.Drawing.Size(75, 23);
+            this.BTT_Test.TabIndex = 1;
+            this.BTT_Test.Text = "Validar";
+            this.BTT_Test.UseVisualStyleBackColor = true;
+            this.BTT_Test.Click += new System.EventHandler(this.BTT_Test_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(100, 157);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 20);
+            this.textBox1.TabIndex = 3;
             // 
             // uiProductProperties1
             // 
             this.uiProductProperties1.AutoSize = true;
-            this.uiProductProperties1.Location = new System.Drawing.Point(398, 115);
+            this.uiProductProperties1.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
+            this.uiProductProperties1.Location = new System.Drawing.Point(347, 89);
             this.uiProductProperties1.MinimumSize = new System.Drawing.Size(150, 150);
             this.uiProductProperties1.Name = "uiProductProperties1";
             this.uiProductProperties1.Size = new System.Drawing.Size(150, 195);
-            this.uiProductProperties1.TabIndex = 2;
+            this.uiProductProperties1.TabIndex = 4;
             // 
             // Home
             // 
@@ -123,7 +133,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.uiProductProperties1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.BTT_Test);
             this.Controls.Add(this.Strip_Principal);
             this.MainMenuStrip = this.Strip_Principal;
             this.Name = "Home";
@@ -144,7 +155,8 @@
         private System.Windows.Forms.ToolStripMenuItem modificarProductoDeInventarioToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem comprasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nuevaCompraToolStripMenuItem;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button BTT_Test;
+        private System.Windows.Forms.TextBox textBox1;
         private UiProductProperties uiProductProperties1;
     }
 }

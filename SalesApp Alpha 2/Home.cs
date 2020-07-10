@@ -41,5 +41,14 @@ namespace SalesApp_Alpha_2
             Form form = new Purchases_New();
             form.Show();
         }
+
+        private void BTT_Test_Click(object sender, EventArgs e)
+        {
+            if (uiProductProperties1.Validate())
+            {
+                Product p = uiProductProperties1.GetObject();
+                MessageBox.Show(p.ToString());
+            }
+        }
     }
 }

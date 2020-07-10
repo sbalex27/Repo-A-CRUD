@@ -9,10 +9,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SalesApp_Alpha_2.UserInterfaces;
 using System.Runtime.CompilerServices;
+using System.Runtime.Remoting.Channels;
+using System.Windows.Forms.Design;
 
 namespace SalesApp_Alpha_2
 {
-    public partial class UiProductProperties : UserControl
+    public partial class UiProductProperties : UserControl, IUIProperties<Product>
     {
         private readonly int TabI = 0;
         private readonly InputBox_Generic<int> BoxID;
@@ -49,5 +51,37 @@ namespace SalesApp_Alpha_2
                 BoxID
             });
         }
+
+        public Product GetObject() => new Product()
+        {
+            Description = BoxDescription.InputValue,
+            TradeMark = BoxTrademak.InputValue,
+            Quantity = BoxQuantity.InputValue,
+            Price = BoxPrice.InputValue
+        };
+
+        public void SetObject(Product obj)
+        {
+            BoxID.InputValue = obj.ID;
+            BoxDescription.InputValue = obj.Description;
+            BoxTrademak.InputValue = obj.TradeMark;
+            BoxQuantity.InputValue = obj.Quantity;
+            BoxPrice.InputValue = obj.Price;
+        }
+
+        private void UiProductProperties_Validating(object sender, CancelEventArgs e)
+        {
+            MessageBox.Show("Prueba de validación");
+            if (!ValidateChildren())
+            {
+                e.Cancel = true;
+            }
+        }
+    }
+
+    public interface IUIProperties<T> where T : ICrud
+    {
+        void SetObject(T obj);
+        T GetObject();
     }
 }
