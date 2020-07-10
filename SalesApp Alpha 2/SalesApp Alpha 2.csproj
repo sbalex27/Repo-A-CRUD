@@ -69,12 +69,6 @@
       <DependentUpon>InBox.cs</DependentUpon>
     </Compile>
     <Compile Include="CustomObjects\ICrud.cs" />
-    <Compile Include="TestUserControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="TestUserControl.Designer.cs">
-      <DependentUpon>TestUserControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserInterfaces\IBoxInput.cs" />
     <Compile Include="UserInterfaces\InputBox_Combo.cs">
       <SubType>UserControl</SubType>
@@ -139,9 +133,6 @@
     <EmbeddedResource Include="InBox.resx">
       <DependentUpon>InBox.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TestUserControl.resx">
-      <DependentUpon>TestUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterfaces\InputBox_Combo.resx">
       <DependentUpon>InputBox_Combo.cs</DependentUpon>
