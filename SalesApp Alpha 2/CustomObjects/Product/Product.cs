@@ -35,6 +35,9 @@ namespace SalesApp_Alpha_2
         }
 
         public static readonly Predicate<string> PredicateDescription = new Predicate<string>(arg => !string.IsNullOrWhiteSpace(arg));
+        public static readonly Predicate<string> PredicateTradeMark = new Predicate<string>(arg => !string.IsNullOrEmpty(arg));
+        public static readonly Predicate<int> PredicateQuantity = new Predicate<int>(arg => arg >= 0);
+        public static readonly Predicate<double> PredicatePrice = new Predicate<double>(arg => arg > 0);
 
         private string description;
         private string trademark;

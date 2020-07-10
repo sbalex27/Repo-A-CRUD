@@ -54,6 +54,7 @@ namespace SalesApp_Alpha_2.UserInterfaces
             Title = title;
             Icon16 = icon16px;
             TabIndex = tabIndex;
+            AutoDisableError = true;
             DrawVariant();
         }
 
@@ -84,8 +85,11 @@ namespace SalesApp_Alpha_2.UserInterfaces
             InputValueChanged?.Invoke(this, e);
         }
 
+        public bool AutoDisableError { get; set; }
         public Predicate<T> DelegatePredicate { get; set; }
         public Action DelegateAction { get; set; }
+        public delegate void BetaDelegateAction();
+
         public Type InputValueType => typeof(T);
         public InputBoxType BoxType
         {
@@ -188,22 +192,25 @@ namespace SalesApp_Alpha_2.UserInterfaces
         }
         #endregion
 
+        private void InputBox_Generic_Validated(object sender, EventArgs e)
+        {
+            if (AutoDisableError)
+            {
+                VisualError = false;
+                DelegateAction?.Invoke();
+            }
+        }
+
         private void InputBox_Generic_Validating(object sender, CancelEventArgs e)
         {
             if (DelegatePredicate != null)
             {
-                if (!DelegatePredicate(InputValue))
+                if (!DelegatePredicate.Invoke(InputValue))
                 {
                     VisualError = true;
                     e.Cancel = true;
                 }
             }
-        }
-
-        private void InputBox_Generic_Validated(object sender, EventArgs e)
-        {
-            VisualError = false;
-            DelegateAction?.Invoke();
         }
     }
 }

@@ -27,18 +27,17 @@ namespace SalesApp_Alpha_2
 
             #region Instanciate
             BoxID = new InputBox_Generic<int>("ID", Properties.Resources._16px_List, TabI++);
-
-            BoxDescription = new InputBox_Generic<string>("Descripción", Properties.Resources._16px_Product, TabI++)
-            {
-                DelegatePredicate = new Predicate<string>(arg => !string.IsNullOrWhiteSpace(arg)),
-                DelegateAction = new Action(delegate () { MessageBox.Show("Si Fue validado"); })
-            };
-
+            BoxDescription = new InputBox_Generic<string>("Descripción", Properties.Resources._16px_Product, TabI++);
             BoxTrademak = new InputBox_Generic<string>("Marca", Properties.Resources._16px_Trademark, TabI++);
-
             BoxQuantity = new InputBox_Generic<int>("Cantidad", Properties.Resources._16px_List, TabI++);
-
             BoxPrice = new InputBox_Generic<double>("Precio", Properties.Resources._16px_Price, TabI++);
+            #endregion
+
+            #region Validations
+            BoxDescription.DelegatePredicate = Product.PredicateDescription;
+            BoxTrademak.DelegatePredicate = Product.PredicateTradeMark;
+            BoxQuantity.DelegatePredicate = Product.PredicateQuantity;
+            BoxPrice.DelegatePredicate = Product.PredicatePrice;
             #endregion
 
             Controls.AddRange(new Control[]
@@ -49,16 +48,6 @@ namespace SalesApp_Alpha_2
                 BoxDescription,
                 BoxID
             });
-        }
-
-        private void BoxID_Validated(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void BoxID_Validating(object sender, CancelEventArgs e)
-        {
-            throw new NotImplementedException();
         }
     }
 }
