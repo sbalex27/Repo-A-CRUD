@@ -37,6 +37,7 @@
             this.nuevaCompraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BTT_Test = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.uiProductProperties1 = new SalesApp_Alpha_2.UiProductProperties();
             this.Strip_Principal.SuspendLayout();
             this.SuspendLayout();
@@ -117,14 +118,26 @@
             this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 3;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(341, 290);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 5;
+            this.button1.Text = "Restablecer";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // uiProductProperties1
             // 
             this.uiProductProperties1.AutoSize = true;
-            this.uiProductProperties1.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
+            this.uiProductProperties1.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
+            this.uiProductProperties1.EnablePrimaryKey = true;
             this.uiProductProperties1.Location = new System.Drawing.Point(347, 89);
             this.uiProductProperties1.MinimumSize = new System.Drawing.Size(150, 150);
             this.uiProductProperties1.Name = "uiProductProperties1";
-            this.uiProductProperties1.Size = new System.Drawing.Size(150, 195);
+            this.uiProductProperties1.ShowPrimaryKey = true;
+            this.uiProductProperties1.Size = new System.Drawing.Size(150, 196);
             this.uiProductProperties1.TabIndex = 4;
             // 
             // Home
@@ -132,6 +145,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.uiProductProperties1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.BTT_Test);
@@ -158,6 +172,7 @@
         private System.Windows.Forms.Button BTT_Test;
         private System.Windows.Forms.TextBox textBox1;
         private UiProductProperties uiProductProperties1;
+        private System.Windows.Forms.Button button1;
     }
 }
 

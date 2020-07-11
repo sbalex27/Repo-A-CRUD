@@ -35,11 +35,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
+            this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
             this.MinimumSize = new System.Drawing.Size(150, 150);
             this.Name = "UiProductProperties";
             this.Size = new System.Drawing.Size(200, 400);
-            this.Validating += new System.ComponentModel.CancelEventHandler(this.UiProductProperties_Validating);
             this.ResumeLayout(false);
 
         }

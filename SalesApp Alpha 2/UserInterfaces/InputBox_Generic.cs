@@ -23,12 +23,12 @@ namespace SalesApp_Alpha_2.UserInterfaces
 
     public partial class InputBox_Generic<T> : UserControl
     {
-        public event EventHandler InputValueChanged;
+        //public event EventHandler InputValueChanged;
 
-        private Control controlUsed = new Control();
-        private readonly TextBox textBox = new TextBox();
-        private readonly ComboBox comboBox = new ComboBox();
-        private readonly NumericUpDown numericBox = new NumericUpDown();
+        private Control ControlBase = new Control();
+        private readonly TextBox ControlTextBox = new TextBox();
+        private readonly ComboBox ControlComboBox = new ComboBox();
+        private readonly NumericUpDown ControlNumericBox = new NumericUpDown();
 
         private readonly List<Type> AllowedTypes = new List<Type>()
         {
@@ -43,46 +43,44 @@ namespace SalesApp_Alpha_2.UserInterfaces
         /// <param name="tabIndex">Índice de tabulación de la caja</param>
         public InputBox_Generic(string title, Image icon16px, int tabIndex = 0)
         {
-            MasterConstructor(title, icon16px, tabIndex);
-        }
-
-        private void MasterConstructor(string title, Image icon16px, int tabIndex)
-        {
-            if (!AllowedTypes.Contains(InputValueType)) throw new ArgumentOutOfRangeException();
-            InitializeComponent();
-            Dock = DockStyle.Top;
-            Title = title;
-            Icon16 = icon16px;
-            TabIndex = tabIndex;
-            AutoDisableError = true;
-            DrawVariant();
+            if (AllowedTypes.Contains(InputValueType))
+            {
+                InitializeComponent();
+                Dock = DockStyle.Top;
+                Title = title;
+                Icon16 = icon16px;
+                TabIndex = tabIndex;
+                AutoDisableError = true;
+                DrawVariant();
+            }
+            else throw new ArgumentException("Tipo de clase generica no admitida");
         }
 
         private void DrawVariant()
         {
+            ControlBase = GetControlVariation();
+            ControlBase.Dock = DockStyle.Top;
+            Panel_Input.Controls.Add(ControlBase);
+            ControlBase.TextChanged += ControlUsed_TextChanged;
+        }
+
+        private Control GetControlVariation()
+        {
             switch (BoxType)
             {
                 case InputBoxType.Text:
-                    controlUsed = textBox;
-                    break;
+                    return ControlTextBox;
                 case InputBoxType.Integer:
-                    controlUsed = numericBox;
-                    break;
                 case InputBoxType.Money:
-                    controlUsed = numericBox;
-                    break;
+                    return ControlNumericBox;
                 default:
-                    controlUsed = comboBox;
-                    break;
+                    return ControlComboBox;
             }
-            controlUsed.Dock = DockStyle.Top;
-            Panel_Input.Controls.Add(controlUsed);
-            controlUsed.TextChanged += ControlUsed_TextChanged;
         }
 
         private void ControlUsed_TextChanged(object sender, EventArgs e)
         {
-            InputValueChanged?.Invoke(this, e);
+            base.OnTextChanged(e);
         }
 
         public bool AutoDisableError { get; set; }
@@ -139,8 +137,8 @@ namespace SalesApp_Alpha_2.UserInterfaces
         /// </summary>
         public bool InputEnabled
         {
-            get => controlUsed.Enabled;
-            set => controlUsed.Enabled = value;
+            get => ControlBase.Enabled;
+            set => ControlBase.Enabled = value;
         }
 
 
@@ -170,10 +168,10 @@ namespace SalesApp_Alpha_2.UserInterfaces
                 {
                     case InputBoxType.Integer:
                     case InputBoxType.Money:
-                        numericBox.Value = Convert.ToDecimal(value);
+                        ControlNumericBox.Value = Convert.ToDecimal(value);
                         break;
                     default:
-                        controlUsed.Text = Convert.ToString(value);
+                        ControlBase.Text = Convert.ToString(value);
                         break;
                 }
             }
@@ -182,11 +180,11 @@ namespace SalesApp_Alpha_2.UserInterfaces
                 switch (BoxType)
                 {
                     case InputBoxType.Integer:
-                        return (T)(object)int.Parse(numericBox.Value.ToString());
+                        return (T)(object)int.Parse(ControlNumericBox.Value.ToString());
                     case InputBoxType.Money:
-                        return (T)(object)double.Parse(numericBox.Value.ToString());
+                        return (T)(object)double.Parse(ControlNumericBox.Value.ToString());
                     default:
-                        return (T)(object)controlUsed.Text;
+                        return (T)(object)ControlBase.Text;
                 }
             }
         }
@@ -211,6 +209,26 @@ namespace SalesApp_Alpha_2.UserInterfaces
                     e.Cancel = true;
                 }
             }
+        }
+
+        public override void ResetText()
+        {
+            switch (BoxType)
+            {
+                case InputBoxType.Integer:
+                case InputBoxType.Money:
+                    ControlNumericBox.Value = Convert.ToDecimal(0);
+                    break;
+                default:
+                    ControlBase.Text = string.Empty;
+                    break;
+            }
+        }
+
+        public new bool Enabled
+        {
+            get => ControlBase.Enabled;
+            set => ControlBase.Enabled = value;
         }
     }
 }

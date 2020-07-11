@@ -69,6 +69,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
+            this.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
             this.Controls.Add(this.Panel_Input);
             this.Controls.Add(this.Picture_Icon);
             this.Controls.Add(this.Label_Title);

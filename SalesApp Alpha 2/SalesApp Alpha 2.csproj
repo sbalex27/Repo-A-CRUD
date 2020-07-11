@@ -226,5 +226,8 @@
   <ItemGroup>
     <None Include="Resources\icons8-añadir-16.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16px_Hashtag.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

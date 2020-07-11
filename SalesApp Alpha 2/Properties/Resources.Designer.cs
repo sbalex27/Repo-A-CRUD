@@ -93,6 +93,16 @@ namespace SalesApp_Alpha_2.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _16px_Hashtag {
+            get {
+                object obj = ResourceManager.GetObject("16px_Hashtag", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap _16px_Image {
             get {
                 object obj = ResourceManager.GetObject("16px_Image", resourceCulture);
