@@ -23,8 +23,6 @@ namespace SalesApp_Alpha_2.UserInterfaces
 
     public partial class InputBox_Generic<T> : UserControl
     {
-        //public event EventHandler InputValueChanged;
-
         private Control ControlBase = new Control();
         private readonly TextBox ControlTextBox = new TextBox();
         private readonly ComboBox ControlComboBox = new ComboBox();
@@ -32,7 +30,7 @@ namespace SalesApp_Alpha_2.UserInterfaces
 
         private readonly List<Type> AllowedTypes = new List<Type>()
         {
-            typeof(string), typeof(double), typeof(object), typeof(int)
+            typeof(string), typeof(double), typeof(int), typeof(object)
         };
 
         /// <summary>
@@ -51,12 +49,12 @@ namespace SalesApp_Alpha_2.UserInterfaces
                 Icon16 = icon16px;
                 TabIndex = tabIndex;
                 AutoDisableError = true;
-                DrawVariant();
+                InitializeVariant();
             }
             else throw new ArgumentException("Tipo de clase generica no admitida");
         }
 
-        private void DrawVariant()
+        private void InitializeVariant()
         {
             ControlBase = GetControlVariation();
             ControlBase.Dock = DockStyle.Top;
@@ -64,31 +62,35 @@ namespace SalesApp_Alpha_2.UserInterfaces
             ControlBase.TextChanged += ControlUsed_TextChanged;
         }
 
-        private Control GetControlVariation()
-        {
-            switch (BoxType)
-            {
-                case InputBoxType.Text:
-                    return ControlTextBox;
-                case InputBoxType.Integer:
-                case InputBoxType.Money:
-                    return ControlNumericBox;
-                default:
-                    return ControlComboBox;
-            }
-        }
+        #region CustomProperties
 
-        private void ControlUsed_TextChanged(object sender, EventArgs e)
-        {
-            base.OnTextChanged(e);
-        }
-
+        /// <summary>
+        /// Obtiene o establece la instrucción de establecer automáticamente el estado
+        /// <see cref="VisualError"/> a <see langword="false"/> al invocarse su evento
+        /// <see cref="Control.Validated"/>
+        /// </summary>
         public bool AutoDisableError { get; set; }
-        public Predicate<T> DelegatePredicate { get; set; }
-        public Action DelegateAction { get; set; }
-        public delegate void BetaDelegateAction();
 
+        /// <summary>
+        /// Obtiene o establece el delegado predicado que se utilizará en la verificación
+        /// del evento <see cref="Control.Validating"/> para la posterior invocación del
+        /// evento <see cref="Control.Validated"/>
+        /// </summary>
+        public Predicate<T> DelegatePredicate { get; set; }
+
+        /// <summary>
+        /// Obtiene o establece la acción que se realizará dentro del evento <see cref="Control.Validated"/>
+        /// </summary>
+        public Action DelegateAction { get; set; }
+
+        /// <summary>
+        /// Obtiene el <see cref="Type"/> de <see cref="T"/>
+        /// </summary>
         public Type InputValueType => typeof(T);
+
+        /// <summary>
+        /// Obtiene el tipo de caja que se ha instanciado mediante un <see cref="Enum"/>
+        /// </summary>
         public InputBoxType BoxType
         {
             get
@@ -111,8 +113,6 @@ namespace SalesApp_Alpha_2.UserInterfaces
                 }
             }
         }
-
-        #region CustomProperties
 
         /// <summary>
         /// Icono del cuadro de entrada
@@ -188,7 +188,27 @@ namespace SalesApp_Alpha_2.UserInterfaces
                 }
             }
         }
+
         #endregion
+
+        private Control GetControlVariation()
+        {
+            switch (BoxType)
+            {
+                case InputBoxType.Text:
+                    return ControlTextBox;
+                case InputBoxType.Integer:
+                case InputBoxType.Money:
+                    return ControlNumericBox;
+                default:
+                    return ControlComboBox;
+            }
+        }
+
+        private void ControlUsed_TextChanged(object sender, EventArgs e)
+        {
+            base.OnTextChanged(e);
+        }
 
         private void InputBox_Generic_Validated(object sender, EventArgs e)
         {
