@@ -44,16 +44,16 @@ namespace SalesApp_Alpha_2
 
         private void BTT_Test_Click(object sender, EventArgs e)
         {
-            if (uiProductProperties1.ValidateChildren())
-            {
-                Product p = uiProductProperties1.GetObject();
-                MessageBox.Show(p.ToString());
-            }
+            //if (uiProductProperties1.ValidateChildren())
+            //{
+            //    Product p = uiProductProperties1.GetObject();
+            //    MessageBox.Show(p.ToString());
+            //}
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            uiProductProperties1.Restore();
+            //uiProductProperties1.Restore();
         }
     }
 }

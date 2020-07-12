@@ -131,22 +131,21 @@
             // uiProductProperties1
             // 
             this.uiProductProperties1.AutoSize = true;
-            this.uiProductProperties1.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
             this.uiProductProperties1.EnablePrimaryKey = true;
-            this.uiProductProperties1.Location = new System.Drawing.Point(347, 89);
+            this.uiProductProperties1.Location = new System.Drawing.Point(347, 88);
             this.uiProductProperties1.MinimumSize = new System.Drawing.Size(150, 150);
             this.uiProductProperties1.Name = "uiProductProperties1";
             this.uiProductProperties1.ShowPrimaryKey = true;
             this.uiProductProperties1.Size = new System.Drawing.Size(150, 196);
-            this.uiProductProperties1.TabIndex = 4;
+            this.uiProductProperties1.TabIndex = 6;
             // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.uiProductProperties1);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.BTT_Test);
             this.Controls.Add(this.Strip_Principal);
@@ -171,8 +170,8 @@
         private System.Windows.Forms.ToolStripMenuItem nuevaCompraToolStripMenuItem;
         private System.Windows.Forms.Button BTT_Test;
         private System.Windows.Forms.TextBox textBox1;
-        private UiProductProperties uiProductProperties1;
         private System.Windows.Forms.Button button1;
+        private UiProductProperties uiProductProperties1;
     }
 }
 

@@ -33,6 +33,22 @@ namespace SalesApp_Alpha_2.UserInterfaces
             typeof(string), typeof(double), typeof(int), typeof(object)
         };
 
+        private readonly Dictionary<Type, InputBoxType> KeyValuesTypes = new Dictionary<Type, InputBoxType>()
+        {
+            {typeof(string), InputBoxType.Text },
+            {typeof(double), InputBoxType.Money },
+            {typeof(int), InputBoxType.Integer },
+            {typeof(object), InputBoxType.Collection }
+        };
+
+        private Dictionary<InputBoxType, Control> KeyValuesControls => new Dictionary<InputBoxType, Control>()
+        {
+            {InputBoxType.Text, ControlTextBox },
+            {InputBoxType.Money, ControlNumericBox },
+            {InputBoxType.Integer, ControlNumericBox },
+            {InputBoxType.Collection, ControlComboBox }
+        };
+
         /// <summary>
         /// Constructor para una caja de entrada genérica
         /// </summary>
@@ -56,7 +72,8 @@ namespace SalesApp_Alpha_2.UserInterfaces
 
         private void InitializeVariant()
         {
-            ControlBase = GetControlVariation();
+            KeyValuesControls.TryGetValue(BoxType, out Control ctrl);
+            ControlBase = ctrl;
             ControlBase.Dock = DockStyle.Top;
             Panel_Input.Controls.Add(ControlBase);
             ControlBase.TextChanged += ControlUsed_TextChanged;
@@ -95,22 +112,8 @@ namespace SalesApp_Alpha_2.UserInterfaces
         {
             get
             {
-                if (InputValueType.Equals(typeof(string)))
-                {
-                    return InputBoxType.Text;
-                }
-                else if (InputValueType.Equals(typeof(double)))
-                {
-                    return InputBoxType.Money;
-                }
-                else if (InputValueType.Equals(typeof(int)))
-                {
-                    return InputBoxType.Integer;
-                }
-                else
-                {
-                    return InputBoxType.Collection;
-                }
+                KeyValuesTypes.TryGetValue(InputValueType, out InputBoxType Value);
+                return Value;
             }
         }
 
@@ -191,20 +194,6 @@ namespace SalesApp_Alpha_2.UserInterfaces
 
         #endregion
 
-        private Control GetControlVariation()
-        {
-            switch (BoxType)
-            {
-                case InputBoxType.Text:
-                    return ControlTextBox;
-                case InputBoxType.Integer:
-                case InputBoxType.Money:
-                    return ControlNumericBox;
-                default:
-                    return ControlComboBox;
-            }
-        }
-
         private void ControlUsed_TextChanged(object sender, EventArgs e)
         {
             base.OnTextChanged(e);
@@ -243,6 +232,11 @@ namespace SalesApp_Alpha_2.UserInterfaces
                     ControlBase.Text = string.Empty;
                     break;
             }
+        }
+
+        public override string ToString()
+        {
+            return $"{Title} - {InputValue}";
         }
 
         public new bool Enabled
