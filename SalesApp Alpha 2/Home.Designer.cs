@@ -131,12 +131,13 @@
             // uiProductProperties1
             // 
             this.uiProductProperties1.AutoSize = true;
+            this.uiProductProperties1.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
             this.uiProductProperties1.EnablePrimaryKey = true;
-            this.uiProductProperties1.Location = new System.Drawing.Point(347, 88);
+            this.uiProductProperties1.Location = new System.Drawing.Point(341, 88);
             this.uiProductProperties1.MinimumSize = new System.Drawing.Size(150, 150);
             this.uiProductProperties1.Name = "uiProductProperties1";
             this.uiProductProperties1.ShowPrimaryKey = true;
-            this.uiProductProperties1.Size = new System.Drawing.Size(150, 196);
+            this.uiProductProperties1.Size = new System.Drawing.Size(156, 196);
             this.uiProductProperties1.TabIndex = 6;
             // 
             // Home

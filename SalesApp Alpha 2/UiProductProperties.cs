@@ -37,6 +37,8 @@ namespace SalesApp_Alpha_2
             BoxPrice = new InputBox_Generic<double>("Precio", Properties.Resources._16px_Price, TabI++);
             #endregion
 
+            BoxTrademark.SetDataSource(Product.GetTradeMarks());
+
             #region Validations
             BoxDescription.DelegatePredicate = Product.PredicateDescription;
             BoxTrademark.DelegatePredicate = arg => Product.PredicateTradeMark(arg.ToString());

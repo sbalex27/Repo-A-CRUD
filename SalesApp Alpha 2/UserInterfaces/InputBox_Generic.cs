@@ -26,7 +26,11 @@ namespace SalesApp_Alpha_2.UserInterfaces
         private Control ControlBase = new Control();
         private readonly TextBox ControlTextBox = new TextBox();
         private readonly ComboBox ControlComboBox = new ComboBox();
-        private readonly NumericUpDown ControlNumericBox = new NumericUpDown();
+        private readonly NumericUpDown ControlNumericBox = new NumericUpDown()
+        {
+            Minimum = 0,
+            Maximum = 1000
+        };
 
         private readonly List<Type> AllowedTypes = new List<Type>()
         {
@@ -220,6 +224,50 @@ namespace SalesApp_Alpha_2.UserInterfaces
             }
         }
 
+        /// <summary>
+        /// Establece una fuente de datos para una caja <see cref="InputBox_Generic{T}"/>
+        /// donde <see cref="T"/> es de tipo <see cref="object"/>
+        /// </summary>
+        /// <param name="dataSource">Establece la propiedad <see cref="ComboBox.DataSource"/></param>
+        /// <param name="displayMember">Establece la propiedad <see cref="ListControl.DisplayMember"/></param>
+        /// <param name="valueMember">Establece la propiedad de <see cref="ListControl.ValueMember"/></param>
+        /// <exception cref="InvalidOperationException"></exception>
+        public void SetDataSource(object dataSource, string displayMember = null, string valueMember = null)
+        {
+            if (BoxType.Equals(InputBoxType.Collection))
+            {
+                ControlComboBox.DataSource = dataSource;
+                ControlComboBox.DisplayMember = displayMember;
+                ControlComboBox.ValueMember = valueMember;
+                ControlComboBox.SelectedIndex = -1;
+            }
+            else throw new InvalidOperationException("No se puede aplicar la fuente de datos");
+        }
+
+        /// <summary>
+        /// Establece un rango numérico para una caja donde <see cref="T"/> sea de tipo <see cref="object"/>
+        /// </summary>
+        /// <param name="MinValue">Establece la propiedad <see cref="NumericUpDown.Minimum"/></param>
+        /// <param name="MaxValue">Establece la propiedad <see cref="NumericUpDown.Maximum"/></param>
+        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="InvalidOperationException"></exception>
+        public void SetNumericalRange(T MinValue, T MaxValue)
+        {
+            bool equals(InputBoxType t) => BoxType.Equals(t);
+            if (equals(InputBoxType.Integer) || equals(InputBoxType.Money))
+            {
+                decimal min = Convert.ToDecimal(MinValue);
+                decimal max = Convert.ToDecimal(MaxValue);
+                if (min < max)
+                {
+                    ControlNumericBox.Minimum = min;
+                    ControlNumericBox.Maximum = max;
+                }
+                else throw new ArgumentException("El valor mínimo tiene que ser menor que el máximo");
+            }
+            else throw new InvalidOperationException("No se puede establecer un rango numérico a este tipo de caja de entrada");
+        }
+
         public override void ResetText()
         {
             switch (BoxType)
@@ -232,11 +280,12 @@ namespace SalesApp_Alpha_2.UserInterfaces
                     ControlBase.Text = string.Empty;
                     break;
             }
+            VisualError = false;
         }
 
         public override string ToString()
         {
-            return $"{Title} - {InputValue}";
+            return $"{BoxType} - {Title}: {InputValue}";
         }
 
         public new bool Enabled
