@@ -17,19 +17,23 @@ namespace SalesApp_Alpha_2
 
         private void BTT_Ok_Click(object sender, EventArgs e)
         {
-            try
+            if (uiProductProperties.ValidateChildren())
             {
-                Product p = UI_ProductsPropertiesInput.GetObject();
-                p.Added += P_Event;
-                p.Add();
-            }
-            catch (Exception ex)
-            {
-                PremadeMessage.Notification(ex.Message);
+                try
+                {
+                    Product p = uiProductProperties.GetObject();
+                    p.Added += P_Added;
+                    p.Add();
+                }
+                catch (Exception ex)
+                {
+                    PremadeMessage.Notification(ex.Message);
+                }
+                
             }
         }
 
-        private void P_Event(object sender, string Action, int AffectedsRecords)
+        private void P_Added(object sender, string Action, int AffectedsRecords)
         {
             PremadeMessage.ObjectAction(sender, Action, AffectedsRecords);
             Added?.Invoke(this, (Product)sender);

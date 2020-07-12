@@ -42,7 +42,7 @@ namespace SalesApp_Alpha_2
     {
         #region Interface Implementation
         //Events
-        public abstract event EventHandler<string> Validating;
+        //public abstract event EventHandler<string> Validating;
         public abstract event CrudEventHandler Added;
         public abstract event CrudEventHandler Updated;
         public abstract event CrudEventHandler Deleted;

@@ -219,7 +219,6 @@ namespace SalesApp_Alpha_2
         #endregion
 
         #region Implements
-        public override event EventHandler<string> Validating;
         public override event CrudEventHandler Added;
         public override event CrudEventHandler Updated;
         public override event CrudEventHandler Deleted;

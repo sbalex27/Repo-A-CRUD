@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Products_New));
             this.BTT_Ok = new System.Windows.Forms.Button();
             this.LPANEL_Buttons = new System.Windows.Forms.FlowLayoutPanel();
-            this.UI_ProductsPropertiesInput = new SalesApp_Alpha_2.UI_ProductsProperties();
+            this.uiProductProperties = new SalesApp_Alpha_2.UiProductProperties();
             this.LPANEL_Buttons.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -48,18 +48,20 @@
             this.LPANEL_Buttons.Controls.Add(this.BTT_Ok);
             this.LPANEL_Buttons.Name = "LPANEL_Buttons";
             // 
-            // UI_ProductsPropertiesInput
+            // uiProductProperties
             // 
-            resources.ApplyResources(this.UI_ProductsPropertiesInput, "UI_ProductsPropertiesInput");
-            this.UI_ProductsPropertiesInput.Name = "UI_ProductsPropertiesInput";
-            this.UI_ProductsPropertiesInput.PropertyID = false;
+            resources.ApplyResources(this.uiProductProperties, "uiProductProperties");
+            this.uiProductProperties.EnablePrimaryKey = false;
+            this.uiProductProperties.Name = "uiProductProperties";
+            this.uiProductProperties.ShowPrimaryKey = false;
             // 
             // Products_New
             // 
             this.AcceptButton = this.BTT_Ok;
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.UI_ProductsPropertiesInput);
+            this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
+            this.Controls.Add(this.uiProductProperties);
             this.Controls.Add(this.LPANEL_Buttons);
             this.Name = "Products_New";
             this.LPANEL_Buttons.ResumeLayout(false);
@@ -71,6 +73,6 @@
         #endregion
         private System.Windows.Forms.Button BTT_Ok;
         private System.Windows.Forms.FlowLayoutPanel LPANEL_Buttons;
-        private UI_ProductsProperties UI_ProductsPropertiesInput;
+        private UiProductProperties uiProductProperties;
     }
 }

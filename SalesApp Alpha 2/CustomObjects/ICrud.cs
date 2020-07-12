@@ -21,10 +21,11 @@ namespace SalesApp_Alpha_2
     /// </summary>
     public interface ICrud
     {
-        /// <summary>
-        /// Evento que se lanza al validar el objeto
-        /// </summary>
-        event EventHandler<string> Validating;
+        //todo: borrar evento validating y verificar si tiene efectos secundarios
+        ///// <summary>
+        ///// Evento que se lanza al validar el objeto
+        ///// </summary>
+        //event EventHandler<string> Validating;
 
         /// <summary>
         /// Evento que se lanza al añadir el objeto

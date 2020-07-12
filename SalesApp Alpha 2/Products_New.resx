@@ -121,9 +121,12 @@
   <data name="BTT_Ok.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Right</value>
   </data>
+  <data name="BTT_Ok.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="BTT_Ok.Location" type="System.Drawing.Point, System.Drawing">
-    <value>180, 3</value>
+    <value>150, 3</value>
   </data>
   <data name="BTT_Ok.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -157,10 +160,10 @@
     <value>RightToLeft</value>
   </data>
   <data name="LPANEL_Buttons.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 281</value>
+    <value>3, 179</value>
   </data>
   <data name="LPANEL_Buttons.Size" type="System.Drawing.Size, System.Drawing">
-    <value>258, 29</value>
+    <value>228, 29</value>
   </data>
   <data name="LPANEL_Buttons.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
@@ -177,43 +180,34 @@
   <data name="&gt;&gt;LPANEL_Buttons.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="UI_ProductsPropertiesInput.AutoScroll" type="System.Boolean, mscorlib">
+  <data name="uiProductProperties.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="UI_ProductsPropertiesInput.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="UI_ProductsPropertiesInput.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="uiProductProperties.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="UI_ProductsPropertiesInput.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="uiProductProperties.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
   </data>
-  <data name="UI_ProductsPropertiesInput.MaximumSize" type="System.Drawing.Size, System.Drawing">
-    <value>0, 400</value>
+  <data name="uiProductProperties.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>150, 150</value>
   </data>
-  <data name="UI_ProductsPropertiesInput.MinimumSize" type="System.Drawing.Size, System.Drawing">
-    <value>200, 0</value>
+  <data name="uiProductProperties.Size" type="System.Drawing.Size, System.Drawing">
+    <value>228, 176</value>
   </data>
-  <data name="UI_ProductsPropertiesInput.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="UI_ProductsPropertiesInput.Size" type="System.Drawing.Size, System.Drawing">
-    <value>258, 278</value>
-  </data>
-  <data name="UI_ProductsPropertiesInput.TabIndex" type="System.Int32, mscorlib">
+  <data name="uiProductProperties.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>
   </data>
-  <data name="&gt;&gt;UI_ProductsPropertiesInput.Name" xml:space="preserve">
-    <value>UI_ProductsPropertiesInput</value>
+  <data name="&gt;&gt;uiProductProperties.Name" xml:space="preserve">
+    <value>uiProductProperties</value>
   </data>
-  <data name="&gt;&gt;UI_ProductsPropertiesInput.Type" xml:space="preserve">
-    <value>SalesApp_Alpha_2.UI_ProductsProperties, SalesApp Alpha 2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  <data name="&gt;&gt;uiProductProperties.Type" xml:space="preserve">
+    <value>SalesApp_Alpha_2.UiProductProperties, SalesApp Alpha 2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
   </data>
-  <data name="&gt;&gt;UI_ProductsPropertiesInput.Parent" xml:space="preserve">
+  <data name="&gt;&gt;uiProductProperties.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;UI_ProductsPropertiesInput.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;uiProductProperties.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
@@ -225,14 +219,11 @@
   <data name="$this.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="$this.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
-    <value>GrowAndShrink</value>
-  </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>264, 313</value>
+    <value>234, 211</value>
   </data>
   <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
-    <value>280, 200</value>
+    <value>200, 200</value>
   </data>
   <data name="$this.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
