@@ -87,10 +87,7 @@ namespace SalesApp_Alpha_2
 
         public void Restore()
         {
-            foreach (Control ctrl in Controls)
-            {
-                ctrl.ResetText();
-            }
+            foreach (Control ctrl in Controls) ctrl.ResetText();
         }
     }
 
