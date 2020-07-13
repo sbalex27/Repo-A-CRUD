@@ -30,7 +30,6 @@
         {
             this.GridView_Products = new System.Windows.Forms.DataGridView();
             this.Panel_Details = new System.Windows.Forms.Panel();
-            this.UI_ProductsProperties_Input = new SalesApp_Alpha_2.UI_ProductsProperties();
             this.BTT_Vender = new System.Windows.Forms.Button();
             this.BTT_Eliminar = new System.Windows.Forms.Button();
             this.BTT_Modificar = new System.Windows.Forms.Button();
@@ -38,6 +37,7 @@
             this.LBL_Title = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.inBox_Buscar = new SalesApp_Alpha_2.InBox();
+            this.uiProductProperties = new SalesApp_Alpha_2.UiProductProperties();
             ((System.ComponentModel.ISupportInitialize)(this.GridView_Products)).BeginInit();
             this.Panel_Details.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -61,7 +61,7 @@
             // 
             // Panel_Details
             // 
-            this.Panel_Details.Controls.Add(this.UI_ProductsProperties_Input);
+            this.Panel_Details.Controls.Add(this.uiProductProperties);
             this.Panel_Details.Controls.Add(this.BTT_Vender);
             this.Panel_Details.Controls.Add(this.BTT_Eliminar);
             this.Panel_Details.Controls.Add(this.BTT_Modificar);
@@ -73,20 +73,6 @@
             this.Panel_Details.Padding = new System.Windows.Forms.Padding(6);
             this.Panel_Details.Size = new System.Drawing.Size(275, 480);
             this.Panel_Details.TabIndex = 2;
-            // 
-            // UI_ProductsProperties_Input
-            // 
-            this.UI_ProductsProperties_Input.AutoScroll = true;
-            this.UI_ProductsProperties_Input.AutoSize = true;
-            this.UI_ProductsProperties_Input.Dock = System.Windows.Forms.DockStyle.Top;
-            this.UI_ProductsProperties_Input.Location = new System.Drawing.Point(6, 27);
-            this.UI_ProductsProperties_Input.MaximumSize = new System.Drawing.Size(0, 400);
-            this.UI_ProductsProperties_Input.MinimumSize = new System.Drawing.Size(200, 0);
-            this.UI_ProductsProperties_Input.Name = "UI_ProductsProperties_Input";
-            this.UI_ProductsProperties_Input.Padding = new System.Windows.Forms.Padding(3);
-            this.UI_ProductsProperties_Input.PropertyID = true;
-            this.UI_ProductsProperties_Input.Size = new System.Drawing.Size(263, 232);
-            this.UI_ProductsProperties_Input.TabIndex = 10;
             // 
             // BTT_Vender
             // 
@@ -141,7 +127,8 @@
             this.LBL_Title.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LBL_Title.Location = new System.Drawing.Point(6, 6);
             this.LBL_Title.Name = "LBL_Title";
-            this.LBL_Title.Size = new System.Drawing.Size(112, 21);
+            this.LBL_Title.Padding = new System.Windows.Forms.Padding(28, 0, 0, 0);
+            this.LBL_Title.Size = new System.Drawing.Size(140, 21);
             this.LBL_Title.TabIndex = 0;
             this.LBL_Title.Text = "ProductString";
             // 
@@ -169,6 +156,18 @@
             this.inBox_Buscar.TabIndex = 0;
             this.inBox_Buscar.Title = "Buscar";
             this.inBox_Buscar.TextChange += new SalesApp_Alpha_2.InBox.TextChangeEventHandler(this.inBox_Buscar_TextChange);
+            // 
+            // uiProductProperties
+            // 
+            this.uiProductProperties.AutoSize = true;
+            this.uiProductProperties.Dock = System.Windows.Forms.DockStyle.Top;
+            this.uiProductProperties.EnablePrimaryKey = false;
+            this.uiProductProperties.Location = new System.Drawing.Point(6, 27);
+            this.uiProductProperties.MinimumSize = new System.Drawing.Size(150, 150);
+            this.uiProductProperties.Name = "uiProductProperties";
+            this.uiProductProperties.ShowPrimaryKey = true;
+            this.uiProductProperties.Size = new System.Drawing.Size(263, 196);
+            this.uiProductProperties.TabIndex = 10;
             // 
             // Products
             // 
@@ -201,6 +200,6 @@
         private InBox inBox_Buscar;
         private System.Windows.Forms.Label LBL_Title;
         private System.Windows.Forms.Button BTT_Vender;
-        private UI_ProductsProperties UI_ProductsProperties_Input;
+        private UiProductProperties uiProductProperties;
     }
 }

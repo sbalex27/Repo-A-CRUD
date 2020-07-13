@@ -55,6 +55,11 @@ namespace SalesApp_Alpha_2
         {
             get => (int)GridView_Products[(int)Product.TableFields.ID, RowIndex].Value;
         }
+
+        private bool IsChildrenValidated
+        {
+            get => uiProductProperties.ValidateChildren();
+        }
         #endregion
 
         /// <summary>
@@ -81,7 +86,7 @@ namespace SalesApp_Alpha_2
             {
                 LBL_Title.Text = P.ToString();
             }
-            UI_ProductsProperties_Input.SetObject(P);
+            uiProductProperties.SetObject(P);
         }
 
         public bool AnyRowActive
@@ -103,17 +108,19 @@ namespace SalesApp_Alpha_2
 
         private void BTT_Modificar_Click(object sender, EventArgs e)
         {
-            try
+            if (uiProductProperties.ValidateChildren())
             {
-                Product FromProperties = UI_ProductsProperties_Input.GetObject();
-                FromProperties.Updated += ProductActioned;
-                FromProperties.Update();
+                try
+                {
+                    Product fromProperties = uiProductProperties.GetObject();
+                    fromProperties.Updated += ProductActioned;
+                    fromProperties.Update();
+                }
+                catch (Exception ex)
+                {
+                    PremadeMessage.Notification(ex.Message);
+                }
             }
-            catch (Exception ex)
-            {
-                PremadeMessage.Notification(ex.Message);
-            }
-            
         }
 
         private void ProductActioned(object sender, string Action, int AffectedsRecords)

@@ -78,11 +78,15 @@ namespace SalesApp_Alpha_2
 
         public void SetObject(Product obj)
         {
-            BoxID.InputValue = obj.ID;
-            BoxDescription.InputValue = obj.Description;
-            BoxTrademark.InputValue = obj.TradeMark;
-            BoxQuantity.InputValue = obj.Quantity;
-            BoxPrice.InputValue = obj.Price;
+            if (obj != null)
+            {
+                BoxID.InputValue = obj.ID;
+                BoxDescription.InputValue = obj.Description;
+                BoxTrademark.InputValue = obj.TradeMark;
+                BoxQuantity.InputValue = obj.Quantity;
+                BoxPrice.InputValue = obj.Price;
+            }
+            else Restore();
         }
 
         public void Restore()

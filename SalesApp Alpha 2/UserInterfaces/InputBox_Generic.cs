@@ -29,7 +29,7 @@ namespace SalesApp_Alpha_2.UserInterfaces
         private readonly NumericUpDown ControlNumericBox = new NumericUpDown()
         {
             Minimum = 0,
-            Maximum = 1000
+            Maximum = int.MaxValue
         };
 
         private readonly List<Type> AllowedTypes = new List<Type>()
